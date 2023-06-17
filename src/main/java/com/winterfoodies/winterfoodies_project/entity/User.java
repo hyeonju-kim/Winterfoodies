@@ -1,12 +1,29 @@
 package com.winterfoodies.winterfoodies_project.entity;
 
+import com.winterfoodies.winterfoodies_project.dto.user.UserRequestDto;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.usertype.UserType;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table(name = "USERS")
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE) //시퀀스 사용가능한 DB에서 사용. H2, 오라클에서 사용가능. H2에서 테스트하니까 이렇게 쓰자. 개발할땐 이렇게 하고 추후에 identity로 바꾼다.
+@Table(name = "USERS", indexes = {
+        @Index(name = "USER_IDX", columnList = "USER_EMAIL", unique = true)
+})
+@Getter
+@Setter
+@SequenceGenerator(name = "userSeq", sequenceName = "USER_SEQ", initialValue = 1, allocationSize = 1)
+@NoArgsConstructor
+public class User implements Serializable {
+    static final long serialVersionUID = -3085157956097560247L;
+
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userSeq")
     @Column(name = "USER_ID")
     private Long id;
 
@@ -18,5 +35,30 @@ public class User {
 
     @Column(name = "USER_EMAIL", nullable = false, unique = true)
     private String email;
+
+    @Column(name = "USER_PHONE_NUMBER")
+    private String phoneNumber;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "USER_STATUS")
+    private UserStatus status;
+
+    @OneToOne
+    @JoinColumn(name = "STORE_ID")
+    private Store store;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private List<Order> order = new ArrayList<>();
+
+    public User(UserRequestDto userRequestDto, UserType type){
+        this.name = userRequestDto.getName();
+        this.email = userRequestDto.getEmail();
+        this.phoneNumber = userRequestDto.getPhoneNumber();
+        this.password = userRequestDto.getPassword();
+    }
+
+    public void encryptPassword(PasswordEncoder passwordEncoder){
+        this.password = passwordEncoder.encode(this.password);
+    }
 
 }
