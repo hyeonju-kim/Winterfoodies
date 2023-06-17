@@ -1,13 +1,11 @@
 package com.winterfoodies.winterfoodies_project.entity;
 
 import com.winterfoodies.winterfoodies_project.dto.user.UserRequestDto;
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.usertype.UserType;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,9 +54,9 @@ public class User implements Serializable {
         this.phoneNumber = userRequestDto.getPhoneNumber();
         this.password = userRequestDto.getPassword();
     }
-
-    public void encryptPassword(PasswordEncoder passwordEncoder){
-        this.password = passwordEncoder.encode(this.password);
-    }
+//
+//    public void encryptPassword(PasswordEncoder passwordEncoder){
+//        this.password = passwordEncoder.encode(this.password);
+//    }
 
 }

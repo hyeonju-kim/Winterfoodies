@@ -4,7 +4,7 @@ import com.winterfoodies.winterfoodies_project.dto.store.StoreRequestDto;
 import lombok.Getter;
 import lombok.Setter;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

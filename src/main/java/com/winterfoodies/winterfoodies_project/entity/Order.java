@@ -1,7 +1,7 @@
 package com.winterfoodies.winterfoodies_project.entity;
 
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 

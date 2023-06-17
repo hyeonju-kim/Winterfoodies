@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,12 +34,7 @@ public class AppRunner implements ApplicationRunner {
         testScenario();
     }
 
-
-
     public void testScenario(){
-
-
-
         //사장 - 오주영
         User ceo = new User();
         ceo.setEmail("blessdutch@naver.com");

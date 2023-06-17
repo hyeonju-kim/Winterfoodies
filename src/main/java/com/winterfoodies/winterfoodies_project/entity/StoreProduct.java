@@ -3,7 +3,7 @@ package com.winterfoodies.winterfoodies_project.entity;
 import lombok.Getter;
 import lombok.Setter;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "STORE_PRODUCT")
