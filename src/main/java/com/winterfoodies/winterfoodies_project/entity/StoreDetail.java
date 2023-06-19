@@ -39,6 +39,9 @@ public class StoreDetail {
     @Column(name = "STORE_OFFICIAL_CODE_NO")
     private String officialCodeNo;
 
+    @Column(name = "AVERAGE_RATING")
+    private Long averageRating;
+
     @Column(name = "STORE_OPEN_TIME")
     private LocalDateTime openTime;
 

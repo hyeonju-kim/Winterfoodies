@@ -2,6 +2,8 @@ package com.winterfoodies.winterfoodies_project.entity;
 
 
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,11 +16,13 @@ import java.util.List;
 @SequenceGenerator(name = "orderSeq", sequenceName = "order_seq", allocationSize = 1, initialValue = 1)
 @Getter
 @Setter
+//@JsonIgnoreProperties("user")  // 순환참조 오류나서 잠시 넣음!!
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "orderSeq")
     @Column(name = "ORDER_ID")
     private Long id;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
@@ -33,6 +37,9 @@ public class Order {
 
     @Column(name = "CREATED_AT")
     private LocalDateTime createAt;
+
+    @Column(name = "TOTAL_AMOUNT")
+    private Long totalAmount;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
     private List<OrderProduct> orderProducts = new ArrayList<>();

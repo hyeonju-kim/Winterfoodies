@@ -23,10 +23,20 @@ public class Product {
     @Column(name = "PRICE")
     private Long price;
 
+    @Column(name = "QUANTITY")
+    private Long quantity;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
     List<OrderProduct> orderProducts = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
     List<StoreProduct> storeProducts = new ArrayList<>();
 
+    public Product() {
+
+    }
+    public Product(String name, Long quantity) {
+        this.name = name;
+        this.quantity = quantity;
+    }
 }

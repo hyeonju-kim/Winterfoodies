@@ -35,4 +35,10 @@ public class OrderProduct {
     @Column(name = "VISIT_TIME")
     private LocalDateTime visitTime;
 
+    public OrderProduct() {
+
+    }
+    public OrderProduct(Product product) {
+        this.product = product;
+    }
 }

@@ -1,5 +1,6 @@
 package com.winterfoodies.winterfoodies_project.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.winterfoodies.winterfoodies_project.dto.user.UserRequestDto;
 import javax.persistence.*;
 import lombok.Getter;
@@ -18,6 +19,7 @@ import java.util.List;
 @Setter
 @SequenceGenerator(name = "userSeq", sequenceName = "USER_SEQ", initialValue = 1, allocationSize = 1)
 @NoArgsConstructor
+//@JsonIgnoreProperties("order")  // 순환참조 오류나서 잠시 넣음!!
 public class User implements Serializable {
     static final long serialVersionUID = -3085157956097560247L;
 

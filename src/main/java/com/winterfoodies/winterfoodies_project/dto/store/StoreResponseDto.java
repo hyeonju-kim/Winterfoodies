@@ -1,6 +1,7 @@
 package com.winterfoodies.winterfoodies_project.dto.store;
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.winterfoodies.winterfoodies_project.entity.StoreDetail;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,17 +10,19 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@JsonInclude(JsonInclude.Include.NON_EMPTY) //비어있지 않은 필드만 나타내는 어노테이션
 public class StoreResponseDto {
     private String message;
     private String redirect;
     private String result;
     private Long id;
-    private String name;
+    private String name; // 가게명
     private String addressNo;
-    private String basicAddress;
+    private String basicAddress; // 기본주소
     private String detailAddress;
     private String info;
     private String roadCodeNo;
+    private Long avergeRating; // 평균 별점
 
     private String officialCodeNo;
 
