@@ -37,6 +37,9 @@ public class Store implements Serializable {
     private List<Order> orders = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "store")
+    private List<Review> reviews = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "store")
     private List<StoreProduct> storeProducts = new ArrayList<>();
 
     public void changeUser(User user){

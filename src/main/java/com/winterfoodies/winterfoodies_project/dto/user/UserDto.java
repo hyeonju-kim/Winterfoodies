@@ -13,6 +13,8 @@ public class UserDto {
     private String email;
     private String password;
     private String name;
+    private double latitude;
+    private double longitude;
 
 
     //잘못된경우에만

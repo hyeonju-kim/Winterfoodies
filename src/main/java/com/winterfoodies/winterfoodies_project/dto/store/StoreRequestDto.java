@@ -36,4 +36,8 @@ public class StoreRequestDto {
     private MultipartFile thumbnailImg;
 
     private StoreStatus status;
+
+    private double latitude;
+
+    private double longitude;
 }

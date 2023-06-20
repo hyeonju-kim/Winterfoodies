@@ -14,6 +14,11 @@ public class Review extends Timestamped{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "STORE_ID")
+    private Store store;
+
     private String storeName;
     private Long rating;
     private Long userId;

@@ -16,6 +16,8 @@ public class ScenarioConfig {
        userDto.setEmail("asdf@naver.com");
        userDto.setPassword("100825asa!");
        userDto.setName("장발장");
+       userDto.setLatitude(37.381798); // 위도 -90 ~ 90    래위작~
+       userDto.setLongitude(126.800944); // 경도 -180 ~ 180
        return userDto;
     }
 }

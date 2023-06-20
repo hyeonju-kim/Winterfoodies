@@ -48,6 +48,11 @@ public class StoreDetail {
     @Column(name = "STORE_CLOSE_TIME")
     private LocalDateTime closeTime;
 
+
+    private double latitude;
+
+    private double longitude;
+
     @Lob
     @Column(name = "STORE_INFO")
     private String info;

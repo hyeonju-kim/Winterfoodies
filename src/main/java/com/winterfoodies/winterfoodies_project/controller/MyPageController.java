@@ -15,10 +15,10 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api")
-public class UserController {
+public class MyPageController {
     private final UserService userService; //서비스 클래스를 직접 주입받지 말고, 서비스 인터페이스를 주입받자!
 
-    // ********** 1. 마이페이지 **********
+    // ################################################## 1. 마이페이지 ##################################################
     // 마이페이지 메인 화면(목록 조회)
     @GetMapping("/mypage")
     @ApiOperation(value = "메인화면 조회")
@@ -26,7 +26,7 @@ public class UserController {
         return;
     }
 
-    // ***** 1-1. 내정보 *****
+    // ***************** 1-1. 내정보 *****************
     // 마이페이지 내정보 조회
     @GetMapping("/mypage/info")
     @ApiOperation(value = "마이페이지 내정보 조회")
@@ -41,7 +41,7 @@ public class UserController {
         return userService.changePw(userDto);
     }
 
-    // ***** 1-2. 찜 *****
+    // ***************** 1-2. 찜 *****************
     // 찜한 가게 목록 조회
     @GetMapping("/mypage/like")
     @ApiOperation(value = "찜한 가게목록 조회")
@@ -49,7 +49,7 @@ public class UserController {
         return userService.getFavoriteStoresByUserId(userId);
     }
 
-    // ***** 1-3. 리뷰관리 *****
+    // ***************** 1-3. 리뷰관리 *****************
     // 내가 쓴 리뷰 목록 조회
     @GetMapping("/mypage/review")
     @ApiOperation(value = "작성한 리뷰 조회")
@@ -64,7 +64,7 @@ public class UserController {
         return userService.delReviewByUserId(reviewId);
     }
 
-    // ***** 1-4. 주문내역 *****
+    // ***************** 1-4. 주문내역 *****************
     // 내가 주문한 주문목록 조회
     @GetMapping("/mypage/orderlist")
     @ApiOperation(value = "주문내역 조회")
@@ -79,7 +79,7 @@ public class UserController {
         return userService.postReview(reviewDto);
     }
 
-    // ***** 1-5. 환경설정 및 공지사항 *****
+    // ***************** 1-5. 환경설정 및 공지사항 *****************
     @GetMapping("/mypage/config")
     @ApiOperation(value = "환경설정 및 공지사항")
     public Configuration config() {
@@ -88,63 +88,9 @@ public class UserController {
 
 
 
-    // ********** 2. 메인페이지 **********
-    // 메인페이지 (나와 가장 가까운 간식 , 인기 간식 랭킹)
-    @GetMapping("/main")
-    @ApiOperation(value = "메인페이지(나와 가장 가까운 간식, 인기 간식 랭킹)")
-    public void mainPage() {
-        return;
-    }
 
-    // 메뉴별, 가까운순별 가게목록
-    @GetMapping("/main/{menuId}")
-    @ApiOperation(value = "메뉴별, 가까운순별 가게목록")
-    public void shortList() {
-        return;
-    }
 
-    // 메뉴별, 인기순별 가게목록
-    @GetMapping("/main/{menuId}/popular")
-    @ApiOperation(value = "메뉴별, 인기순별 가게목록")
-    public void popularList() {
-        return;
-    }
-
-    // 메뉴별, 리뷰순별 가게목록
-    @GetMapping("/main/{menuId}/review")
-    @ApiOperation(value = "메뉴별, 리뷰순별 가게목록")
-    public void reviewList() {
-        return;
-    }
-
-    // 가게 상세 조회 (메뉴)
-    @GetMapping("/main/{storeId}")
-    @ApiOperation(value = "가게 상세 조회(메뉴)")
-    public void storeDetail() {
-        return;
-    }
-
-    // 가게 상세 조회 (가게정보)
-    @GetMapping("/main/{storeId}/info")
-    @ApiOperation(value = "가게 상세 조회(가게정보)")
-    public void storeDetailInfo() {
-        return;
-    }
-
-    // 가게 상세 조회(리뷰)
-    @GetMapping("/main/{storeId}/review")
-    @ApiOperation(value = "가게 상세 조회(리뷰)")
-    public void storeDetailReview() {
-        return;
-    }
-
-    // 가게 찜하기
-    @PostMapping("/main/{storeId}/like")
-    @ApiOperation(value = "가게 찜하기")
-    public FavoriteStore addFavoriteStore(@RequestParam("userId") Long userId, @PathVariable("storeId") Long storeId) {
-        return userService.addFavoriteStore(userId, storeId);
-    }
-
+    ///////////////////////////////////////////////////////////////////////////
 
     // ********** 3. 검색 **********
     // 상호명 검색

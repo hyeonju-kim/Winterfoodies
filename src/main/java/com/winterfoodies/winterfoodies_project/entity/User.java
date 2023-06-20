@@ -43,6 +43,9 @@ public class User implements Serializable {
     @Column(name = "USER_STATUS")
     private UserStatus status;
 
+    private double latitude;
+    private double longitude;
+
     @OneToOne
     @JoinColumn(name = "STORE_ID")
     private Store store;

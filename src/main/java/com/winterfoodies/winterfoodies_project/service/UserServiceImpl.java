@@ -1,7 +1,10 @@
 package com.winterfoodies.winterfoodies_project.service;
 
+import com.winterfoodies.winterfoodies_project.config.LocationConfig;
 import com.winterfoodies.winterfoodies_project.dto.order.OrderResponseDto;
+import com.winterfoodies.winterfoodies_project.dto.store.StoreRequestDto;
 import com.winterfoodies.winterfoodies_project.dto.store.StoreResponseDto;
+import com.winterfoodies.winterfoodies_project.dto.user.LocationDto;
 import com.winterfoodies.winterfoodies_project.dto.user.ReviewDto;
 import com.winterfoodies.winterfoodies_project.dto.user.UserDto;
 import com.winterfoodies.winterfoodies_project.entity.*;
@@ -11,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -22,6 +26,7 @@ public class UserServiceImpl implements UserService{
     private final ReviewRepository reviewRepository;
     private final OrderRepository orderRepository;
     private final StoreRepository storeRepository;
+    private final LocationConfig locationConfig;
 
 
     @Override
@@ -161,5 +166,105 @@ public class UserServiceImpl implements UserService{
         configuration.setAnnounce("공지사항 샘플2");
 
         return configuration;
+    }
+
+// ################################################################ 메인페이지 ##############################################################
+    // 메인페이지 - 나와 가까운 가게 목록 보이기
+    @Override
+    public List<StoreResponseDto> getNearbyStores() {
+        double radius = 2.0; // 검색 반경 설정 (예: 2.0km)
+
+        List<Store> nearbyStores = storeRepository.findNearbyStores(loginUser.getLatitude(), loginUser.getLongitude(), radius);
+        List<StoreResponseDto> nearbyStoreDtoList = new ArrayList<>();
+
+        for (Store store : nearbyStores) {
+            StoreResponseDto storeResponseDto = new StoreResponseDto();
+            storeResponseDto.setName(store.getStoreDetail().getName());
+            nearbyStoreDtoList.add(storeResponseDto);
+        }
+
+        return nearbyStoreDtoList;
+    }
+
+    // 메뉴별, 가까운순별 가게목록 - 가게명, 위치, 평점
+    @Override
+    public List<StoreResponseDto> getNearbyStores2(Long productId) {
+        double radius = 2.0; // 검색 반경 설정 (예: 2.0km)
+
+        List<Store> nearbyStores = storeRepository.findNearbyStores(loginUser.getLatitude(), loginUser.getLongitude(), radius);
+        List<StoreResponseDto> nearbyStoreDtoList = new ArrayList<>();
+
+        for (Store store : nearbyStores) {
+            List<StoreProduct> storeProducts = store.getStoreProducts();
+            for (StoreProduct storeProduct : storeProducts) {
+                if(Objects.equals(storeProduct.getProduct().getId(), productId)){
+                    StoreResponseDto storeResponseDto = new StoreResponseDto();
+                    storeResponseDto.setName(store.getStoreDetail().getName());
+                    storeResponseDto.setBasicAddress(store.getStoreDetail().getBasicAddress());
+                    storeResponseDto.setAvergeRating(store.getStoreDetail().getAverageRating());
+                    nearbyStoreDtoList.add(storeResponseDto);
+                }
+            }
+        }
+        return nearbyStoreDtoList;
+    }
+    // 메뉴별, 인기순(판매순)별 가게목록
+    @Override
+    public List<StoreResponseDto> getStoresSortedByMenuSales(Long productId) {
+
+        List<Store> storesSortedByMenuSales = storeRepository.getStoresSortedByMenuSales();
+        List<StoreResponseDto> storeBySalesStoreList = new ArrayList<>();
+        for (Store store : storesSortedByMenuSales) {
+            StoreResponseDto storeResponseDto = new StoreResponseDto();
+            storeResponseDto.setName(store.getStoreDetail().getName());
+            storeResponseDto.setBasicAddress(store.getStoreDetail().getBasicAddress());
+            storeResponseDto.setAvergeRating(store.getStoreDetail().getAverageRating());
+
+            storeBySalesStoreList.add(storeResponseDto);
+        }
+        return storeBySalesStoreList;
+
+//        List<Store> allStore = storeRepository.findAll();
+//        List<StoreResponseDto> bySalesStoreDtoList = new ArrayList<>();
+//
+//        for (Store store : allStore) {
+//            List<StoreProduct> storeProducts = store.getStoreProducts();
+//            for (StoreProduct storeProduct : storeProducts) {
+//
+//                if(Objects.equals(storeProduct.getProduct().getId(), productId)){
+//                    StoreResponseDto storeResponseDto = new StoreResponseDto();
+//                    storeResponseDto.setName(store.getStoreDetail().getName());
+//                    storeResponseDto.setBasicAddress(store.getStoreDetail().getBasicAddress());
+//                    storeResponseDto.setAvergeRating(store.getStoreDetail().getAverageRating());
+//
+//                    bySalesStoreDtoList.add(storeResponseDto);
+//                }
+//            }
+//
+//        }
+
+
+
+//        return bySalesStoreDtoList;
+    }
+
+    // 메뉴별, 리뷰순 가게목록
+
+
+    @Override
+    public List<StoreResponseDto> getStoresSortedByReiviews(Long productId) {
+        List<Store> storeByReviews = storeRepository.getStoreByReviews(); // TODO productId넣기!
+        List<StoreResponseDto> storeByReiviewsStoreList = new ArrayList<>();
+
+        for (Store store : storeByReviews) {
+            StoreResponseDto storeResponseDto = new StoreResponseDto();
+            storeResponseDto.setName(store.getStoreDetail().getName());
+            storeResponseDto.setBasicAddress(store.getStoreDetail().getBasicAddress());
+            storeResponseDto.setAvergeRating(store.getStoreDetail().getAverageRating());
+
+            storeByReiviewsStoreList.add(storeResponseDto);
+        }
+        return storeByReiviewsStoreList;
+
     }
 }

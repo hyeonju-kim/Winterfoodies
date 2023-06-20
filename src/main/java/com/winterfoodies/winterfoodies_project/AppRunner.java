@@ -43,35 +43,56 @@ public class AppRunner implements ApplicationRunner {
         ceo.setPassword("asdf123!");
         ceo.setName("홍길동");
 
-        //가게 생성 1
+        //가게 생성 1 - 신천붕어빵
         Store store = new Store();
         store.setStatus(StoreStatus.OPEN);
 
-        //가게 생성 2
+        //가게 생성 2 - 대야붕어빵
         Store store2 = new Store();
         store2.setStatus(StoreStatus.OPEN);
 
-        //가게 디테일 생성 1
+        //가게 생성 3 - 소새울호떡집
+        Store store3 = new Store();
+        store3.setStatus(StoreStatus.OPEN);
+
+        //가게 디테일 생성 1 - 신천붕어빵 (붕어빵, 델리만쥬, 다코야키)
         StoreDetail storeDetail = new StoreDetail();
-        storeDetail.setName("길동이네 다꼬야끼 가게");
-        storeDetail.setBasicAddress("부천역 1번 출구");
-        storeDetail.setDetailAddress("부천로 11길");
+        storeDetail.setName("신천붕어빵");
+        storeDetail.setBasicAddress("신천역 1번 출구");
+        storeDetail.setDetailAddress("신천로 11길");
         storeDetail.setAddressNo("14774");
         storeDetail.setOfficialCodeNo("1111111111");
         storeDetail.setRoadCodeNo("222222222");
         storeDetail.setInfo("존맛탱인 저희가게 많이 놀러와주세요~!");
         storeDetail.setAverageRating(4l);
+        storeDetail.setLatitude(37.381798);
+        storeDetail.setLongitude(126.800944);
 
-        //가게 디테일 생성 2
+        //가게 디테일 생성 2 - 대야붕어빵 (붕어빵, 다코야끼)
         StoreDetail storeDetail2 = new StoreDetail();
-        storeDetail2.setName("미미네 붕어빵");
-        storeDetail2.setBasicAddress("신도림역 1번 출구");
-        storeDetail2.setDetailAddress("신도림길 10번길 22");
+        storeDetail2.setName("대야붕어빵");
+        storeDetail2.setBasicAddress("대야역 1번 출구");
+        storeDetail2.setDetailAddress("대야길 10번길 22");
         storeDetail2.setAddressNo("45612");
         storeDetail2.setOfficialCodeNo("222223333");
         storeDetail2.setRoadCodeNo("222222222");
         storeDetail2.setInfo("국산 재료만 사용합니다. 많은 관심 부탁드려요~!");
         storeDetail2.setAverageRating(5l);
+        storeDetail2.setLatitude(37.375499);
+        storeDetail2.setLongitude(126.785488);
+
+        //가게 디테일 생성 3 - 소새울호떡집 (호떡)
+        StoreDetail storeDetail3 = new StoreDetail();
+        storeDetail3.setName("소새울호떡집");
+        storeDetail3.setBasicAddress("소새울역 1번 출구");
+        storeDetail3.setDetailAddress("소새울길 10번길 22");
+        storeDetail3.setAddressNo("45612");
+        storeDetail3.setOfficialCodeNo("222223333");
+        storeDetail3.setRoadCodeNo("222222222");
+        storeDetail3.setInfo("신규오픈 했어요 50% 할인 행사 합니다 ^^~!");
+        storeDetail3.setAverageRating(5l);
+        storeDetail3.setLatitude(37.467441);
+        storeDetail3.setLongitude(126.793399);
 
         //가게에게 가게 디테일 인젝션 1
         store.setStoreDetail(storeDetail);
@@ -81,13 +102,14 @@ public class AppRunner implements ApplicationRunner {
         store2.setStoreDetail(storeDetail2);
         storeRepository.save(store2);
 
-        //사장님에게 가게 인젝션 1
+        //가게에게 가게 디테일 인젝션 3
+        store3.setStoreDetail(storeDetail3);
+        storeRepository.save(store3);
+
+        //홍길동사장님에게 가게 인젝션 1
         ceo.setStore(store);
         userRepository.save(ceo);
 
-        //사장님에게 가게 인젝션 1
-        ceo.setStore(store2);
-        userRepository.save(ceo);
 
 
         //상품 생성
@@ -99,38 +121,76 @@ public class AppRunner implements ApplicationRunner {
         product2.setName("델리만쥬");
         product2.setPrice(3000L);
 
+        Product product3 = new Product();
+        product3.setName("다코야끼");
+        product3.setPrice(4000L);
+
+        Product product4 = new Product();
+        product4.setName("호떡");
+        product4.setPrice(2000L);
+
         productRepository.save(product);
         productRepository.save(product2);
+        productRepository.save(product3);
+        productRepository.save(product4);
 
         //가게에 상품 생성 후 연결
         StoreProduct storeProduct = new StoreProduct();
-        storeProduct.setStore(store);
-        storeProduct.setProduct(product);
+        storeProduct.setStore(store); // 신천붕어빵
+        storeProduct.setProduct(product); // 붕어빵
         storeProductRepository.save(storeProduct);
 
-        StoreProduct storeProduct1 = new StoreProduct();
-        storeProduct1.setStore(store);
-        storeProduct1.setProduct(product2);
-        storeProductRepository.save(storeProduct1);
+        StoreProduct storeProduct2 = new StoreProduct();
+        storeProduct2.setStore(store); // 신천붕어빵
+        storeProduct2.setProduct(product2); // 델리만쥬
+        storeProductRepository.save(storeProduct2);
 
-        //사용자 - 류현수, 김소라, 방성훈
+        StoreProduct storeProduct3 = new StoreProduct();
+        storeProduct3.setStore(store); // 신천붕어빵
+        storeProduct3.setProduct(product3); // 다코야끼
+        storeProductRepository.save(storeProduct3);
+
+        StoreProduct storeProduct4 = new StoreProduct();
+        storeProduct4.setStore(store2); // 대야붕어빵
+        storeProduct4.setProduct(product); // 붕어빵
+        storeProductRepository.save(storeProduct4);
+
+        StoreProduct storeProduct5 = new StoreProduct();
+        storeProduct5.setStore(store2); // 대야붕어빵
+        storeProduct5.setProduct(product3); // 다코야끼
+        storeProductRepository.save(storeProduct5);
+
+        StoreProduct storeProduct6 = new StoreProduct();
+        storeProduct6.setStore(store3); // 소새울호떡집
+        storeProduct6.setProduct(product4); // 호떡
+        storeProductRepository.save(storeProduct6);
+
+        //사용자 - 헨리, 김소라, 방성훈
         User customer = new User();
         customer.setPassword("33");
-        customer.setEmail("aa@kbanknow.com");
-        customer.setName("류현수");
+        customer.setEmail("aa@naver.com");
+        customer.setName("헨리");
         userRepository.save(customer);
 
         User customer2 = new User();
-        customer2.setPassword("100825asa!");
-        customer2.setEmail("bb@kbanknow.com");
+        customer2.setPassword("asdf123!");
+        customer2.setEmail("bb@naver.com");
         customer2.setName("김소라");
         userRepository.save(customer2);
 
         User customer3 = new User();
-        customer3.setPassword("100825asa111!");
-        customer3.setEmail("bang@kbanknow.com");
+        customer3.setPassword("qwer123!");
+        customer3.setEmail("bang@naver.com");
         customer3.setName("방성훈");
         userRepository.save(customer3);
+
+        //헨리에게 가게 인젝션 2
+        customer.setStore(store2);
+        userRepository.save(ceo);
+
+        //김소라에게 가게 인젝션 3
+        customer2.setStore(store3);
+        userRepository.save(ceo);
 
         // 사용자 찜하기 1
         FavoriteStore favoriteStore = new FavoriteStore();
@@ -149,7 +209,8 @@ public class AppRunner implements ApplicationRunner {
         Review review = new Review();
         review.setUserId(customer.getId());
         review.setRating(5L);
-        review.setStoreName("미미붕어빵");
+        review.setStore(store);
+        review.setStoreName("신천붕어빵");
         review.setContent("붕어빵 너무 맛있어요!!");
 //        review.setTimestamp(LocalDateTime.now());
         reviewRepository.save(review);
@@ -158,51 +219,124 @@ public class AppRunner implements ApplicationRunner {
         Review review2 = new Review();
         review2.setUserId(customer.getId());
         review2.setRating(4L);
-        review2.setStoreName("서울붕어빵");
+        review.setStore(store2);
+        review2.setStoreName("대야붕어빵");
         review2.setContent("매일 먹어요 최고!!");
 //        review2.setTimestamp(LocalDateTime.now());
         reviewRepository.save(review2);
 
-        //주문
+        // 사용자 리뷰작성 3
+        Review review3 = new Review();
+        review3.setUserId(customer.getId());
+        review3.setRating(5L);
+        review3.setStore(store);
+        review3.setStoreName("신천붕어빵");
+        review3.setContent("붕어빵 너무 맛있어요!!");
+        reviewRepository.save(review3);
+
+        // 사용자 리뷰작성 4
+        Review review4 = new Review();
+        review4.setUserId(customer.getId());
+        review4.setRating(5L);
+        review4.setStore(store);
+        review4.setStoreName("신천붕어빵");
+        review4.setContent("맛있어요!!");
+        reviewRepository.save(review4);
+
+        // 사용자 리뷰작성 5
+        Review review5 = new Review();
+        review5.setUserId(customer.getId());
+        review5.setRating(5L);
+        review5.setStore(store3);
+        review5.setStoreName("소새울호떡집");
+        review5.setContent("넘맛있어요!!");
+        reviewRepository.save(review5);
+
+        // 사용자 리뷰작성 6
+        Review review6 = new Review();
+        review6.setUserId(customer.getId());
+        review6.setRating(5L);
+        review6.setStore(store3);
+        review6.setStoreName("소새울호떡집");
+        review6.setContent("완전맛있어요!!");
+        reviewRepository.save(review6);
+
+        //주문 - 신천붕어빵 3회주문 ,  소새울호떡 2회주문,  대야붕어빵 1회주문
         Order order = new Order();
-        order.setUser(customer);
-        order.setStore(ceo.getStore());
+        order.setUser(customer); //헨리
+        order.setStore(store); // 신천붕어빵
         order.setCreateAt(LocalDateTime.now());
         order.setProcessYn("N");
         order.setTotalAmount(20000L);
         List<OrderProduct> orderProductList = new ArrayList<>();
-        orderProductList.add(new OrderProduct(new Product("호떡", 2L)));
-        orderProductList.add(new OrderProduct(new Product("어묵", 4L)));
+//        orderProductList.add(new OrderProduct(new Product("호떡", 2L)));
+//        orderProductList.add(new OrderProduct(new Product("어묵", 4L)));
         order.setOrderProducts(orderProductList);
         orderRepository.save(order);
 
         Order order2 = new Order();
         order2.setUser(customer2); // 김소라
-        order2.setStore(ceo.getStore());
+        order2.setStore(store2); // 대야붕어빵
         order2.setCreateAt(LocalDateTime.now());
         order2.setProcessYn("N");
         order2.setTotalAmount(10000L);
         List<OrderProduct> orderProductList2 = new ArrayList<>();
-        orderProductList2.add(new OrderProduct(new Product("다코야끼", 10L)));
-        orderProductList2.add(new OrderProduct(new Product("호빵", 4L)));
+//        orderProductList2.add(new OrderProduct(new Product("다코야끼", 10L)));
+//        orderProductList2.add(new OrderProduct(new Product("호빵", 4L)));
         order2.setOrderProducts(orderProductList2);
         orderRepository.save(order2);
 
         Order order3 = new Order();
-        order3.setUser(customer2); // 김소라
-        order3.setStore(ceo.getStore());
+        order3.setUser(customer3); // 방성훈
+        order3.setStore(store);  //신천붕어빵
         order3.setCreateAt(LocalDateTime.now());
         order3.setProcessYn("Y");
         order3.setTotalAmount(8000L);
         List<OrderProduct> orderProductList3 = new ArrayList<>();
-        orderProductList3.add(new OrderProduct(new Product("붕어빵",20L)));
-        orderProductList3.add(new OrderProduct(new Product("어묵", 5L)));
+//        orderProductList3.add(new OrderProduct(new Product("붕어빵",20L)));
+//        orderProductList3.add(new OrderProduct(new Product("어묵", 5L)));
         order3.setOrderProducts(orderProductList3);
         orderRepository.save(order3);
 
+        Order order4 = new Order();
+        order4.setUser(customer2); // 김소라
+        order4.setStore(store);  //신천붕어빵
+        order4.setCreateAt(LocalDateTime.now());
+        order4.setProcessYn("Y");
+        order4.setTotalAmount(8000L);
+        List<OrderProduct> orderProductList4 = new ArrayList<>();
+//        orderProductList4.add(new OrderProduct(new Product("붕어빵",20L)));
+//        orderProductList4.add(new OrderProduct(new Product("어묵", 5L)));
+        order4.setOrderProducts(orderProductList4);
+        orderRepository.save(order4);
+
+        Order order5 = new Order();
+        order5.setUser(customer2); // 김소라
+        order5.setStore(store3);  //소새울호떡집
+        order5.setCreateAt(LocalDateTime.now());
+        order5.setProcessYn("Y");
+        order5.setTotalAmount(8000L);
+        List<OrderProduct> orderProductList5 = new ArrayList<>();
+//        orderProductList5.add(new OrderProduct(new Product("붕어빵",20L)));
+//        orderProductList5.add(new OrderProduct(new Product("어묵", 5L)));
+        order5.setOrderProducts(orderProductList5);
+        orderRepository.save(order5);
+
+        Order order6 = new Order();
+        order6.setUser(customer2); // 김소라
+        order6.setStore(store3);  //소새울호떡집
+        order6.setCreateAt(LocalDateTime.now());
+        order6.setProcessYn("Y");
+        order6.setTotalAmount(8000L);
+        List<OrderProduct> orderProductList6 = new ArrayList<>();
+//        orderProductList6.add(new OrderProduct(new Product("붕어빵",20L)));
+//        orderProductList6.add(new OrderProduct(new Product("어묵", 5L)));
+        order6.setOrderProducts(orderProductList6);
+        orderRepository.save(order6);
+
         //주문상세
         OrderProduct orderProduct = new OrderProduct();
-        orderProduct.setOrder(order);
+        orderProduct.setOrder(order4);
         orderProduct.setProduct(product);
         orderProduct.setClientMessage("빨리 만들어주세요");
         orderProduct.setQuantity(3L);
@@ -211,7 +345,7 @@ public class AppRunner implements ApplicationRunner {
 
 
         OrderProduct orderProduct2 = new OrderProduct();
-        orderProduct2.setOrder(order);
+        orderProduct2.setOrder(order5);
         orderProduct2.setProduct(product2);
         orderProduct2.setClientMessage("덜 익혀주세요");
         orderProduct2.setQuantity(2L);
@@ -219,12 +353,39 @@ public class AppRunner implements ApplicationRunner {
         orderProductRepository.save(orderProduct2);
 
         OrderProduct orderProduct3 = new OrderProduct();
-        orderProduct3.setOrder(order2);
+        orderProduct3.setOrder(order6);
         orderProduct3.setProduct(product);
         orderProduct3.setClientMessage("리뷰이벤트 감자튀김이요");
         orderProduct3.setQuantity(10L);
         orderProduct3.setVisitTime(LocalDateTime.now().plus(Duration.ofHours(1)));
         orderProductRepository.save(orderProduct3);
+
+        OrderProduct orderProduct4 = new OrderProduct();
+        orderProduct4.setOrder(order);
+        orderProduct4.setProduct(product);
+        orderProduct4.setClientMessage("빨리 만들어주세요");
+        orderProduct4.setQuantity(3L);
+        orderProduct4.setVisitTime(LocalDateTime.now().plus(Duration.ofHours(1)));
+        orderProductRepository.save(orderProduct4);
+
+
+        OrderProduct orderProduct5 = new OrderProduct();
+        orderProduct5.setOrder(order);
+        orderProduct5.setProduct(product2);
+        orderProduct5.setClientMessage("덜 익혀주세요");
+        orderProduct5.setQuantity(2L);
+        orderProduct5.setVisitTime(LocalDateTime.now().plus(Duration.ofHours(1)));
+        orderProductRepository.save(orderProduct5);
+
+        OrderProduct orderProduct6 = new OrderProduct();
+        orderProduct6.setOrder(order2);
+        orderProduct6.setProduct(product);
+        orderProduct6.setClientMessage("리뷰이벤트 감자튀김이요");
+        orderProduct6.setQuantity(10L);
+        orderProduct6.setVisitTime(LocalDateTime.now().plus(Duration.ofHours(1)));
+        orderProductRepository.save(orderProduct6);
+
+
 
     }
 }
