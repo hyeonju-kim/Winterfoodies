@@ -1,6 +1,8 @@
 package com.winterfoodies.winterfoodies_project.service;
 
 import com.winterfoodies.winterfoodies_project.dto.order.OrderResponseDto;
+import com.winterfoodies.winterfoodies_project.dto.product.ProductResponseDto;
+import com.winterfoodies.winterfoodies_project.dto.store.StoreMainDto;
 import com.winterfoodies.winterfoodies_project.dto.store.StoreResponseDto;
 import com.winterfoodies.winterfoodies_project.dto.user.LocationDto;
 import com.winterfoodies.winterfoodies_project.dto.user.ReviewDto;
@@ -20,8 +22,6 @@ public interface UserService { // 인터페이스 메소드 명세를 만들고 
     //유저 비밀번호 변경
     public UserDto changePw(UserDto userDto);
 
-    // 가게 찜하기
-    public FavoriteStore  addFavoriteStore(Long userId, Long storeId);
 
     // 찜 한 가게 목록 조회
     public List<StoreResponseDto> getFavoriteStoresByUserId(Long userId);
@@ -57,4 +57,27 @@ public interface UserService { // 인터페이스 메소드 명세를 만들고 
     // 메뉴별, 리뷰순 가게목록
     public List<StoreResponseDto> getStoresSortedByReiviews(Long productId);
 
+
+    //230622
+    // 상호명 검색
+    List<StoreResponseDto> searchStores(String keyword);
+
+    // 지도로 근처 가게 검색
+    List<StoreResponseDto> searchStoresByAddressNo(String addressNo);
+
+
+    //  가게 상세 조회 (메뉴 및 인기간식)
+    public StoreMainDto getStoreProducts(Long storeId);
+
+    // 가게 상세 조회 (가게정보)
+    public StoreResponseDto getStoreDetails(Long storeId);
+
+    // 가게 상세 조회(리뷰)
+    public List<ReviewDto> getStoreReviews(Long storeId);
+
+    // 가게 찜하기
+    public UserResponseDto  addFavoriteStore(Long storeId);
+
 }
+
+

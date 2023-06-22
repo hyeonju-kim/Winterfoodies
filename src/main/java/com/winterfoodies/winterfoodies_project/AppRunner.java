@@ -11,7 +11,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,6 +66,8 @@ public class AppRunner implements ApplicationRunner {
         storeDetail.setOfficialCodeNo("1111111111");
         storeDetail.setRoadCodeNo("222222222");
         storeDetail.setInfo("존맛탱인 저희가게 많이 놀러와주세요~!");
+        storeDetail.setOpenTime(LocalTime.of(8,0));
+        storeDetail.setCloseTime(LocalTime.of(20,0));
         storeDetail.setAverageRating(4l);
         storeDetail.setLatitude(37.381798);
         storeDetail.setLongitude(126.800944);
@@ -77,6 +81,8 @@ public class AppRunner implements ApplicationRunner {
         storeDetail2.setOfficialCodeNo("222223333");
         storeDetail2.setRoadCodeNo("222222222");
         storeDetail2.setInfo("국산 재료만 사용합니다. 많은 관심 부탁드려요~!");
+        storeDetail2.setOpenTime(LocalTime.of(11,0));
+        storeDetail2.setCloseTime(LocalTime.of(22,0));
         storeDetail2.setAverageRating(5l);
         storeDetail2.setLatitude(37.375499);
         storeDetail2.setLongitude(126.785488);
@@ -90,6 +96,8 @@ public class AppRunner implements ApplicationRunner {
         storeDetail3.setOfficialCodeNo("222223333");
         storeDetail3.setRoadCodeNo("222222222");
         storeDetail3.setInfo("신규오픈 했어요 50% 할인 행사 합니다 ^^~!");
+        storeDetail3.setOpenTime(LocalTime.of(13,0));
+        storeDetail3.setCloseTime(LocalTime.of(20,0));
         storeDetail3.setAverageRating(5l);
         storeDetail3.setLatitude(37.467441);
         storeDetail3.setLongitude(126.793399);
@@ -334,10 +342,10 @@ public class AppRunner implements ApplicationRunner {
         order6.setOrderProducts(orderProductList6);
         orderRepository.save(order6);
 
-        //주문상세
+        //주문상품
         OrderProduct orderProduct = new OrderProduct();
-        orderProduct.setOrder(order4);
-        orderProduct.setProduct(product);
+        orderProduct.setOrder(order4); // 신천붕어빵
+        orderProduct.setProduct(product); // 붕어빵
         orderProduct.setClientMessage("빨리 만들어주세요");
         orderProduct.setQuantity(3L);
         orderProduct.setVisitTime(LocalDateTime.now().plus(Duration.ofHours(1)));
@@ -345,24 +353,24 @@ public class AppRunner implements ApplicationRunner {
 
 
         OrderProduct orderProduct2 = new OrderProduct();
-        orderProduct2.setOrder(order5);
-        orderProduct2.setProduct(product2);
+        orderProduct2.setOrder(order5); // 소새울호떡집
+        orderProduct2.setProduct(product2); // 델리만쥬
         orderProduct2.setClientMessage("덜 익혀주세요");
         orderProduct2.setQuantity(2L);
         orderProduct2.setVisitTime(LocalDateTime.now().plus(Duration.ofHours(1)));
         orderProductRepository.save(orderProduct2);
 
         OrderProduct orderProduct3 = new OrderProduct();
-        orderProduct3.setOrder(order6);
-        orderProduct3.setProduct(product);
+        orderProduct3.setOrder(order6); // 소새울호떡집
+        orderProduct3.setProduct(product); // 붕어빵
         orderProduct3.setClientMessage("리뷰이벤트 감자튀김이요");
         orderProduct3.setQuantity(10L);
         orderProduct3.setVisitTime(LocalDateTime.now().plus(Duration.ofHours(1)));
         orderProductRepository.save(orderProduct3);
 
         OrderProduct orderProduct4 = new OrderProduct();
-        orderProduct4.setOrder(order);
-        orderProduct4.setProduct(product);
+        orderProduct4.setOrder(order); // 신천붕어빵
+        orderProduct4.setProduct(product); // 붕어빵
         orderProduct4.setClientMessage("빨리 만들어주세요");
         orderProduct4.setQuantity(3L);
         orderProduct4.setVisitTime(LocalDateTime.now().plus(Duration.ofHours(1)));
@@ -370,16 +378,16 @@ public class AppRunner implements ApplicationRunner {
 
 
         OrderProduct orderProduct5 = new OrderProduct();
-        orderProduct5.setOrder(order);
-        orderProduct5.setProduct(product2);
+        orderProduct5.setOrder(order); // 신천붕어빵
+        orderProduct5.setProduct(product2); // 델리만쥬
         orderProduct5.setClientMessage("덜 익혀주세요");
         orderProduct5.setQuantity(2L);
         orderProduct5.setVisitTime(LocalDateTime.now().plus(Duration.ofHours(1)));
         orderProductRepository.save(orderProduct5);
 
         OrderProduct orderProduct6 = new OrderProduct();
-        orderProduct6.setOrder(order2);
-        orderProduct6.setProduct(product);
+        orderProduct6.setOrder(order2); // 대야붕어빵
+        orderProduct6.setProduct(product); // 붕어빵
         orderProduct6.setClientMessage("리뷰이벤트 감자튀김이요");
         orderProduct6.setQuantity(10L);
         orderProduct6.setVisitTime(LocalDateTime.now().plus(Duration.ofHours(1)));

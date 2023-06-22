@@ -92,21 +92,6 @@ public class MyPageController {
 
     ///////////////////////////////////////////////////////////////////////////
 
-    // ********** 3. 검색 **********
-    // 상호명 검색
-    @GetMapping("/search")
-    @ApiOperation(value = "상호명 검색")
-    public void search() {
-        return;
-    }
-
-    // 지도 검색
-    @GetMapping("/search/map")
-    @ApiOperation(value = "지도로 검색")
-    public void searchMap() {
-        return;
-    }
-
     // ********** 4. 장바구니 **********
     // 장바구니 페이지
     @GetMapping("/basket")

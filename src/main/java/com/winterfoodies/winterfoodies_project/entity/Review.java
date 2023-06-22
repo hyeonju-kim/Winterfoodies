@@ -24,6 +24,6 @@ public class Review extends Timestamped{
     private Long userId;
     private byte[] photo;
     private String content;
-//    private LocalDateTime timestamp;
+//    private LocalDateTime timestamp;  -> 이건 추가할 필요 없음!!!!!!  reviewDto에는 시작시간 담아야하니까 추가해준것
 
 }

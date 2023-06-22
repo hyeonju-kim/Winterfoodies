@@ -13,6 +13,7 @@ public class ScenarioConfig {
     @Bean
     public UserDto loginUser(){
        UserDto userDto = new UserDto();
+       userDto.setId(1L);
        userDto.setEmail("asdf@naver.com");
        userDto.setPassword("100825asa!");
        userDto.setName("장발장");

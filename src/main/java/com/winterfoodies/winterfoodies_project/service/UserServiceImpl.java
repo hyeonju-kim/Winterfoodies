@@ -2,15 +2,20 @@ package com.winterfoodies.winterfoodies_project.service;
 
 import com.winterfoodies.winterfoodies_project.config.LocationConfig;
 import com.winterfoodies.winterfoodies_project.dto.order.OrderResponseDto;
+import com.winterfoodies.winterfoodies_project.dto.product.ProductResponseDto;
+import com.winterfoodies.winterfoodies_project.dto.store.StoreMainDto;
 import com.winterfoodies.winterfoodies_project.dto.store.StoreRequestDto;
 import com.winterfoodies.winterfoodies_project.dto.store.StoreResponseDto;
 import com.winterfoodies.winterfoodies_project.dto.user.LocationDto;
 import com.winterfoodies.winterfoodies_project.dto.user.ReviewDto;
 import com.winterfoodies.winterfoodies_project.dto.user.UserDto;
+import com.winterfoodies.winterfoodies_project.dto.user.UserResponseDto;
 import com.winterfoodies.winterfoodies_project.entity.*;
 import com.winterfoodies.winterfoodies_project.repository.*;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,8 +31,8 @@ public class UserServiceImpl implements UserService{
     private final ReviewRepository reviewRepository;
     private final OrderRepository orderRepository;
     private final StoreRepository storeRepository;
-    private final LocationConfig locationConfig;
-
+    private final StoreProductRepository storeProductRepository;
+    private final OrderProductRepository orderProductRepository;
 
     @Override
     public UserDto retrieveUser() {
@@ -61,14 +66,7 @@ public class UserServiceImpl implements UserService{
         return notFoundUserDto;
     }
 
-    // 가게 찜하기
-    @Override
-    public FavoriteStore addFavoriteStore(Long userId, Long storeId) {
-        FavoriteStore favoriteStore = new FavoriteStore();
-        favoriteStore.setUserId(userId);
-        favoriteStore.setStoreId(storeId);
-        return favoriteStoreRepository.save(favoriteStore);
-    }
+
 
     // 찜한 가게 목록 조회
     @Override
@@ -223,34 +221,9 @@ public class UserServiceImpl implements UserService{
             storeBySalesStoreList.add(storeResponseDto);
         }
         return storeBySalesStoreList;
-
-//        List<Store> allStore = storeRepository.findAll();
-//        List<StoreResponseDto> bySalesStoreDtoList = new ArrayList<>();
-//
-//        for (Store store : allStore) {
-//            List<StoreProduct> storeProducts = store.getStoreProducts();
-//            for (StoreProduct storeProduct : storeProducts) {
-//
-//                if(Objects.equals(storeProduct.getProduct().getId(), productId)){
-//                    StoreResponseDto storeResponseDto = new StoreResponseDto();
-//                    storeResponseDto.setName(store.getStoreDetail().getName());
-//                    storeResponseDto.setBasicAddress(store.getStoreDetail().getBasicAddress());
-//                    storeResponseDto.setAvergeRating(store.getStoreDetail().getAverageRating());
-//
-//                    bySalesStoreDtoList.add(storeResponseDto);
-//                }
-//            }
-//
-//        }
-
-
-
-//        return bySalesStoreDtoList;
     }
 
     // 메뉴별, 리뷰순 가게목록
-
-
     @Override
     public List<StoreResponseDto> getStoresSortedByReiviews(Long productId) {
         List<Store> storeByReviews = storeRepository.getStoreByReviews(); // TODO productId넣기!
@@ -265,6 +238,121 @@ public class UserServiceImpl implements UserService{
             storeByReiviewsStoreList.add(storeResponseDto);
         }
         return storeByReiviewsStoreList;
+    }
 
+    // 상호명 검색
+    @Override
+    public List<StoreResponseDto> searchStores(String keyword) {
+        List<Store> storeList = storeRepository.searchStores(keyword);
+
+        List<StoreResponseDto> storeResponseDtoList = new ArrayList<>();
+        for (Store store : storeList) {
+            StoreResponseDto storeResponseDto = new StoreResponseDto();
+            storeResponseDto.setName(store.getStoreDetail().getName());
+            storeResponseDto.setBasicAddress(store.getStoreDetail().getBasicAddress());
+            storeResponseDto.setAvergeRating(store.getStoreDetail().getAverageRating());
+
+            storeResponseDtoList.add(storeResponseDto);
+        }
+        return storeResponseDtoList;
+    }
+
+    // 지도로 근처 가게 검색 (addressNo가 같은 가게 반환)
+    @Override
+    public List<StoreResponseDto> searchStoresByAddressNo(String addressNo) {
+        List<Store> storeList = storeRepository.searchStoresByAddressNo(addressNo);
+
+        List<StoreResponseDto> storeResponseDtoList = new ArrayList<>();
+        for (Store store : storeList) {
+            StoreResponseDto storeResponseDto = new StoreResponseDto();
+            storeResponseDto.setName(store.getStoreDetail().getName());
+            storeResponseDto.setBasicAddress(store.getStoreDetail().getBasicAddress());
+            storeResponseDto.setAvergeRating(store.getStoreDetail().getAverageRating());
+
+            storeResponseDtoList.add(storeResponseDto);
+        }
+        return storeResponseDtoList;
+    }
+
+    //  가게 상세 조회 (메뉴 및 인기간식)
+    @Override
+    public StoreMainDto getStoreProducts(Long storeId) {
+        StoreMainDto storeMainDto = new StoreMainDto();
+
+        // 가게 메뉴 담는 리스트 만들기
+        List<StoreProduct> storeProductList = storeProductRepository.findByStoreId(storeId);
+        List<ProductResponseDto> storeProductDtoList = new ArrayList<>();
+
+        for (StoreProduct storeProduct : storeProductList) {
+            ProductResponseDto productResponseDto = new ProductResponseDto();
+            productResponseDto.setProductName(storeProduct.getProduct().getName());
+            productResponseDto.setPrice(storeProduct.getProduct().getPrice());
+            productResponseDto.setQuantity(1L);
+
+            storeProductDtoList.add(productResponseDto);
+        }
+
+        // 인기 메뉴 리스트 만들기
+        List<StoreProduct> storeProducts = storeProductRepository.findByStoreId(storeId);
+        List<ProductResponseDto> popularProductsDtoList = new ArrayList<>();
+
+        for (StoreProduct storeProduct : storeProducts) {
+            ProductResponseDto productResponseDto = new ProductResponseDto();
+            productResponseDto.setProductName(storeProduct.getProduct().getName());
+
+            popularProductsDtoList.add(productResponseDto);
+        }
+
+        storeMainDto.setProductResponseDtoList(storeProductDtoList);
+        storeMainDto.setPopularProductsDtoList(popularProductsDtoList);
+
+        return storeMainDto;
+    }
+
+    // 가게 상세 조회 (가게정보)
+    @Override
+    public StoreResponseDto getStoreDetails(Long storeId) {
+        Optional<Store> optionalStore = storeRepository.findById(storeId);
+        Store store = optionalStore.get();
+        StoreResponseDto storeResponseDto = new StoreResponseDto();
+        storeResponseDto.setBasicAddress(store.getStoreDetail().getBasicAddress());
+        storeResponseDto.setDetailAddress(store.getStoreDetail().getDetailAddress());
+        storeResponseDto.setOpenTime(store.getStoreDetail().getOpenTime());
+        storeResponseDto.setCloseTime(store.getStoreDetail().getCloseTime());
+        storeResponseDto.setInfo(store.getStoreDetail().getInfo());
+
+        return storeResponseDto;
+    }
+
+    // 가게 상세 조회(리뷰)
+    @Override
+    public List<ReviewDto> getStoreReviews(Long storeId) {
+
+        List<Review> reviewList = reviewRepository.findByStoreId(storeId);
+        List<ReviewDto> reviewDtoList = new ArrayList<>();
+
+        for (Review review : reviewList) {
+            ReviewDto reviewDto = new ReviewDto();
+            reviewDto.setRating(review.getRating());
+            reviewDto.setPhoto(review.getPhoto());
+            reviewDto.setContent(review.getContent());
+            reviewDto.setTimestamp(review.getCreatedAt()); // getTimeStamp라고 해서 안나왔었음
+            reviewDtoList.add(reviewDto);
+        }
+        return reviewDtoList;
+
+    }
+
+    // 가게 찜하기
+    @Override
+    public UserResponseDto addFavoriteStore(Long storeId) {
+        FavoriteStore favoriteStore = new FavoriteStore();
+        favoriteStore.setUserId(loginUser.getId());
+        favoriteStore.setStoreId(storeId);
+        favoriteStoreRepository.save(favoriteStore);
+
+        UserResponseDto userDto = new UserResponseDto();
+        userDto.setMessage("찜하기 등록!");
+        return userDto;
     }
 }

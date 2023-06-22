@@ -22,7 +22,7 @@ public class ReviewDto extends Timestamped {
     private byte[] photo;
 
     private String content;
-//    private LocalDateTime timestamp;
+    private LocalDateTime timestamp;
 
     private String message; // 리뷰가 등록되었습니다.
 }

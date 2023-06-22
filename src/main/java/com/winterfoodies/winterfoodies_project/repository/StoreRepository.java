@@ -24,4 +24,12 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
     // 상품별, 리뷰순으로 정렬하여 가게목록 가져오기 (신천3리뷰 - 소새울2리뷰 - 대야1리뷰)
     @Query("SELECT s FROM Store s JOIN s.reviews r GROUP BY s.id ORDER BY SUM(r.size) DESC ")
     List<Store> getStoreByReviews();
+
+    // 상호명 검색
+    @Query("SELECT s FROM Store s WHERE s.storeDetail.name LIKE %:keyword%")
+    List<Store> searchStores(@Param("keyword") String keyword);
+
+    // 지도로 근처가게 검색 (addressNo가 같은 가게 검색)
+    @Query("SELECT s FROM Store s WHERE s.storeDetail.addressNo = :addressNo")
+    List<Store> searchStoresByAddressNo(@Param("addressNo") String addressNo);
 }

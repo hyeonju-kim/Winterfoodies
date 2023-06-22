@@ -8,6 +8,7 @@ import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Objects;
 
 @Entity
@@ -43,10 +44,10 @@ public class StoreDetail {
     private Long averageRating;
 
     @Column(name = "STORE_OPEN_TIME")
-    private LocalDateTime openTime;
+    private LocalTime openTime;
 
     @Column(name = "STORE_CLOSE_TIME")
-    private LocalDateTime closeTime;
+    private LocalTime closeTime;
 
 
     private double latitude;
