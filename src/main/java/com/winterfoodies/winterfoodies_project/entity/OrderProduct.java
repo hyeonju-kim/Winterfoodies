@@ -2,6 +2,8 @@ package com.winterfoodies.winterfoodies_project.entity;
 
 
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,10 +20,12 @@ public class OrderProduct {
     @Column(name = "ORDER_PRODUCT_ID")
     private Long id;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "ORDER_ID")
     private Order order;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "PRODUCT_ID")
     private Product product;

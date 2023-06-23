@@ -1,6 +1,7 @@
 package com.winterfoodies.winterfoodies_project.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import javax.persistence.*;
@@ -32,9 +33,15 @@ public class Product {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
     List<StoreProduct> storeProducts = new ArrayList<>();
 
-    public Product() {
+    @JsonIgnore
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CartProduct> cartProducts = new ArrayList<>();
 
+
+
+    public Product() {
     }
+
     public Product(String name, Long quantity) {
         this.name = name;
         this.quantity = quantity;

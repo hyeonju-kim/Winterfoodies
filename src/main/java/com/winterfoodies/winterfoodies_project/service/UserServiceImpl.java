@@ -33,6 +33,9 @@ public class UserServiceImpl implements UserService{
     private final StoreRepository storeRepository;
     private final StoreProductRepository storeProductRepository;
     private final OrderProductRepository orderProductRepository;
+    private final CartRepository cartRepository;
+    private final ProductRepository productRepository;
+    private final CartProductRepository cartProductRepository;
 
     @Override
     public UserDto retrieveUser() {
@@ -355,4 +358,31 @@ public class UserServiceImpl implements UserService{
         userDto.setMessage("찜하기 등록!");
         return userDto;
     }
+
+    // 장바구니에 상품 추가
+    @Override
+    public UserResponseDto addProductToCart(Long cartId, Long productId, int quantity) {
+        Optional<Cart> optionalCart = cartRepository.findById(cartId);
+        Cart cart = optionalCart.get();
+        Optional<Product> optionalProduct = productRepository.findById(productId);
+        Product product = optionalProduct.get();
+        CartProduct cartProduct = new CartProduct(cart, product, quantity);
+        cartProductRepository.save(cartProduct);
+
+        UserResponseDto userResponseDto = new UserResponseDto();
+        userResponseDto.setMessage("장바구니에 상품을 담았습니다.");
+
+        return userResponseDto;
+    }
+
+
+    // 장바구니 상품 목록 조회
+    @Override
+    public List<CartProduct> getCartProduct(Long cartId) {
+        return cartProductRepository.findByCartId(cartId);
+
+    }
+
+
+
 }

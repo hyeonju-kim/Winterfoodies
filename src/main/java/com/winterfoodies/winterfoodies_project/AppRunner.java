@@ -29,6 +29,7 @@ public class AppRunner implements ApplicationRunner {
     private final StoreRepository storeRepository;
     private final FavoriteStoreRepository favoriteStoreRepository;
     private final ReviewRepository reviewRepository;
+    private final CartRepository cartRepository;
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -392,6 +393,12 @@ public class AppRunner implements ApplicationRunner {
         orderProduct6.setQuantity(10L);
         orderProduct6.setVisitTime(LocalDateTime.now().plus(Duration.ofHours(1)));
         orderProductRepository.save(orderProduct6);
+
+        // 장바구니 생성
+        Cart cart = new Cart();
+        Cart cart2 = new Cart();
+        cartRepository.save(cart);
+        cartRepository.save(cart2);
 
 
 

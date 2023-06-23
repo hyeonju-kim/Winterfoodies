@@ -1,5 +1,6 @@
 package com.winterfoodies.winterfoodies_project.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.winterfoodies.winterfoodies_project.dto.user.UserRequestDto;
 import javax.persistence.*;
@@ -46,6 +47,7 @@ public class User implements Serializable {
     private double latitude;
     private double longitude;
 
+    @JsonIgnore // 재귀순환 방지
     @OneToOne
     @JoinColumn(name = "STORE_ID")
     private Store store;

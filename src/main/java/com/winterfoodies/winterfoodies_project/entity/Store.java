@@ -1,5 +1,6 @@
 package com.winterfoodies.winterfoodies_project.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.winterfoodies.winterfoodies_project.dto.store.StoreRequestDto;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,13 +23,16 @@ public class Store implements Serializable {
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "storeSeq")
     private Long id;
 
+
     @Column(name = "STORE_STATUS")
     @Enumerated(EnumType.STRING)
     private StoreStatus status;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "store")
     private User user;
 
+    @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "STORE_DETAIL_ID")
     private StoreDetail storeDetail;

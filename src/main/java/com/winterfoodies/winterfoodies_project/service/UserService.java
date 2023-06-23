@@ -78,6 +78,12 @@ public interface UserService { // 인터페이스 메소드 명세를 만들고 
     // 가게 찜하기
     public UserResponseDto  addFavoriteStore(Long storeId);
 
+    // 장바구니에 상품 추가
+    public UserResponseDto addProductToCart(Long cartId, Long productId, int quantity);
+
+    // 장바구니 상품 목록 조회
+    public List<CartProduct> getCartProduct(Long cartId);
+
 }
 
 
