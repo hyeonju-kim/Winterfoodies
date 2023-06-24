@@ -1,5 +1,6 @@
 package com.winterfoodies.winterfoodies_project.controller;
 
+import com.winterfoodies.winterfoodies_project.dto.user.CartDto;
 import com.winterfoodies.winterfoodies_project.dto.user.UserResponseDto;
 import com.winterfoodies.winterfoodies_project.entity.Cart;
 import com.winterfoodies.winterfoodies_project.entity.CartProduct;
@@ -37,39 +38,22 @@ public class CartController {
 //        return ResponseEntity.ok("장바구니에 추가되었습니다!");
 //    }
 
-//  위의 코드를 이렇게 써도 된다 !
-//    @PostMapping("/{cartId}/items")
-//    public void addProductToCart(@PathVariable Long cartId, @RequestParam Long productId, @RequestParam int quantity, HttpServletResponse response) {
-//        userService.addProductToCart(cartId, productId, quantity);
-//        response.setStatus(HttpStatus.OK.value());
-//        response.setContentType(MediaType.TEXT_PLAIN_VALUE);
-//        try {
-//            response.getWriter().write("Product added to cart");
-//        } catch (IOException e) {
-//            // 예외 처리
-//        }
-//    }
+    // 장바구니에 상품 조회 API
+    @GetMapping("/{cartId}/items")
+    public List<CartDto> getCartProducts(@PathVariable Long cartId) {
+        return userService.getCartProduct(cartId);
+    }
 
-
-    // 장바구니 상품 목록 조회 API
+    //  위의 코드를 이렇게 써도 된다 !
 //    @GetMapping("/{cartId}/items")
 //    public ResponseEntity<List<CartProduct>> getCartItems(@PathVariable Long cartId) {
 //        List<CartProduct> cartProducts = userService.getCartItems(cartId);
 //        return ResponseEntity.ok(cartProducts);
 //    }
-    @GetMapping("/{cartId}/items")
-    public List<CartProduct> getCartProducts(@PathVariable Long cartId) {
-//        return userService.getCartProduct(cartId);
-        Cart cart = new Cart();
-        cart.setId(1L);
-        Product product = new Product("호빵", 5L);
-        product.setId(1L);
-        product.setPrice(4000L);
-        CartProduct cartProduct = new CartProduct(cart, product, 5);
-        List<CartProduct> cartProductList = new ArrayList<>();
-        cartProductList.add(cartProduct);
-        return cartProductList;
 
+    // 주문완료 페이지
+    @GetMapping("/{cartId}/items/confirm")
+    public List<CartDto> orderConfirm(@PathVariable Long cartId) {
+        return userService.getOrderConfirmPage(cartId);
     }
-
 }

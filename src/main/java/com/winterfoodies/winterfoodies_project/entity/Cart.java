@@ -22,13 +22,8 @@ public class Cart {
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartProduct> cartProducts = new ArrayList<>();
 
-    // 상품 추가 메서드
-    public void addProduct(Product product, int quantity) {
-        CartProduct cartProduct = new CartProduct(this, product, quantity);
-        cartProducts.add(cartProduct);
-    }
-
     // 상품 목록 조회 메서드
+    @JsonIgnore
     public List<CartProduct> getCartProducts() {
         return cartProducts;
     }

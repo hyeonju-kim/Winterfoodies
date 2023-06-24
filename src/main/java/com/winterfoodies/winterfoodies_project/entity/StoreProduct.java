@@ -1,5 +1,6 @@
 package com.winterfoodies.winterfoodies_project.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,10 +16,12 @@ public class StoreProduct {
     @Column(name = "STORE_PRODUCT_ID")
     private Long id;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "STORE_ID")
     private Store store;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PRODUCT_ID")
     private Product product;

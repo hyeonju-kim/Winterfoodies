@@ -1,5 +1,7 @@
 package com.winterfoodies.winterfoodies_project.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,6 +17,7 @@ public class Review extends Timestamped{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "STORE_ID")
     private Store store;

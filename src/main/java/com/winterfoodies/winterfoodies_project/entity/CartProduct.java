@@ -20,15 +20,18 @@ public class CartProduct {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cart_id")
     private Cart cart;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
 
     private int quantity;
+
+    private Long totalPrice;
+//    private Long totalPrice = product.getPrice() * quantity;
 
     public CartProduct(Cart cart, Product product, int quantity) {
         this.cart = cart;

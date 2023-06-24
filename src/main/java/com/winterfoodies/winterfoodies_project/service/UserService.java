@@ -4,10 +4,7 @@ import com.winterfoodies.winterfoodies_project.dto.order.OrderResponseDto;
 import com.winterfoodies.winterfoodies_project.dto.product.ProductResponseDto;
 import com.winterfoodies.winterfoodies_project.dto.store.StoreMainDto;
 import com.winterfoodies.winterfoodies_project.dto.store.StoreResponseDto;
-import com.winterfoodies.winterfoodies_project.dto.user.LocationDto;
-import com.winterfoodies.winterfoodies_project.dto.user.ReviewDto;
-import com.winterfoodies.winterfoodies_project.dto.user.UserDto;
-import com.winterfoodies.winterfoodies_project.dto.user.UserResponseDto;
+import com.winterfoodies.winterfoodies_project.dto.user.*;
 import com.winterfoodies.winterfoodies_project.entity.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -82,7 +79,10 @@ public interface UserService { // 인터페이스 메소드 명세를 만들고 
     public UserResponseDto addProductToCart(Long cartId, Long productId, int quantity);
 
     // 장바구니 상품 목록 조회
-    public List<CartProduct> getCartProduct(Long cartId);
+    public List<CartDto> getCartProduct(Long cartId);
+
+    // 주문완료 페이지 조회
+    public List<CartDto> getOrderConfirmPage(Long cartId);
 
 }
 

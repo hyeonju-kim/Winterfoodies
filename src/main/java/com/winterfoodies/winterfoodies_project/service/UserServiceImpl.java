@@ -6,10 +6,7 @@ import com.winterfoodies.winterfoodies_project.dto.product.ProductResponseDto;
 import com.winterfoodies.winterfoodies_project.dto.store.StoreMainDto;
 import com.winterfoodies.winterfoodies_project.dto.store.StoreRequestDto;
 import com.winterfoodies.winterfoodies_project.dto.store.StoreResponseDto;
-import com.winterfoodies.winterfoodies_project.dto.user.LocationDto;
-import com.winterfoodies.winterfoodies_project.dto.user.ReviewDto;
-import com.winterfoodies.winterfoodies_project.dto.user.UserDto;
-import com.winterfoodies.winterfoodies_project.dto.user.UserResponseDto;
+import com.winterfoodies.winterfoodies_project.dto.user.*;
 import com.winterfoodies.winterfoodies_project.entity.*;
 import com.winterfoodies.winterfoodies_project.repository.*;
 import io.swagger.annotations.ApiOperation;
@@ -24,7 +21,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
     private final UserDto loginUser; //ScenarioConfig에서 등록한 bean을 주입받아서 사용하기
     private final UserRepository userRepository;
     private final FavoriteStoreRepository favoriteStoreRepository;
@@ -40,7 +37,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public UserDto retrieveUser() {
         Optional<User> user = userRepository.findByEmail(loginUser.getEmail());
-        if(user.isPresent()){  // respository에서 가져온건 꼭 분기처리 해야한다!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        if (user.isPresent()) {  // respository에서 가져온건 꼭 분기처리 해야한다!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             User foundUser = user.get();
             UserDto foundUserDto = new UserDto();
             foundUserDto.setEmail(foundUser.getEmail());
@@ -68,7 +65,6 @@ public class UserServiceImpl implements UserService{
         notFoundUserDto.setMessage("해당 유저를 찾을 수 없습니다.");
         return notFoundUserDto;
     }
-
 
 
     // 찜한 가게 목록 조회
@@ -107,7 +103,6 @@ public class UserServiceImpl implements UserService{
     }
 
 
-
     // 주문한 가게 목록 조회
     @Override
     public List<OrderResponseDto> getOrderByUserId(Long userId) {
@@ -129,7 +124,7 @@ public class UserServiceImpl implements UserService{
 
             orderResponseDtoList.add(orderResponseDto);
         }
-        return  orderResponseDtoList;
+        return orderResponseDtoList;
 
     }
 
@@ -169,7 +164,7 @@ public class UserServiceImpl implements UserService{
         return configuration;
     }
 
-// ################################################################ 메인페이지 ##############################################################
+    // ################################################################ 메인페이지 ##############################################################
     // 메인페이지 - 나와 가까운 가게 목록 보이기
     @Override
     public List<StoreResponseDto> getNearbyStores() {
@@ -198,7 +193,7 @@ public class UserServiceImpl implements UserService{
         for (Store store : nearbyStores) {
             List<StoreProduct> storeProducts = store.getStoreProducts();
             for (StoreProduct storeProduct : storeProducts) {
-                if(Objects.equals(storeProduct.getProduct().getId(), productId)){
+                if (Objects.equals(storeProduct.getProduct().getId(), productId)) {
                     StoreResponseDto storeResponseDto = new StoreResponseDto();
                     storeResponseDto.setName(store.getStoreDetail().getName());
                     storeResponseDto.setBasicAddress(store.getStoreDetail().getBasicAddress());
@@ -209,6 +204,7 @@ public class UserServiceImpl implements UserService{
         }
         return nearbyStoreDtoList;
     }
+
     // 메뉴별, 인기순(판매순)별 가게목록
     @Override
     public List<StoreResponseDto> getStoresSortedByMenuSales(Long productId) {
@@ -378,11 +374,35 @@ public class UserServiceImpl implements UserService{
 
     // 장바구니 상품 목록 조회
     @Override
-    public List<CartProduct> getCartProduct(Long cartId) {
-        return cartProductRepository.findByCartId(cartId);
+    public List<CartDto> getCartProduct(Long cartId) {
+        List<CartProduct> cartProducts = cartProductRepository.findByCartId(cartId);
+        List<CartDto> cartDtoList = new ArrayList<>();
+        for (CartProduct cartProduct : cartProducts) {
+            CartDto cartDto = new CartDto();
+            cartDto.setId(cartProduct.getId());
+            cartDto.setName(cartProduct.getProduct().getName());
+            cartDto.setPrice(cartProduct.getProduct().getPrice());
+            cartDto.setQuantity(cartProduct.getQuantity());
+            cartDtoList.add(cartDto);
+        }
+        return cartDtoList;
 
     }
 
-
-
+    // 주문완료 페이지 조회
+    @Override
+    public List<CartDto> getOrderConfirmPage(Long cartId) {
+        List<CartProduct> cartProducts = cartProductRepository.findByCartId(cartId);
+        List<CartDto> cartDtoList = new ArrayList<>();
+        for (CartProduct cartProduct : cartProducts) {
+            CartDto cartDto = new CartDto();
+            cartDto.setId(cartProduct.getId());
+            cartDto.setName(cartProduct.getProduct().getName());
+            cartDto.setQuantity(cartProduct.getQuantity());
+            cartDto.setTotalPrice(cartProduct.getQuantity() * cartProduct.getProduct().getPrice());
+            cartDto.setEstimatedCookingTime("조리 예상 시간 :" + "10~20분");
+            cartDtoList.add(cartDto);
+        }
+        return cartDtoList;
+    }
 }
