@@ -33,6 +33,7 @@ public class AppRunner implements ApplicationRunner {
 
     private final JdbcTemplate jdbcTemplate;
 
+
     @Transactional
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -44,7 +45,7 @@ public class AppRunner implements ApplicationRunner {
         User ceo = new User();
         ceo.setEmail("asdf@naver.com");
         ceo.setPassword("asdf123!");
-        ceo.setName("홍길동");
+        ceo.setUsername("홍길동");
 
         //가게 생성 1 - 신천붕어빵
         Store store = new Store();
@@ -178,19 +179,19 @@ public class AppRunner implements ApplicationRunner {
         User customer = new User();
         customer.setPassword("33");
         customer.setEmail("aa@naver.com");
-        customer.setName("헨리");
+        customer.setUsername("헨리");
         userRepository.save(customer);
 
         User customer2 = new User();
         customer2.setPassword("asdf123!");
         customer2.setEmail("bb@naver.com");
-        customer2.setName("김소라");
+        customer2.setUsername("김소라");
         userRepository.save(customer2);
 
         User customer3 = new User();
         customer3.setPassword("qwer123!");
         customer3.setEmail("bang@naver.com");
-        customer3.setName("방성훈");
+        customer3.setUsername("방성훈");
         userRepository.save(customer3);
 
         //헨리에게 가게 인젝션 2

@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.usertype.UserType;
+//import org.springframework.security.crypto.password.PasswordEncoder;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +31,7 @@ public class User implements Serializable {
     private Long id;
 
     @Column(name = "USER_NAME")
-    private String name;
+    private String username;
 
     @Column(name = "USER_PASSWORD")
     private String password;
@@ -56,12 +58,12 @@ public class User implements Serializable {
     private List<Order> order = new ArrayList<>();
 
     public User(UserRequestDto userRequestDto, UserType type){
-        this.name = userRequestDto.getName();
+        this.username = userRequestDto.getUsername();
         this.email = userRequestDto.getEmail();
         this.phoneNumber = userRequestDto.getPhoneNumber();
         this.password = userRequestDto.getPassword();
     }
-//
+
 //    public void encryptPassword(PasswordEncoder passwordEncoder){
 //        this.password = passwordEncoder.encode(this.password);
 //    }

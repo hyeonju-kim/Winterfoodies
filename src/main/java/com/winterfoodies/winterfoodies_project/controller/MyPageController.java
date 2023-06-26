@@ -8,6 +8,7 @@ import com.winterfoodies.winterfoodies_project.entity.*;
 import com.winterfoodies.winterfoodies_project.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,10 +21,10 @@ public class MyPageController {
 
     // ################################################## 1. 마이페이지 ##################################################
     // 마이페이지 메인 화면(목록 조회)
-    @GetMapping("/mypage")
+    @GetMapping("/mypage") // 테스트용
     @ApiOperation(value = "메인화면 조회")
-    public void getMyPageList() { // 반환값 List로 바꾸기
-        return;
+    public ResponseEntity<String> getMyPageList() { // 반환값 List로 바꾸기
+        return ResponseEntity.ok("굿~~");
     }
 
     // ***************** 1-1. 내정보 *****************
@@ -45,19 +46,19 @@ public class MyPageController {
     // 찜한 가게 목록 조회
     @GetMapping("/mypage/like")
     @ApiOperation(value = "찜한 가게목록 조회")
-    public List<StoreResponseDto> getFavoriteStoresByUserId(@RequestParam("userId") Long userId) {
-        return userService.getFavoriteStoresByUserId(userId);
+    public List<StoreResponseDto> getFavoriteStoresByUserId() {
+        return userService.getFavoriteStoresByUserId();
     }
 
     // ***************** 1-3. 리뷰관리 *****************
     // 내가 쓴 리뷰 목록 조회
     @GetMapping("/mypage/review")
     @ApiOperation(value = "작성한 리뷰 조회")
-    public List<ReviewDto> getMyReviews(@RequestParam("userId") Long userId){
-        return userService.getReview(userId);
+    public List<ReviewDto> getMyReviews(){
+        return userService.getReview();
     }
 
-    // 리뷰 삭제 추가
+    // 리뷰 삭제
     @DeleteMapping("/mypage/review/{reviewId}")
     @ApiOperation(value = "리뷰 삭제")
     public UserDto delReview(@PathVariable("reviewId") Long reviewId) {
@@ -68,8 +69,8 @@ public class MyPageController {
     // 내가 주문한 주문목록 조회
     @GetMapping("/mypage/orderlist")
     @ApiOperation(value = "주문내역 조회")
-    public List<OrderResponseDto> getMyOrders(@RequestParam("userId") Long userId) {
-        return userService.getOrderByUserId(userId);
+    public List<OrderResponseDto> getMyOrders() {
+        return userService.getOrderByUserId();
     }
 
     // 리뷰 작성
@@ -85,10 +86,6 @@ public class MyPageController {
     public Configuration config() {
         return userService.getConfig();
     }
-
-
-
-
 
     ///////////////////////////////////////////////////////////////////////////
 

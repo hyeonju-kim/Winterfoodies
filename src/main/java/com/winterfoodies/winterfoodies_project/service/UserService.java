@@ -21,16 +21,16 @@ public interface UserService { // 인터페이스 메소드 명세를 만들고 
 
 
     // 찜 한 가게 목록 조회
-    public List<StoreResponseDto> getFavoriteStoresByUserId(Long userId);
+    public List<StoreResponseDto> getFavoriteStoresByUserId();
 
     // 주문한 가게 목록 조회
 //    List<OrderProduct> getOrderProductByUserId(Long userId);
 
     // 리뷰 쓴 가게 목록 조회
-    List<ReviewDto> getReview(Long userId);
+    List<ReviewDto> getReview();
 
     // 주문한 가게 목록 조회
-    List<OrderResponseDto> getOrderByUserId(Long userId);
+    List<OrderResponseDto> getOrderByUserId();
 
     // 리뷰 삭제
     public UserDto delReviewByUserId(Long reviewId);

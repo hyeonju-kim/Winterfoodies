@@ -17,7 +17,7 @@ public class UserResponseDto{
     private String result;
     private Long id;
     private String email;
-    private String name;
+    private String username;
 
     @JsonIgnore
     private HttpStatus status;

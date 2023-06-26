@@ -37,11 +37,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto retrieveUser() {
         Optional<User> user = userRepository.findByEmail(loginUser.getEmail());
-        if (user.isPresent()) {  // respository에서 가져온건 꼭 분기처리 해야한다!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        if (user.isPresent()) {  // respository에서 가져온건 꼭 분기처리 해야한다!!!!
             User foundUser = user.get();
             UserDto foundUserDto = new UserDto();
             foundUserDto.setEmail(foundUser.getEmail());
-            foundUserDto.setName(foundUser.getName());
+            foundUserDto.setUsername(foundUser.getUsername());
             return foundUserDto;
         }
         UserDto notFoundUserDto = new UserDto();
@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto changePw(UserDto userDto) {
-        Optional<User> user = userRepository.findByEmail(userDto.getEmail());
+        Optional<User> user = userRepository.findByEmail(loginUser.getEmail());
         if (user.isPresent()) {
             User foundUser = user.get();
             foundUser.setPassword(userDto.getPassword());
@@ -69,8 +69,8 @@ public class UserServiceImpl implements UserService {
 
     // 찜한 가게 목록 조회
     @Override
-    public List<StoreResponseDto> getFavoriteStoresByUserId(Long userId) {
-        List<FavoriteStore> foundFavoriteStore = favoriteStoreRepository.findByUserId(userId);
+    public List<StoreResponseDto> getFavoriteStoresByUserId() {
+        List<FavoriteStore> foundFavoriteStore = favoriteStoreRepository.findByUserId(loginUser.getId());
         List<StoreResponseDto> storeResponseDtoList = new ArrayList<>();
 
         for (FavoriteStore favoriteStore : foundFavoriteStore) {
@@ -89,8 +89,8 @@ public class UserServiceImpl implements UserService {
 
     // 리뷰 쓴 가게 목록 조회
     @Override
-    public List<ReviewDto> getReview(Long userId) {
-        List<Review> foundReview = reviewRepository.findByUserId(userId);
+    public List<ReviewDto> getReview() {
+        List<Review> foundReview = reviewRepository.findByUserId(loginUser.getId());
         List<ReviewDto> reviewDtoList = new ArrayList<>();
         for (Review review : foundReview) {
             ReviewDto reviewDto2 = new ReviewDto();
@@ -105,8 +105,8 @@ public class UserServiceImpl implements UserService {
 
     // 주문한 가게 목록 조회
     @Override
-    public List<OrderResponseDto> getOrderByUserId(Long userId) {
-        List<Order> foundOrderList = orderRepository.findByUserId(userId);
+    public List<OrderResponseDto> getOrderByUserId() {
+        List<Order> foundOrderList = orderRepository.findByUserId(loginUser.getId());
         List<OrderResponseDto> orderResponseDtoList = new ArrayList<>();
 
         for (Order order : foundOrderList) {
@@ -143,7 +143,7 @@ public class UserServiceImpl implements UserService {
         ReviewDto reviewDto1 = new ReviewDto();
         Review review = new Review();
 
-        review.setUserId(reviewDto.getUserId());
+        review.setUserId(loginUser.getId());
         review.setRating(reviewDto.getRating());
         review.setPhoto(reviewDto.getPhoto());
         review.setContent(reviewDto.getContent());
@@ -155,6 +155,7 @@ public class UserServiceImpl implements UserService {
         return reviewDto1;
     }
 
+    // 환경설정
     @Override
     public Configuration getConfig() {
         Configuration configuration = new Configuration(); // TODO DTO로 변경예정
@@ -386,13 +387,22 @@ public class UserServiceImpl implements UserService {
             cartDtoList.add(cartDto);
         }
         return cartDtoList;
-
     }
 
-    // 주문완료 페이지 조회
+    // 주문등록 & 주문완료 페이지 조회
     @Override
     public List<CartDto> getOrderConfirmPage(Long cartId) {
         List<CartProduct> cartProducts = cartProductRepository.findByCartId(cartId);
+//        Order order = new Order();
+//        User user = new User();
+//        user.setId(1L);
+//        Store store = new Store();
+//        store.setStoreDetail();
+//
+//        order.setUser(new User());
+//        order.setStore(new Store());
+
+
         List<CartDto> cartDtoList = new ArrayList<>();
         for (CartProduct cartProduct : cartProducts) {
             CartDto cartDto = new CartDto();
