@@ -13,6 +13,10 @@ import java.util.List;
 
 
 public interface UserService { // 인터페이스 메소드 명세를 만들고 가져다 쓰자!
+    // 회원가입
+    public void signUp(UserRequestDto userRequestDto);
+
+
     //마이페이지 내정보 조회
     public UserDto retrieveUser();
 

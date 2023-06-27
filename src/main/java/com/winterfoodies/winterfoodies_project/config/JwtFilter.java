@@ -20,15 +20,12 @@ import java.io.IOException;
 import java.security.Security;
 
 @RequiredArgsConstructor
-//@Component
 public class JwtFilter extends OncePerRequestFilter {
     private final UserDetailsServiceImpl userDetailsService;
     private final JwtUtil jwtUtil;
 
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
         String authorization = request.getHeader("Authorization"); // 1. 헤더 파싱
         String username = "";
         String token = "";
@@ -37,16 +34,11 @@ public class JwtFilter extends OncePerRequestFilter {
             token = authorization.substring(7);
             username = jwtUtil.getUsernameFromToken(token);
         }else{
-            // 로그인 요청은 필터를 거치지 않고 허용
-//            if (request.getRequestURI().equals("/api/login")) {
                 filterChain.doFilter(request, response);
-//                return;
-//            }
         }
 
         // 3. 토큰은 있는데 현재 인증객체가 없으면 컨텍스트홀더에 유저토큰 세팅
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
             // 토큰 유효여부 확인
@@ -58,6 +50,4 @@ public class JwtFilter extends OncePerRequestFilter {
         }
         filterChain.doFilter(request, response);
     }
-
-
 }

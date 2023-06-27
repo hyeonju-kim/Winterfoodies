@@ -42,7 +42,7 @@ public class JwtUtil {
                 .getBody();
     }
 
-    // 4. Claim에서 username 가져오기
+    // 4. 토큰에서 username 가져오기
     public String getUsernameFromToken(String token) {
         String username = String.valueOf(getAllClaims(token).get("username"));
         return username;
@@ -58,6 +58,5 @@ public class JwtUtil {
     public boolean isTokenExpired(String token) {
         return getExpirationDate(token).before(new Date());
     }
-
 }
 

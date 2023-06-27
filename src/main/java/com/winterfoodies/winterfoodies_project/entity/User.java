@@ -4,9 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.winterfoodies.winterfoodies_project.dto.user.UserRequestDto;
 import javax.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+
+import lombok.*;
 import org.hibernate.usertype.UserType;
 //import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -21,7 +20,6 @@ import java.util.List;
 @Getter
 @Setter
 @SequenceGenerator(name = "userSeq", sequenceName = "USER_SEQ", initialValue = 1, allocationSize = 1)
-@NoArgsConstructor
 //@JsonIgnoreProperties("order")  // 순환참조 오류나서 잠시 넣음!!
 public class User implements Serializable {
     static final long serialVersionUID = -3085157956097560247L;
@@ -62,6 +60,16 @@ public class User implements Serializable {
         this.email = userRequestDto.getEmail();
         this.phoneNumber = userRequestDto.getPhoneNumber();
         this.password = userRequestDto.getPassword();
+    }
+
+    public User(UserRequestDto userRequestDto) {
+        this.username = userRequestDto.getUsername();
+        this.email = userRequestDto.getEmail();
+        this.phoneNumber = userRequestDto.getPhoneNumber();
+        this.password = userRequestDto.getPassword();
+    }
+
+    public User() {
     }
 
 //    public void encryptPassword(PasswordEncoder passwordEncoder){

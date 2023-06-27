@@ -11,6 +11,8 @@ import com.winterfoodies.winterfoodies_project.entity.*;
 import com.winterfoodies.winterfoodies_project.repository.*;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -22,23 +24,49 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-    private final UserDto loginUser; //ScenarioConfig에서 등록한 bean을 주입받아서 사용하기
+//    private final UserDto loginUser; //ScenarioConfig에서 등록한 bean을 주입받아서 사용하기 -> jwt토큰 적용 후에는 필요x
     private final UserRepository userRepository;
     private final FavoriteStoreRepository favoriteStoreRepository;
     private final ReviewRepository reviewRepository;
     private final OrderRepository orderRepository;
     private final StoreRepository storeRepository;
     private final StoreProductRepository storeProductRepository;
-    private final OrderProductRepository orderProductRepository;
     private final CartRepository cartRepository;
     private final ProductRepository productRepository;
     private final CartProductRepository cartProductRepository;
 
+    // jwt 토큰으로 현재 인증된 사용자의 Authentication 객체에서 이름 가져오기
+    public String getUsernameFromAuthentication() {
+        String username = null;
+        if (SecurityContextHolder.getContext().getAuthentication() != null) {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+            // 인증된 사용자의 이름 가져오기
+            username = authentication.getName();
+        }
+        return username;
+    }
+
+    // 인증된 사용자의 id 가져오기
+    public Long getId() {
+        User foundUser = userRepository.findByUsername(getUsernameFromAuthentication());
+        return foundUser.getId();
+    }
+
+    // ################################################################ 회원가입/로그인 ##############################################################
+    // 회원가입
+    @Override
+    public void signUp(UserRequestDto userRequestDto) {
+        User user = new User(userRequestDto);
+        userRepository.save(user);
+    }
+
+    // ################################################################ 마이페이지 ##############################################################
+    // 마이페이지 내정보
     @Override
     public UserDto retrieveUser() {
-        Optional<User> user = userRepository.findByEmail(loginUser.getEmail());
-        if (user.isPresent()) {  // respository에서 가져온건 꼭 분기처리 해야한다!!!!
-            User foundUser = user.get();
+        User foundUser = userRepository.findByUsername(getUsernameFromAuthentication());
+        if (foundUser != null) {  // respository에서 가져온건 꼭 분기처리 해야한다!!!!
             UserDto foundUserDto = new UserDto();
             foundUserDto.setEmail(foundUser.getEmail());
             foundUserDto.setUsername(foundUser.getUsername());
@@ -49,11 +77,11 @@ public class UserServiceImpl implements UserService {
         return notFoundUserDto;
     }
 
+    // 마이페이지 비번 변경
     @Override
     public UserDto changePw(UserDto userDto) {
-        Optional<User> user = userRepository.findByEmail(loginUser.getEmail());
-        if (user.isPresent()) {
-            User foundUser = user.get();
+        User foundUser = userRepository.findByUsername(getUsernameFromAuthentication());
+        if (foundUser != null) {
             foundUser.setPassword(userDto.getPassword());
             userRepository.save(foundUser);
 
@@ -70,7 +98,7 @@ public class UserServiceImpl implements UserService {
     // 찜한 가게 목록 조회
     @Override
     public List<StoreResponseDto> getFavoriteStoresByUserId() {
-        List<FavoriteStore> foundFavoriteStore = favoriteStoreRepository.findByUserId(loginUser.getId());
+        List<FavoriteStore> foundFavoriteStore = favoriteStoreRepository.findByUserId(getId());
         List<StoreResponseDto> storeResponseDtoList = new ArrayList<>();
 
         for (FavoriteStore favoriteStore : foundFavoriteStore) {
@@ -90,7 +118,7 @@ public class UserServiceImpl implements UserService {
     // 리뷰 쓴 가게 목록 조회
     @Override
     public List<ReviewDto> getReview() {
-        List<Review> foundReview = reviewRepository.findByUserId(loginUser.getId());
+        List<Review> foundReview = reviewRepository.findByUserId(getId());
         List<ReviewDto> reviewDtoList = new ArrayList<>();
         for (Review review : foundReview) {
             ReviewDto reviewDto2 = new ReviewDto();
@@ -106,7 +134,7 @@ public class UserServiceImpl implements UserService {
     // 주문한 가게 목록 조회
     @Override
     public List<OrderResponseDto> getOrderByUserId() {
-        List<Order> foundOrderList = orderRepository.findByUserId(loginUser.getId());
+        List<Order> foundOrderList = orderRepository.findByUserId(getId());
         List<OrderResponseDto> orderResponseDtoList = new ArrayList<>();
 
         for (Order order : foundOrderList) {
@@ -143,7 +171,7 @@ public class UserServiceImpl implements UserService {
         ReviewDto reviewDto1 = new ReviewDto();
         Review review = new Review();
 
-        review.setUserId(loginUser.getId());
+        review.setUserId(getId());
         review.setRating(reviewDto.getRating());
         review.setPhoto(reviewDto.getPhoto());
         review.setContent(reviewDto.getContent());
@@ -171,7 +199,9 @@ public class UserServiceImpl implements UserService {
     public List<StoreResponseDto> getNearbyStores() {
         double radius = 2.0; // 검색 반경 설정 (예: 2.0km)
 
-        List<Store> nearbyStores = storeRepository.findNearbyStores(loginUser.getLatitude(), loginUser.getLongitude(), radius);
+        User foundUser = userRepository.findByUsername(getUsernameFromAuthentication());
+
+        List<Store> nearbyStores = storeRepository.findNearbyStores(foundUser.getLatitude(), foundUser.getLongitude(), radius);
         List<StoreResponseDto> nearbyStoreDtoList = new ArrayList<>();
 
         for (Store store : nearbyStores) {
@@ -188,7 +218,9 @@ public class UserServiceImpl implements UserService {
     public List<StoreResponseDto> getNearbyStores2(Long productId) {
         double radius = 2.0; // 검색 반경 설정 (예: 2.0km)
 
-        List<Store> nearbyStores = storeRepository.findNearbyStores(loginUser.getLatitude(), loginUser.getLongitude(), radius);
+        User foundUser = userRepository.findByUsername(getUsernameFromAuthentication());
+
+        List<Store> nearbyStores = storeRepository.findNearbyStores(foundUser.getLatitude(), foundUser.getLongitude(), radius);
         List<StoreResponseDto> nearbyStoreDtoList = new ArrayList<>();
 
         for (Store store : nearbyStores) {
@@ -347,7 +379,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDto addFavoriteStore(Long storeId) {
         FavoriteStore favoriteStore = new FavoriteStore();
-        favoriteStore.setUserId(loginUser.getId());
+        favoriteStore.setUserId(getId());
         favoriteStore.setStoreId(storeId);
         favoriteStoreRepository.save(favoriteStore);
 
@@ -356,20 +388,28 @@ public class UserServiceImpl implements UserService {
         return userDto;
     }
 
+    // ################################################################ 장바구니 ##############################################################
+
     // 장바구니에 상품 추가
     @Override
     public UserResponseDto addProductToCart(Long cartId, Long productId, int quantity) {
         Optional<Cart> optionalCart = cartRepository.findById(cartId);
-        Cart cart = optionalCart.get();
-        Optional<Product> optionalProduct = productRepository.findById(productId);
-        Product product = optionalProduct.get();
-        CartProduct cartProduct = new CartProduct(cart, product, quantity);
-        cartProductRepository.save(cartProduct);
+        if (optionalCart.isPresent()) {
 
-        UserResponseDto userResponseDto = new UserResponseDto();
-        userResponseDto.setMessage("장바구니에 상품을 담았습니다.");
+            Cart cart = optionalCart.get();
+            Optional<Product> optionalProduct = productRepository.findById(productId);
+            Product product = optionalProduct.get();
+            CartProduct cartProduct = new CartProduct(cart, product, quantity);
+            cartProductRepository.save(cartProduct);
 
-        return userResponseDto;
+            UserResponseDto userResponseDto = new UserResponseDto();
+            userResponseDto.setMessage("장바구니에 상품을 담았습니다.");
+
+            return userResponseDto;
+        }
+        UserResponseDto notFoundUserDto = new UserResponseDto();
+        notFoundUserDto.setMessage("장바구니를 찾을 수 없습니다.");
+        return notFoundUserDto;
     }
 
 
@@ -378,15 +418,18 @@ public class UserServiceImpl implements UserService {
     public List<CartDto> getCartProduct(Long cartId) {
         List<CartProduct> cartProducts = cartProductRepository.findByCartId(cartId);
         List<CartDto> cartDtoList = new ArrayList<>();
-        for (CartProduct cartProduct : cartProducts) {
-            CartDto cartDto = new CartDto();
-            cartDto.setId(cartProduct.getId());
-            cartDto.setName(cartProduct.getProduct().getName());
-            cartDto.setPrice(cartProduct.getProduct().getPrice());
-            cartDto.setQuantity(cartProduct.getQuantity());
-            cartDtoList.add(cartDto);
+        if (cartProducts != null) {
+            for (CartProduct cartProduct : cartProducts) {
+                CartDto cartDto = new CartDto();
+                cartDto.setId(cartProduct.getId());
+                cartDto.setName(cartProduct.getProduct().getName());
+                cartDto.setPrice(cartProduct.getProduct().getPrice());
+                cartDto.setQuantity(cartProduct.getQuantity());
+                cartDtoList.add(cartDto);
+            }
+            return cartDtoList;
         }
-        return cartDtoList;
+        throw new IllegalArgumentException("장바구니 목록을 찾을 수 없습니다!");
     }
 
     // 주문등록 & 주문완료 페이지 조회
@@ -415,4 +458,6 @@ public class UserServiceImpl implements UserService {
         }
         return cartDtoList;
     }
+
+
 }

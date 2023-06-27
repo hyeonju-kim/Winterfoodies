@@ -13,7 +13,6 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
-
     private final UserRepository userRepository;
 //    private final BCryptPasswordEncoder passwordEncoder;
 
@@ -23,7 +22,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (user == null) {
             throw new IllegalArgumentException("존재하지 않는 이름입니다.");
         }
-
         return new UserDetailsImpl(user);
     }
 }
