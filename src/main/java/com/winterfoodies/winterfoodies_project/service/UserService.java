@@ -1,5 +1,6 @@
 package com.winterfoodies.winterfoodies_project.service;
 
+import com.winterfoodies.winterfoodies_project.dto.order.OrderRequestDto;
 import com.winterfoodies.winterfoodies_project.dto.order.OrderResponseDto;
 import com.winterfoodies.winterfoodies_project.dto.product.ProductResponseDto;
 import com.winterfoodies.winterfoodies_project.dto.store.StoreMainDto;
@@ -8,7 +9,10 @@ import com.winterfoodies.winterfoodies_project.dto.user.*;
 import com.winterfoodies.winterfoodies_project.entity.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 
@@ -59,7 +63,6 @@ public interface UserService { // 인터페이스 메소드 명세를 만들고 
     public List<StoreResponseDto> getStoresSortedByReiviews(Long productId);
 
 
-    //230622
     // 상호명 검색
     List<StoreResponseDto> searchStores(String keyword);
 
@@ -80,13 +83,21 @@ public interface UserService { // 인터페이스 메소드 명세를 만들고 
     public UserResponseDto  addFavoriteStore(Long storeId);
 
     // 장바구니에 상품 추가
-    public UserResponseDto addProductToCart(Long cartId, Long productId, int quantity);
+//    public UserResponseDto addProductToCart(Long cartId, Long productId, int quantity);
+    public String addProductToCart(@RequestParam Long productId, @RequestParam Long quantity, HttpServletRequest request, HttpServletResponse response);
 
-    // 장바구니 상품 목록 조회
-    public List<CartDto> getCartProduct(Long cartId);
+
+   // 장바구니 상품 목록 조회
+    public List<CartDto> getCartProduct(HttpServletRequest request);
+
+    // 장바구니 특정 상품 삭제
+    public String removeProductFromCart(@RequestParam Long productId, HttpServletRequest request, HttpServletResponse response);
+
+        // 장바구니 초기화
+    public String clearCart(HttpServletResponse response);
 
     // 주문완료 페이지 조회
-    public List<CartDto> getOrderConfirmPage(Long cartId);
+    public OrderResponseDto getOrderConfirmPage(OrderRequestDto orderRequestDto, HttpServletRequest request);
 
 }
 

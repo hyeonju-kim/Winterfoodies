@@ -10,9 +10,9 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-
 public class OrderRequestDto {
     private Long orderId;
     private List<ProductRequestDto> productRequestDtoList;
     private Long storeId;
+    private String message;
 }

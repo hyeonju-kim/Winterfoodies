@@ -6,7 +6,9 @@ import com.winterfoodies.winterfoodies_project.entity.OrderProduct;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -17,9 +19,9 @@ public class OrderResponseDto {
     private Long orderId;
     private Long customerId;
     private String customerName;
-    private String orderDate;
+    private LocalDateTime orderDate;
     private String processYn;
     private String customerMessage;
-    private List<String> orderMenu; // List<OrderProduct> 라고 하니까 순환참조 오류가 났다!!
+    private List<Map<String, Long>> productAndQuantityList;
     private Long totalAmount;
 }

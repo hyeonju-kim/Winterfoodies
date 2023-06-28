@@ -28,12 +28,12 @@ public class CartProduct {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    private int quantity;
+    private Long quantity;
 
     private Long totalPrice;
 //    private Long totalPrice = product.getPrice() * quantity;
 
-    public CartProduct(Cart cart, Product product, int quantity) {
+    public CartProduct(Cart cart, Product product, Long quantity) {
         this.cart = cart;
         this.product = product;
         this.quantity = quantity;

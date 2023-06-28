@@ -44,6 +44,8 @@ public class Order {
     @Column(name = "TOTAL_AMOUNT")
     private Long totalAmount;
 
+    private String message;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
     private List<OrderProduct> orderProducts = new ArrayList<>();
 

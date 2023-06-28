@@ -1,6 +1,7 @@
 package com.winterfoodies.winterfoodies_project.service;
 
 import com.winterfoodies.winterfoodies_project.config.LocationConfig;
+import com.winterfoodies.winterfoodies_project.dto.order.OrderRequestDto;
 import com.winterfoodies.winterfoodies_project.dto.order.OrderResponseDto;
 import com.winterfoodies.winterfoodies_project.dto.product.ProductResponseDto;
 import com.winterfoodies.winterfoodies_project.dto.store.StoreMainDto;
@@ -15,11 +16,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +33,7 @@ public class UserServiceImpl implements UserService {
     private final FavoriteStoreRepository favoriteStoreRepository;
     private final ReviewRepository reviewRepository;
     private final OrderRepository orderRepository;
+    private final OrderProductRepository orderProductRepository;
     private final StoreRepository storeRepository;
     private final StoreProductRepository storeProductRepository;
     private final CartRepository cartRepository;
@@ -48,7 +53,7 @@ public class UserServiceImpl implements UserService {
     }
 
     // 인증된 사용자의 id 가져오기
-    public Long getId() {
+    public Long getUserId() {
         User foundUser = userRepository.findByUsername(getUsernameFromAuthentication());
         return foundUser.getId();
     }
@@ -98,7 +103,7 @@ public class UserServiceImpl implements UserService {
     // 찜한 가게 목록 조회
     @Override
     public List<StoreResponseDto> getFavoriteStoresByUserId() {
-        List<FavoriteStore> foundFavoriteStore = favoriteStoreRepository.findByUserId(getId());
+        List<FavoriteStore> foundFavoriteStore = favoriteStoreRepository.findByUserId(getUserId());
         List<StoreResponseDto> storeResponseDtoList = new ArrayList<>();
 
         for (FavoriteStore favoriteStore : foundFavoriteStore) {
@@ -118,7 +123,7 @@ public class UserServiceImpl implements UserService {
     // 리뷰 쓴 가게 목록 조회
     @Override
     public List<ReviewDto> getReview() {
-        List<Review> foundReview = reviewRepository.findByUserId(getId());
+        List<Review> foundReview = reviewRepository.findByUserId(getUserId());
         List<ReviewDto> reviewDtoList = new ArrayList<>();
         for (Review review : foundReview) {
             ReviewDto reviewDto2 = new ReviewDto();
@@ -134,25 +139,26 @@ public class UserServiceImpl implements UserService {
     // 주문한 가게 목록 조회
     @Override
     public List<OrderResponseDto> getOrderByUserId() {
-        List<Order> foundOrderList = orderRepository.findByUserId(getId());
-        List<OrderResponseDto> orderResponseDtoList = new ArrayList<>();
-
-        for (Order order : foundOrderList) {
-            OrderResponseDto orderResponseDto = new OrderResponseDto();
-            orderResponseDto.setStoreName(order.getStore().getStoreDetail().getName());
-
-            List<OrderProduct> foundOrderProducts = order.getOrderProducts();
-            List<String> tempProducts = new ArrayList<>();
-            for (OrderProduct foundOrderProduct : foundOrderProducts) {
-                tempProducts.add(foundOrderProduct.getProduct().getName());
-            }
-            orderResponseDto.setOrderMenu(tempProducts);
-            orderResponseDto.setTotalAmount(order.getTotalAmount());
-            orderResponseDto.setOrderDate(order.getCreateAt().toString());
-
-            orderResponseDtoList.add(orderResponseDto);
-        }
-        return orderResponseDtoList;
+//        List<Order> foundOrderList = orderRepository.findByUserId(getUserId());
+//        List<OrderResponseDto> orderResponseDtoList = new ArrayList<>();
+//
+//        for (Order order : foundOrderList) {
+//            OrderResponseDto orderResponseDto = new OrderResponseDto();
+//            orderResponseDto.setStoreName(order.getStore().getStoreDetail().getName());
+//
+//            List<OrderProduct> foundOrderProducts = order.getOrderProducts();
+//            List<String> tempProducts = new ArrayList<>();
+//            for (OrderProduct foundOrderProduct : foundOrderProducts) {
+//                tempProducts.add(foundOrderProduct.getProduct().getName());
+//            }
+//            orderResponseDto.setOrderMenu(tempProducts);
+//            orderResponseDto.setTotalAmount(order.getTotalAmount());
+//            orderResponseDto.setOrderDate(order.getCreateAt().toString());
+//
+//            orderResponseDtoList.add(orderResponseDto);
+//        }
+//        return orderResponseDtoList;
+        return null;
 
     }
 
@@ -171,7 +177,7 @@ public class UserServiceImpl implements UserService {
         ReviewDto reviewDto1 = new ReviewDto();
         Review review = new Review();
 
-        review.setUserId(getId());
+        review.setUserId(getUserId());
         review.setRating(reviewDto.getRating());
         review.setPhoto(reviewDto.getPhoto());
         review.setContent(reviewDto.getContent());
@@ -379,7 +385,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDto addFavoriteStore(Long storeId) {
         FavoriteStore favoriteStore = new FavoriteStore();
-        favoriteStore.setUserId(getId());
+        favoriteStore.setUserId(getUserId());
         favoriteStore.setStoreId(storeId);
         favoriteStoreRepository.save(favoriteStore);
 
@@ -391,73 +397,197 @@ public class UserServiceImpl implements UserService {
     // ################################################################ 장바구니 ##############################################################
 
     // 장바구니에 상품 추가
-    @Override
-    public UserResponseDto addProductToCart(Long cartId, Long productId, int quantity) {
-        Optional<Cart> optionalCart = cartRepository.findById(cartId);
-        if (optionalCart.isPresent()) {
-
-            Cart cart = optionalCart.get();
-            Optional<Product> optionalProduct = productRepository.findById(productId);
-            Product product = optionalProduct.get();
-            CartProduct cartProduct = new CartProduct(cart, product, quantity);
-            cartProductRepository.save(cartProduct);
-
-            UserResponseDto userResponseDto = new UserResponseDto();
-            userResponseDto.setMessage("장바구니에 상품을 담았습니다.");
-
-            return userResponseDto;
-        }
-        UserResponseDto notFoundUserDto = new UserResponseDto();
-        notFoundUserDto.setMessage("장바구니를 찾을 수 없습니다.");
-        return notFoundUserDto;
-    }
-
-
-    // 장바구니 상품 목록 조회
-    @Override
-    public List<CartDto> getCartProduct(Long cartId) {
-        List<CartProduct> cartProducts = cartProductRepository.findByCartId(cartId);
-        List<CartDto> cartDtoList = new ArrayList<>();
-        if (cartProducts != null) {
-            for (CartProduct cartProduct : cartProducts) {
-                CartDto cartDto = new CartDto();
-                cartDto.setId(cartProduct.getId());
-                cartDto.setName(cartProduct.getProduct().getName());
-                cartDto.setPrice(cartProduct.getProduct().getPrice());
-                cartDto.setQuantity(cartProduct.getQuantity());
-                cartDtoList.add(cartDto);
-            }
-            return cartDtoList;
-        }
-        throw new IllegalArgumentException("장바구니 목록을 찾을 수 없습니다!");
-    }
-
-    // 주문등록 & 주문완료 페이지 조회
-    @Override
-    public List<CartDto> getOrderConfirmPage(Long cartId) {
-        List<CartProduct> cartProducts = cartProductRepository.findByCartId(cartId);
-//        Order order = new Order();
-//        User user = new User();
-//        user.setId(1L);
-//        Store store = new Store();
-//        store.setStoreDetail();
+//    @Override
+//    public UserResponseDto addProductToCart(Long cartId, Long productId, int quantity) {
+//        Optional<Cart> optionalCart = cartRepository.findById(cartId);
+//        if (optionalCart.isPresent()) {
 //
-//        order.setUser(new User());
-//        order.setStore(new Store());
+//            Cart cart = optionalCart.get();
+//            Optional<Product> optionalProduct = productRepository.findById(productId);
+//            Product product = optionalProduct.get();
+//            CartProduct cartProduct = new CartProduct(cart, product, quantity);
+//            cartProductRepository.save(cartProduct);
+//
+//            UserResponseDto userResponseDto = new UserResponseDto();
+//            userResponseDto.setMessage("장바구니에 상품을 담았습니다.");
+//
+//            return userResponseDto;
+//        }
+//        UserResponseDto notFoundUserDto = new UserResponseDto();
+//        notFoundUserDto.setMessage("장바구니를 찾을 수 없습니다.");
+//        return notFoundUserDto;
+//    }
 
+    // 1. 장바구니에 상품 추가 (쿠키에 장바구니 담기)
+    @Override
+    public String addProductToCart(@RequestParam Long productId,@RequestParam Long quantity, HttpServletRequest request, HttpServletResponse response) {
+        Cookie[] cookies = request.getCookies();
+        StringBuilder cartValueBuilder = new StringBuilder();
 
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("Cart")) {
+                    // 기존 장바구니 값을 StringBuilder에 추가
+                    cartValueBuilder.append(cookie.getValue());
+                    cartValueBuilder.append("|");
+                    break;
+                }
+            }
+        }
+        // 새로운 상품과 수량을 StringBuilder에 추가
+        cartValueBuilder.append(productId.toString());
+        cartValueBuilder.append(":");
+        cartValueBuilder.append(quantity.toString());
+
+        String cartValue = cartValueBuilder.toString();
+
+        Cookie cookie = new Cookie("Cart", cartValue);
+        cookie.setMaxAge(7 * 24 * 60 * 60); // 쿠키 수명 7일로 설정 (초 단위)
+        response.addCookie(cookie);
+
+        return "장바구니에 추가되었습니다.";
+    }
+
+    // 2. 장바구니 상품 목록 조회
+    @Override
+    public List<CartDto> getCartProduct(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
         List<CartDto> cartDtoList = new ArrayList<>();
-        for (CartProduct cartProduct : cartProducts) {
-            CartDto cartDto = new CartDto();
-            cartDto.setId(cartProduct.getId());
-            cartDto.setName(cartProduct.getProduct().getName());
-            cartDto.setQuantity(cartProduct.getQuantity());
-            cartDto.setTotalPrice(cartProduct.getQuantity() * cartProduct.getProduct().getPrice());
-            cartDto.setEstimatedCookingTime("조리 예상 시간 :" + "10~20분");
-            cartDtoList.add(cartDto);
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("Cart")) {
+                    String cartProduct = cookie.getValue();
+                    String[] products = cartProduct.split("\\|");
+
+                    for (String product : products) {
+                        String[] productAndQuantity = product.split(":");
+
+                        Long productId = Long.valueOf(productAndQuantity[0]);
+                        Long quantity = Long.valueOf(productAndQuantity[1]);
+
+                        Optional<Product> optionalProduct = productRepository.findById(productId);
+
+                        if (optionalProduct.isPresent()) {
+                            Product foundProduct = optionalProduct.get();
+                            String productName = foundProduct.getName();
+
+                            CartDto cartDto = new CartDto();
+                            cartDto.setName(productName);
+                            cartDto.setQuantity(quantity);
+                            cartDtoList.add(cartDto);
+                        }
+                    }
+                    break;
+                }
+            }
         }
         return cartDtoList;
     }
 
+    // 3. 장바구니 특정 상품 삭제
+    @Override
+    public String removeProductFromCart(Long productId, HttpServletRequest request, HttpServletResponse response) {
+        Cookie[] cookies = request.getCookies();
 
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("Cart")) {
+                    String cartProduct = cookie.getValue();
+                    String[] product = cartProduct.split("\\|");
+
+                    StringBuilder updatedCartValue = new StringBuilder();
+
+                    // 입력한 상품 id가 현재의 상품과 같지 않으면 새로운 Cart에 추가하기 (입력한 상품 id만 빼고 추가하는 것. 결론적으로는 입력한 상품 id가 삭제되는 꼴 !)
+                    for (String prd : product) {
+                        String[] prdAndQnt = prd.split(":");
+                        Long cartProductId = Long.valueOf(prdAndQnt[0]);
+
+                        if (!cartProductId.equals(productId)) {
+                            updatedCartValue.append("|").append(prd);
+                        }
+                    }
+
+                    if (updatedCartValue.length() > 0) {
+                        cookie.setValue(updatedCartValue.substring(1)); // 첫 번째 '|' 문자 제외
+                    } else {
+                        cookie.setMaxAge(0); // 장바구니가 비어있으면 쿠키를 삭제
+                    }
+
+                    response.addCookie(cookie);
+
+                    return "장바구니에서 상품이 삭제되었습니다.";
+                }
+            }
+        }
+        return "장바구니에서 상품을 삭제할 수 없습니다.";
+    }
+
+    // 4. 장바구니 초기화
+    @Override
+    public String clearCart(HttpServletResponse response) {
+        Cookie cookie = new Cookie("Cart", "");
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+
+        return "모두 삭제 되었습니다.";
+    }
+
+    // 5. 주문등록 & 주문완료 페이지 조회
+    @Override
+    public OrderResponseDto getOrderConfirmPage(OrderRequestDto orderRequestDto, HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+
+        // 주문객체 만들기
+        Optional<User> userOptional = userRepository.findById(getUserId());
+        Order order = new Order();
+        order.setUser(userOptional.get());
+        order.setMessage(orderRequestDto.getMessage());
+        order.setCreateAt(LocalDateTime.now());
+
+        orderRepository.save(order);
+
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("Cart")) {
+                    String[] products = cookie.getValue().split("\\|");
+                    for (String product : products) {
+                        String[] productAndQuantity = product.split(":");
+                        String productId = productAndQuantity[0];
+                        String quantity = productAndQuantity[1];
+
+                        // 상품객체 만들기
+                        Optional<Product> optionalProduct = productRepository.findById(Long.valueOf(productId));
+                        Product foundProduct = optionalProduct.get();
+                        foundProduct.setQuantity(Long.valueOf(quantity));
+
+                        // 주문상품객체에 상품객체, 주문객체 인젝션
+                        OrderProduct orderProduct = new OrderProduct();
+                        orderProduct.setProduct(foundProduct);
+                        orderProduct.setOrder(order);
+                        orderProduct.setQuantity(Long.valueOf(quantity));
+                        orderProductRepository.save(orderProduct);
+                    }
+                    break;
+                }
+            }
+        }
+
+        OrderResponseDto orderResponseDto = new OrderResponseDto();
+
+        List<Map<String, Long>> prdAndQntList = new ArrayList<>();
+
+        List<OrderProduct> orderProducts = orderProductRepository.findByOrderId(order.getId());
+        for (OrderProduct orderProduct : orderProducts) {
+            Map<String, Long> prdAndQnt = new HashMap<>();
+            prdAndQnt.put(orderProduct.getProduct().getName(), orderProduct.getQuantity());
+            prdAndQntList.add(prdAndQnt);
+        }
+
+        orderResponseDto.setProductAndQuantityList(prdAndQntList);
+        orderResponseDto.setOrderDate(LocalDateTime.now());
+        orderResponseDto.setCustomerMessage(orderRequestDto.getMessage());
+
+        return orderResponseDto;
+
+    }
 }
