@@ -418,9 +418,11 @@ public class UserServiceImpl implements UserService {
 //        return notFoundUserDto;
 //    }
 
-    // 1. 장바구니에 상품 추가 (쿠키에 장바구니 담기)
+    // 1. 장바구니에 상품 추가 (쿠키와 DB에 장바구니 담기)
     @Override
     public String addProductToCart(@RequestParam Long productId,@RequestParam Long quantity, HttpServletRequest request, HttpServletResponse response) {
+
+        // 쿠키에 담기
         Cookie[] cookies = request.getCookies();
         StringBuilder cartValueBuilder = new StringBuilder();
 
@@ -445,10 +447,19 @@ public class UserServiceImpl implements UserService {
         cookie.setMaxAge(7 * 24 * 60 * 60); // 쿠키 수명 7일로 설정 (초 단위)
         response.addCookie(cookie);
 
+        // 디비에 담기
+        Cart cart = new Cart();
+        Optional<Product> optionalProduct = productRepository.findById(productId);
+        Product product = optionalProduct.get();
+        CartProduct cartProduct = new CartProduct(cart, product);
+        cartProduct.setQuantity(quantity);
+        cartProduct.setTotalPrice(product.getPrice() * quantity);
+        cartProductRepository.save(cartProduct);
+
         return "장바구니에 추가되었습니다.";
     }
 
-    // 2. 장바구니 상품 목록 조회
+    // 2. 장바구니 상품 목록 조회 (쿠키에서 조회)
     @Override
     public List<CartDto> getCartProduct(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
@@ -484,11 +495,12 @@ public class UserServiceImpl implements UserService {
         return cartDtoList;
     }
 
-    // 3. 장바구니 특정 상품 삭제
+    // 3. 장바구니 특정 상품 삭제 (쿠키와 DB에서 삭제)
     @Override
     public String removeProductFromCart(Long productId, HttpServletRequest request, HttpServletResponse response) {
         Cookie[] cookies = request.getCookies();
 
+        // 쿠키에서 삭제
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("Cart")) {
@@ -514,25 +526,28 @@ public class UserServiceImpl implements UserService {
                     }
 
                     response.addCookie(cookie);
-
-                    return "장바구니에서 상품이 삭제되었습니다.";
                 }
             }
         }
-        return "장바구니에서 상품을 삭제할 수 없습니다.";
+        // 디비에서 삭제
+        cartProductRepository.deleteByProductId(productId);
+        return "장바구니에서 상품을 삭제했습니다.";
     }
 
-    // 4. 장바구니 초기화
+    // 4. 장바구니 초기화 (쿠키와 DB 초기화)
     @Override
     public String clearCart(HttpServletResponse response) {
+        // 쿠키 초기화
         Cookie cookie = new Cookie("Cart", "");
         cookie.setMaxAge(0);
         response.addCookie(cookie);
 
+        // 디비 초기화
+        cartProductRepository.deleteAll();
         return "모두 삭제 되었습니다.";
     }
 
-    // 5. 주문등록 & 주문완료 페이지 조회
+    // 5. 주문등록 & 주문완료 페이지 조회 (쿠키에서 조회)
     @Override
     public OrderResponseDto getOrderConfirmPage(OrderRequestDto orderRequestDto, HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
@@ -558,7 +573,6 @@ public class UserServiceImpl implements UserService {
                         // 상품객체 만들기
                         Optional<Product> optionalProduct = productRepository.findById(Long.valueOf(productId));
                         Product foundProduct = optionalProduct.get();
-                        foundProduct.setQuantity(Long.valueOf(quantity));
 
                         // 주문상품객체에 상품객체, 주문객체 인젝션
                         OrderProduct orderProduct = new OrderProduct();

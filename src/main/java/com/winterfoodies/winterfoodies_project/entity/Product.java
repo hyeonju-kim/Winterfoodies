@@ -23,9 +23,9 @@ public class Product {
 
     @Column(name = "PRICE")
     private Long price;
-
-    @Column(name = "QUANTITY")
-    private Long quantity;
+//
+//    @Column(name = "QUANTITY")
+//    private Long quantity;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
     List<OrderProduct> orderProducts = new ArrayList<>();
@@ -42,8 +42,5 @@ public class Product {
     public Product() {
     }
 
-    public Product(String name, Long quantity) {
-        this.name = name;
-        this.quantity = quantity;
-    }
+
 }
