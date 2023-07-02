@@ -2,7 +2,7 @@
 
 language: java
 jdk:
-  - openjdk11  #프로젝트의 실제 JDK 버전과 Travis CI에서 사용하는 JDK 버전을 맞추는 것이 좋다.
+  - openjdk8  #프로젝트의 실제 JDK 버전과 Travis CI에서 사용하는 JDK 버전을 맞추는 것이 좋다.
 
 # Travis CI를 어느 브랜치가 푸시될 때 수행할지 지정. 지금은 master 브랜치에 push될 때만 수행
 branches:
