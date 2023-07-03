@@ -19,11 +19,26 @@ cache:
 # master 브랜치에 푸시되었을 때 수행하는 명령어. 푸시가 되면 자동으로 clean & build 를 수행
 script: "mvn clean install"
 
+# S3 설정
+deploy:
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY # Travis repo settings에 설정된 값
+    secret_access_key: $AWS_SECRET_KEY # Travis repo settings에 설정된 값
+    bucket: winterfoodies-project-deploy # 생성한 S3 버킷
+    region: ap-northeast-2
+    skip_cleanup: true
+    acl: public_read
+    wait-until-deployed: true
+    on:
+      repo: https://github.com/hyeonju-kim/Winterfoodies #Github 주소
+      branch: master
+
+
 # CI 실행 완료시 메일로 알람
 notifications:
   email:
     recipients:
-      - yocu1784@gmail.com
+      - yocu1784@naver.com
 
 # 권한 부여 (빌드시 에러 방지)
 before_install:
