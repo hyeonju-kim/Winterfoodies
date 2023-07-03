@@ -20,7 +20,11 @@ cache:
 script: "mvn clean install"
 
 # S3 설정
-deploy:
+before_deploy: # deploy 명령어가 실행되기 전에 수행
+  - zip -r winterfoodies-project *
+  - mkdir -p deploy
+  - mv winterfoodies-project.zip deploy/winterfoodies-project.zip
+deploy: # 외부 서비스와 연동될 행위들을 선언
   - provider: s3
     access_key_id: $AWS_ACCESS_KEY # Travis repo settings에 설정된 값
     secret_access_key: $AWS_SECRET_KEY # Travis repo settings에 설정된 값
@@ -28,10 +32,11 @@ deploy:
     region: ap-northeast-2
     skip_cleanup: true
     acl: public_read
+    local_dir: deploy   # before_deploy에서 생성한 디렉토리
     wait-until-deployed: true
-    on:
-      repo: github.com/hyeonju-kim/Winterfoodies #Github 주소
-      branch: master
+#    on:
+#      repo: github.com/hyeonju-kim/Winterfoodies #Github 주소
+#      branch: master
 
 
 
