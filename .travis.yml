@@ -1,4 +1,4 @@
-# travis 가 어떤 행동을 할지 알려주는 파일!!!!!!
+# travis 가 어떤 행동을 할지 알려주는 파일!!!!!!!
 
 language: java
 jdk:
