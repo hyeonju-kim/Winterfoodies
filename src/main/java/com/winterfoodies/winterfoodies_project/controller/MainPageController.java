@@ -10,6 +10,7 @@ import com.winterfoodies.winterfoodies_project.dto.user.UserDto;
 import com.winterfoodies.winterfoodies_project.dto.user.UserResponseDto;
 import com.winterfoodies.winterfoodies_project.entity.FavoriteStore;
 import com.winterfoodies.winterfoodies_project.service.UserService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

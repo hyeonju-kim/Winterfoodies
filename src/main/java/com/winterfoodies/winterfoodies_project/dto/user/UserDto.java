@@ -3,6 +3,7 @@ package com.winterfoodies.winterfoodies_project.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.winterfoodies.winterfoodies_project.entity.User;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,4 +21,28 @@ public class UserDto {
 
     //잘못된경우에만
     private String message;
+
+    public UserDto() {
+    }
+
+    // request -> service
+    public UserDto(UserRequestDto requestDto) {
+        this.password = requestDto.getPassword();
+        this.username = requestDto.getUsername();
+    }
+
+    // repository -> service
+    public UserDto(User user) {
+        this.username = user.getUsername();
+        this.password = user.getPassword();
+    }
+
+    // UserDto -> UserResponseDto
+    public UserResponseDto converToUserResponseDto() {
+        UserResponseDto userResponseDto = new UserResponseDto();
+        userResponseDto.setId(this.id);
+        userResponseDto.setUsername(this.username);
+        return userResponseDto;
+    }
+
 }

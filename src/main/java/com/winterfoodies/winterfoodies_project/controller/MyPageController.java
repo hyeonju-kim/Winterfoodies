@@ -4,6 +4,8 @@ import com.winterfoodies.winterfoodies_project.dto.order.OrderResponseDto;
 import com.winterfoodies.winterfoodies_project.dto.store.StoreResponseDto;
 import com.winterfoodies.winterfoodies_project.dto.user.ReviewDto;
 import com.winterfoodies.winterfoodies_project.dto.user.UserDto;
+import com.winterfoodies.winterfoodies_project.dto.user.UserRequestDto;
+import com.winterfoodies.winterfoodies_project.dto.user.UserResponseDto;
 import com.winterfoodies.winterfoodies_project.entity.*;
 import com.winterfoodies.winterfoodies_project.service.UserService;
 import io.swagger.annotations.ApiOperation;
@@ -38,8 +40,10 @@ public class MyPageController {
     // 비밀번호 변경
     @PutMapping("/mypage/info/pw")
     @ApiOperation(value = "마아페이지 내정보 비밀번호 변경")
-    public UserDto changePw(@RequestBody UserDto userDto) {
-        return userService.changePw(userDto);
+    public UserResponseDto changePw(UserRequestDto userRequestDto) {
+        UserDto userDto = new UserDto(userRequestDto);
+        UserResponseDto userResponseDto = userDto.converToUserResponseDto();
+        return userResponseDto;
     }
 
     // ***************** 1-2. 찜 *****************

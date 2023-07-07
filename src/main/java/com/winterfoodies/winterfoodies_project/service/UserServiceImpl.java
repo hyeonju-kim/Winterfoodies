@@ -84,19 +84,23 @@ public class UserServiceImpl implements UserService {
 
     // 마이페이지 비번 변경
     @Override
-    public UserDto changePw(UserDto userDto) {
+    public UserDto changePw(UserDto inUserDto) {
         User foundUser = userRepository.findByUsername(getUsernameFromAuthentication());
         if (foundUser != null) {
-            foundUser.setPassword(userDto.getPassword());
+            foundUser.setPassword(inUserDto.getPassword());
             userRepository.save(foundUser);
 
             UserDto foundUserDto = new UserDto();
             foundUserDto.setMessage("변경완료!!");
             return foundUserDto;
         }
+
         UserDto notFoundUserDto = new UserDto();
         notFoundUserDto.setMessage("해당 유저를 찾을 수 없습니다.");
-        return notFoundUserDto;
+
+        // Entity -> UserDto
+        UserDto outUserDto = new UserDto(foundUser);
+        return outUserDto;
     }
 
 
