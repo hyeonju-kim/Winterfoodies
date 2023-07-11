@@ -3,7 +3,7 @@ version: 0.0
 os: linux
 files:
   - source: / #S3 버킷에서 복사할 파일의 위치를 나타냄
-    destination: /home/ubuntu/app/travis/build #TravisCI가 Build가 끝나면 S3에 zip 파일이 전송되고, 이 zip파일은 /home/ubuntu/app/travis/build로 복사되어 압축을 푼다.
+    destination: /home/ubuntu/app/travis/build/ #TravisCI가 Build가 끝나면 S3에 zip 파일이 전송되고, 이 zip파일은 /home/ubuntu/app/travis/build로 복사되어 압축을 푼다.
     overwrite: yes
 
 permissions:
@@ -12,8 +12,8 @@ permissions:
     owner: ubuntu
     group: ubuntu
 
-#
-#hooks:
-#  AfterInstall: # 배포가 끝나면 아래 명령어를 실행!!
-#    - location: execute-deploy.sh
-#      timeout: 180
+
+hooks:
+  AfterInstall: # 배포가 끝나면 아래 명령어를 실행!!
+    - location: execute-deploy.sh
+      timeout: 180
