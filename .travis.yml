@@ -24,6 +24,7 @@ before_deploy: # deploy 명령어가 실행되기 전에 수행
   - zip -r winterfoodies-project *
   - mkdir -p deploy
   - mv winterfoodies-project.zip deploy/winterfoodies-project.zip
+
 deploy: # 외부 서비스와 연동될 행위들을 선언
   - provider: s3
     access_key_id: $AWS_ACCESS_KEY # Travis repo settings에 설정된 값
@@ -32,7 +33,7 @@ deploy: # 외부 서비스와 연동될 행위들을 선언
     region: ap-northeast-2
     skip_cleanup: true
     acl: public_read
-    local_dir: deploy   # before_deploy에서 생성한 디렉토리
+    local_dir: deploy   # before_deploy에서 생성한 디렉토리. 해당 디렉토리(deploy)내용들만 S3로 전송
     wait-until-deployed: true
 
   - provider: codedeploy
@@ -56,3 +57,4 @@ notifications:
 # 권한 부여 (빌드시 에러 방지)
 before_install:
   - chmod +x mvnw
+  - chmod +x deploy.sh
