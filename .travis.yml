@@ -17,7 +17,7 @@ cache:
     - '$HOME/.pom'
 
 # master 브랜치에 푸시되었을 때 수행하는 명령어. 푸시가 되면 자동으로 clean & build 를 수행
-script: "mvn clean install"  #이거나 아래거나 상관없는듯..
+script: "mvn clean install"
 
 
 # S3, codedeploy 설정
