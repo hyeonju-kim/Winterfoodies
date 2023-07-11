@@ -57,4 +57,3 @@ notifications:
 # 권한 부여 (빌드시 에러 방지)
 before_install:
   - chmod +x mvnw
-  - chmod +x deploy.sh
