@@ -46,7 +46,7 @@ public class CartController {
             String code = err.getCode();
             ErrorBox errorBox = new ErrorBox();
             errorBox.setCause(code);
-            errorBox.setMessage(message);
+            errorBox.setMessage("[고객id] : " + productRequestDto.getId() + "[에러메시지] : "+ message);
             log.error(message);
             throw new RequestException(errorBox);
         }
