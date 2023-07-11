@@ -17,12 +17,13 @@ cache:
     - '$HOME/.pom'
 
 # master 브랜치에 푸시되었을 때 수행하는 명령어. 푸시가 되면 자동으로 clean & build 를 수행
-script: "mvn clean install"
+#script: "mvn clean install"
+script: "./mvnw clean package"
 
 # S3, codedeploy 설정
 before_deploy: # deploy 명령어가 실행되기 전에 수행
   - zip -r winterfoodies-project *
-  - mkdir -p deploy
+  - mkdir -p deploy                #travis 서버 내에서 deploy디렉토리를 만드는것. ec2와 상관x
   - mv winterfoodies-project.zip deploy/winterfoodies-project.zip
 
 deploy: # 외부 서비스와 연동될 행위들을 선언
