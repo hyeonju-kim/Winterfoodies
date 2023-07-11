@@ -6,7 +6,7 @@ files:
     destination: /home/ubuntu/app/travis/build/ #TravisCI가 Build가 끝나면 S3에 zip 파일이 전송되고, 이 zip파일은 /home/ec2-user/app/travis/build로 복사되어 압축을 푼다.
 
 permissions:
-  - object: /
+  - object: /home/ubuntu/app/travis/build/
     pattern: "**"
     owner: ubuntu
     group: ubuntu
