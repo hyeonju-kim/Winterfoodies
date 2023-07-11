@@ -15,5 +15,5 @@ permissions:
 
 hooks:
   AfterInstall: # 배포가 끝나면 아래 명령어를 실행!! AfterInstall 단계에서는 ubuntu 권한으로 execute-deploy.sh 스크립트를 실행해준다. 180초가 넘게되면 실패한다.
-    - location: deploy.sh
+    - location: execute-deploy.sh
       timeout: 180
