@@ -1,19 +1,19 @@
 # AWS Code deploy 설정
 version: 0.0
-os: linux
+os: linux     #ubuntu여도 linux라고 쓴다!
 files:
   - source: / #S3 버킷에서 복사할 파일의 위치를 나타냄
     destination: /home/ubuntu/app/travis/build/ #TravisCI가 Build가 끝나면 S3에 zip 파일이 전송되고, 이 zip파일은 /home/ubuntu/app/travis/build로 복사되어 압축을 푼다.
     overwrite: yes
 
 permissions:
-  - object: /home/ubuntu/app/travis/build/
+  - object: /
     pattern: "**"
     owner: ubuntu
     group: ubuntu
 
 
-#hooks:
-#  AfterInstall: # 배포가 끝나면 아래 명령어를 실행!!
-#    - location: execute-deploy.sh
-#      timeout: 180
+hooks:
+  AfterInstall: # 배포가 끝나면 아래 명령어를 실행!! AfterInstall 단계에서는 ubuntu 권한으로 execute-deploy.sh 스크립트를 실행해준다. 180초가 넘게되면 실패한다.
+    - location: deploy.sh
+      timeout: 180
