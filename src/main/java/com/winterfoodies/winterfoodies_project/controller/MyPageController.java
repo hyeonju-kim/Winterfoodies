@@ -37,9 +37,10 @@ public class MyPageController {
         return userService.retrieveUser();
     }
 
+    // 230707
     // 비밀번호 변경
     @PutMapping("/mypage/info/pw")
-    @ApiOperation(value = "마아페이지 내정보 비밀번호 변경")
+    @ApiOperation(value = "마이페이지 내정보 비밀번호 변경")
     public UserResponseDto changePw(UserRequestDto userRequestDto) {
         UserDto userDto = new UserDto(userRequestDto);
         UserResponseDto userResponseDto = userDto.converToUserResponseDto();

@@ -37,7 +37,7 @@ public class CartController {
     private final ProductRepository productRepository;
 
     // 장바구니에 상품 추가 API
-    // valid 추가 !!!!!
+    // 230707 valid 추가 !!!!!
     @GetMapping("/items")
     public String addProductToCart(@Valid ProductRequestDto productRequestDto, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response) throws Exception{
         if (bindingResult.hasErrors()) {

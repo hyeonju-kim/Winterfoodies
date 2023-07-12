@@ -25,7 +25,7 @@ public class UserDto {
     public UserDto() {
     }
 
-    // request -> service
+    // request -> service (requestDto를 받아서 Dto로 변환해준다)
     public UserDto(UserRequestDto requestDto) {
         this.password = requestDto.getPassword();
         this.username = requestDto.getUsername();
@@ -37,7 +37,7 @@ public class UserDto {
         this.password = user.getPassword();
     }
 
-    // UserDto -> UserResponseDto
+    // UserDto -> UserResponseDto (Dto에서 responseDto로 변환해준다)
     public UserResponseDto converToUserResponseDto() {
         UserResponseDto userResponseDto = new UserResponseDto();
         userResponseDto.setId(this.id);
