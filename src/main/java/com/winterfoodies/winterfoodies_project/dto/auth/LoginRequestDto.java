@@ -1,4 +1,4 @@
-package com.winterfoodies.winterfoodies_project.dto.user;
+package com.winterfoodies.winterfoodies_project.dto.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

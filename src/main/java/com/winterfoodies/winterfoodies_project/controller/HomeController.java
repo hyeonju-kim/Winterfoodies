@@ -1,18 +1,13 @@
 package com.winterfoodies.winterfoodies_project.controller;
 
 import com.winterfoodies.winterfoodies_project.config.JwtUtil;
-import com.winterfoodies.winterfoodies_project.dto.user.LoginRequestDto;
-import com.winterfoodies.winterfoodies_project.dto.user.LoginSuccessResponseDto;
-import com.winterfoodies.winterfoodies_project.dto.user.UserDto;
+import com.winterfoodies.winterfoodies_project.dto.auth.LoginRequestDto;
+import com.winterfoodies.winterfoodies_project.dto.auth.LoginSuccessResponseDto;
 import com.winterfoodies.winterfoodies_project.dto.user.UserRequestDto;
-import com.winterfoodies.winterfoodies_project.service.UserDetailsImpl;
 import com.winterfoodies.winterfoodies_project.service.UserDetailsServiceImpl;
 import com.winterfoodies.winterfoodies_project.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

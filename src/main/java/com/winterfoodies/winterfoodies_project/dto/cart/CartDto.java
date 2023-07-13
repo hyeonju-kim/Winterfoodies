@@ -1,4 +1,4 @@
-package com.winterfoodies.winterfoodies_project.dto.user;
+package com.winterfoodies.winterfoodies_project.dto.cart;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;

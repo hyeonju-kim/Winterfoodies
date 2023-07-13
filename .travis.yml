@@ -22,7 +22,7 @@ script: "mvn clean install"
 
 # S3, codedeploy 설정
 before_deploy: # deploy 명령어가 실행되기 전에 수행
-  - zip -r winterfoodies-project *
+  - zip -r winterfoodies-project * # Travis CI에서 파일을 하나하나 복사하는건 복사시간이 많이 걸려서 프로젝트 폴더 채로 압축해서 S3로 전달
   - mkdir -p deploy                #travis 서버 내에서 deploy디렉토리를 만드는것. ec2와 상관x
   - mv winterfoodies-project.zip deploy/winterfoodies-project.zip
 

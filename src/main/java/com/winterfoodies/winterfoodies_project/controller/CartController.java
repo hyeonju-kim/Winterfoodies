@@ -5,18 +5,11 @@ import com.winterfoodies.winterfoodies_project.RequestException;
 import com.winterfoodies.winterfoodies_project.dto.order.OrderRequestDto;
 import com.winterfoodies.winterfoodies_project.dto.order.OrderResponseDto;
 import com.winterfoodies.winterfoodies_project.dto.product.ProductRequestDto;
-import com.winterfoodies.winterfoodies_project.dto.user.CartDto;
-import com.winterfoodies.winterfoodies_project.dto.user.UserResponseDto;
-import com.winterfoodies.winterfoodies_project.entity.Cart;
-import com.winterfoodies.winterfoodies_project.entity.CartProduct;
-import com.winterfoodies.winterfoodies_project.entity.Product;
+import com.winterfoodies.winterfoodies_project.dto.cart.CartDto;
 import com.winterfoodies.winterfoodies_project.repository.ProductRepository;
 import com.winterfoodies.winterfoodies_project.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
@@ -24,8 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -50,8 +41,8 @@ public class CartController {
             log.error(message);
             throw new RequestException(errorBox);
         }
-        return "장바구니에 추가되었습니다";
-//        return userService.addProductToCart(productRequestDto.getId(), productRequestDto.getQuantity(), request, response);
+//        return "장바구니에 추가되었습니다";
+        return userService.addProductToCart(productRequestDto.getId(), productRequestDto.getQuantity(), request, response);
     }
 
     @ResponseBody

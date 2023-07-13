@@ -1,27 +1,24 @@
 package com.winterfoodies.winterfoodies_project.service;
 
-import com.winterfoodies.winterfoodies_project.config.LocationConfig;
+import com.winterfoodies.winterfoodies_project.dto.cart.CartDto;
 import com.winterfoodies.winterfoodies_project.dto.order.OrderRequestDto;
 import com.winterfoodies.winterfoodies_project.dto.order.OrderResponseDto;
 import com.winterfoodies.winterfoodies_project.dto.product.ProductResponseDto;
+import com.winterfoodies.winterfoodies_project.dto.review.ReviewDto;
 import com.winterfoodies.winterfoodies_project.dto.store.StoreMainDto;
-import com.winterfoodies.winterfoodies_project.dto.store.StoreRequestDto;
 import com.winterfoodies.winterfoodies_project.dto.store.StoreResponseDto;
 import com.winterfoodies.winterfoodies_project.dto.user.*;
 import com.winterfoodies.winterfoodies_project.entity.*;
 import com.winterfoodies.winterfoodies_project.repository.*;
-import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -72,10 +69,7 @@ public class UserServiceImpl implements UserService {
     public UserDto retrieveUser() {
         User foundUser = userRepository.findByUsername(getUsernameFromAuthentication());
         if (foundUser != null) {  // respository에서 가져온건 꼭 분기처리 해야한다!!!!
-            UserDto foundUserDto = new UserDto();
-            foundUserDto.setEmail(foundUser.getEmail());
-            foundUserDto.setUsername(foundUser.getUsername());
-            return foundUserDto;
+            return new UserDto(foundUser);
         }
         UserDto notFoundUserDto = new UserDto();
         notFoundUserDto.setMessage("해당 유저를 찾을 수 없습니다.");
@@ -90,17 +84,15 @@ public class UserServiceImpl implements UserService {
             foundUser.setPassword(inUserDto.getPassword());
             userRepository.save(foundUser);
 
-            UserDto foundUserDto = new UserDto();
-            foundUserDto.setMessage("변경완료!!");
-            return foundUserDto;
+            // Entity -> UserDto
+            UserDto outUserDto = new UserDto(foundUser);
+            outUserDto.setMessage("변경완료!!");
+            return outUserDto;
         }
 
-        UserDto notFoundUserDto = new UserDto();
-        notFoundUserDto.setMessage("해당 유저를 찾을 수 없습니다.");
-
-        // Entity -> UserDto
-        UserDto outUserDto = new UserDto(foundUser);
-        return outUserDto;
+        UserDto notFoundOutUserDto = new UserDto();
+        notFoundOutUserDto.setMessage("해당 유저를 찾을 수 없습니다.");
+        return notFoundOutUserDto;
     }
 
 
@@ -169,28 +161,21 @@ public class UserServiceImpl implements UserService {
     // 리뷰 삭제
     @Override
     public UserDto delReviewByUserId(Long reviewId) {
-        UserDto userDto = new UserDto();
         reviewRepository.deleteById(reviewId);
+        UserDto userDto = new UserDto();
         userDto.setMessage("삭제완료!!");
         return userDto;
     }
 
     // 리뷰 등록
     @Override
-    public ReviewDto postReview(ReviewDto reviewDto) {
-        ReviewDto reviewDto1 = new ReviewDto();
-        Review review = new Review();
-
-        review.setUserId(getUserId());
-        review.setRating(reviewDto.getRating());
-        review.setPhoto(reviewDto.getPhoto());
-        review.setContent(reviewDto.getContent());
-        review.setStoreName(reviewDto.getStoreName());
-
+    public ReviewDto postReview(ReviewDto inReviewDto) {
+        Review review = new Review(inReviewDto);
         reviewRepository.save(review);
 
-        reviewDto1.setMessage("리뷰가 등록되었습니다");
-        return reviewDto1;
+        ReviewDto reviewDto = new ReviewDto(review);
+        reviewDto.setMessage("리뷰가 등록되었습니다");
+        return reviewDto;
     }
 
     // 환경설정

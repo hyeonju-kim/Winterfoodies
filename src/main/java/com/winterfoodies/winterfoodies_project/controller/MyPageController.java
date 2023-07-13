@@ -2,7 +2,7 @@ package com.winterfoodies.winterfoodies_project.controller;
 
 import com.winterfoodies.winterfoodies_project.dto.order.OrderResponseDto;
 import com.winterfoodies.winterfoodies_project.dto.store.StoreResponseDto;
-import com.winterfoodies.winterfoodies_project.dto.user.ReviewDto;
+import com.winterfoodies.winterfoodies_project.dto.review.ReviewDto;
 import com.winterfoodies.winterfoodies_project.dto.user.UserDto;
 import com.winterfoodies.winterfoodies_project.dto.user.UserRequestDto;
 import com.winterfoodies.winterfoodies_project.dto.user.UserResponseDto;
@@ -33,18 +33,20 @@ public class MyPageController {
     // 마이페이지 내정보 조회
     @GetMapping("/mypage/info")
     @ApiOperation(value = "마이페이지 내정보 조회")
-    public UserDto getUser() {
-        return userService.retrieveUser();
+    public UserResponseDto getUser() {
+        UserDto userDto = userService.retrieveUser();
+        UserResponseDto userResponseDto = userDto.convertToUserResponseDto();
+        return userResponseDto;
     }
 
     // 230707
     // 비밀번호 변경
     @PutMapping("/mypage/info/pw")
     @ApiOperation(value = "마이페이지 내정보 비밀번호 변경")
-    public UserResponseDto changePw(UserRequestDto userRequestDto) {
+    public UserResponseDto changePw(@RequestBody UserRequestDto userRequestDto) {
         UserDto userDto = new UserDto(userRequestDto);
-        UserResponseDto userResponseDto = userDto.converToUserResponseDto();
-        return userResponseDto;
+        UserDto updatedUserDto = userService.changePw(userDto);
+        return updatedUserDto.convertToUserResponseDto();
     }
 
     // ***************** 1-2. 찜 *****************
@@ -66,8 +68,9 @@ public class MyPageController {
     // 리뷰 삭제
     @DeleteMapping("/mypage/review/{reviewId}")
     @ApiOperation(value = "리뷰 삭제")
-    public UserDto delReview(@PathVariable("reviewId") Long reviewId) {
-        return userService.delReviewByUserId(reviewId);
+    public UserResponseDto delReview(@PathVariable("reviewId") Long reviewId) {
+        UserDto userDto = userService.delReviewByUserId(reviewId);
+        return userDto.convertToUserResponseDto();
     }
 
     // ***************** 1-4. 주문내역 *****************

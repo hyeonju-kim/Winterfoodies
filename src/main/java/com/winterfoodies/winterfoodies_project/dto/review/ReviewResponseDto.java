@@ -1,8 +1,7 @@
-package com.winterfoodies.winterfoodies_project.dto.user;
+package com.winterfoodies.winterfoodies_project.dto.review;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.winterfoodies.winterfoodies_project.entity.Timestamped;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,8 +9,8 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@JsonInclude(JsonInclude.Include.NON_EMPTY) //비어있지 않은 필드만 나타내는 어노테이션
-public class ReviewDto extends Timestamped {
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+public class ReviewResponseDto {
     private Long userId;
 
     private String storeName;

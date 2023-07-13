@@ -27,18 +27,20 @@ public class UserDto {
 
     // request -> service (requestDto를 받아서 Dto로 변환해준다)
     public UserDto(UserRequestDto requestDto) {
+        this.email = requestDto.getEmail();
         this.password = requestDto.getPassword();
         this.username = requestDto.getUsername();
     }
 
     // repository -> service
     public UserDto(User user) {
+        this.email = user.getEmail();
         this.username = user.getUsername();
         this.password = user.getPassword();
     }
 
     // UserDto -> UserResponseDto (Dto에서 responseDto로 변환해준다)
-    public UserResponseDto converToUserResponseDto() {
+    public UserResponseDto convertToUserResponseDto() {
         UserResponseDto userResponseDto = new UserResponseDto();
         userResponseDto.setId(this.id);
         userResponseDto.setUsername(this.username);
