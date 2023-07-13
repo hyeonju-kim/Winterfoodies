@@ -25,7 +25,7 @@ public class SwaggerConfig {
     public ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("Winterfoodies API")
-                .description("윈터푸디스 API 명세서")
+                .description("윈터푸디스 API 명세서~^^~~~~")
                 .version("0.1")
                 .build();
     }
