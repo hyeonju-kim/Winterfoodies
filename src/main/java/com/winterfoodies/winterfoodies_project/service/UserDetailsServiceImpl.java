@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
 @Service
@@ -15,12 +16,15 @@ import java.util.Optional;
 public class UserDetailsServiceImpl implements UserDetailsService {
     private final UserRepository userRepository;
 //    private final BCryptPasswordEncoder passwordEncoder;
+    private final HttpServletResponse response;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
         if (user == null) {
+
             throw new IllegalArgumentException("존재하지 않는 이름입니다.");
+
         }
         return new UserDetailsImpl(user);
     }

@@ -5,6 +5,7 @@ import com.winterfoodies.winterfoodies_project.service.UserDetailsServiceImpl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -35,11 +36,15 @@ public class JwtFilter extends OncePerRequestFilter {
             username = jwtUtil.getUsernameFromToken(token);
         }else{
                 filterChain.doFilter(request, response);
+
+                // 추가!! IllegalStateException: Cannot call sendRedirect() after the response has been committed 해결 위해 추가함. 비 로그인 상태일 경우 소셜로그인창을 두번 호출해서 발생하는 에러임
+                return;
         }
 
         // 3. 토큰은 있는데 현재 인증객체가 없으면 컨텍스트홀더에 유저토큰 세팅
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
 
             // 토큰 유효여부 확인
             if (jwtUtil.isValidToken(token, userDetails)) {
@@ -49,5 +54,6 @@ public class JwtFilter extends OncePerRequestFilter {
             }
         }
         filterChain.doFilter(request, response);
+
     }
 }

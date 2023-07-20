@@ -6,10 +6,15 @@ import com.winterfoodies.winterfoodies_project.dto.order.OrderRequestDto;
 import com.winterfoodies.winterfoodies_project.dto.order.OrderResponseDto;
 import com.winterfoodies.winterfoodies_project.dto.product.ProductRequestDto;
 import com.winterfoodies.winterfoodies_project.dto.cart.CartDto;
+import com.winterfoodies.winterfoodies_project.entity.User;
 import com.winterfoodies.winterfoodies_project.repository.ProductRepository;
+import com.winterfoodies.winterfoodies_project.repository.UserRepository;
 import com.winterfoodies.winterfoodies_project.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +22,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -24,28 +32,47 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class CartController {
-    private final UserService userService;
-    private final ProductRepository productRepository;
+    private UserService userService;
+    private ProductRepository productRepository;
+
+//    // jwt 토큰으로 현재 인증된 사용자의 Authentication 객체에서 이름 가져오기
+//    public String getUsernameFromAuthentication() {
+//        String username = null;
+//        if (SecurityContextHolder.getContext().getAuthentication() != null) {
+//            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//
+//            // 인증된 사용자의 이름 가져오기
+//            username = authentication.getName();
+//        }
+//        return username;
+//    }
+//
+//    // 인증된 사용자의 id 가져오기
+//    public Long getUserId() {
+//        User foundUser = userRepository.findByUsername(getUsernameFromAuthentication());
+//        return foundUser.getId();
+//    }
 
     // 장바구니에 상품 추가 API
     // 230707 valid 추가 !!!!!
-    @GetMapping("/items")
+    @GetMapping("/items") // 수정하기!
     public String addProductToCart(@Valid ProductRequestDto productRequestDto, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response) throws Exception{
         if (bindingResult.hasErrors()) {
             ObjectError err = bindingResult.getAllErrors().get(0);
             String message = err.getDefaultMessage();
             String code = err.getCode();
+            LocalDateTime now = LocalDateTime.now();
+            String dateTime = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
             ErrorBox errorBox = new ErrorBox();
             errorBox.setCause(code);
-            errorBox.setMessage("[고객id] : " + productRequestDto.getId() + "[에러메시지] : "+ message);
-            log.error(message);
+            errorBox.setMessage("[ 고객 id ] : " + userService.getUserId() + " | [ 에러 유형 ] : "+ code + " | [ 에러 시간 ] : " + dateTime + " | [ 에러메시지 ] : "+ message); //이 형태 그대로 사용해야함. 길이 맞춰놓음 스케줄러에서 사용
+
+            log.error(errorBox.getMessage());
             throw new RequestException(errorBox);
         }
-//        return "장바구니에 추가되었습니다";
         return userService.addProductToCart(productRequestDto.getId(), productRequestDto.getQuantity(), request, response);
     }
 
-    @ResponseBody
     @ExceptionHandler(RequestException.class)
     public ErrorBox requestExceptionHandler(RequestException requestException) {
         return requestException.getErrorBox();
@@ -60,7 +87,7 @@ public class CartController {
 
 
     // 장바구니 특정 상품 삭제
-    @GetMapping("/remove")
+    @GetMapping("/remove") // Delete로변경()
     public String removeProduct(@RequestParam Long productId, HttpServletRequest request, HttpServletResponse response){
        return userService.removeProductFromCart(productId, request, response);
     }

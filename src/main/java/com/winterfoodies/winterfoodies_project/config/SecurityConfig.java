@@ -58,6 +58,9 @@ public class  SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests().antMatchers("/**").permitAll()// 괄호 안에 허용해줄 url적기
                 .anyRequest().authenticated();
 
+                // 소셜 로그인 설정
+
+
         http.headers().frameOptions().disable(); // h2 db 접근위해 추가함 (빼면 화면안보임)
 
         // 4. 세션 꺼주기

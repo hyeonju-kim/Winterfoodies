@@ -70,10 +70,12 @@ public class UserServiceImpl implements UserService {
         User foundUser = userRepository.findByUsername(getUsernameFromAuthentication());
         if (foundUser != null) {  // respository에서 가져온건 꼭 분기처리 해야한다!!!!
             return new UserDto(foundUser);
+        }else {
+
+            UserDto notFoundUserDto = new UserDto();
+            notFoundUserDto.setMessage("해당 유저를 찾을 수 없습니다.");
+            return notFoundUserDto;
         }
-        UserDto notFoundUserDto = new UserDto();
-        notFoundUserDto.setMessage("해당 유저를 찾을 수 없습니다.");
-        return notFoundUserDto;
     }
 
     // 마이페이지 비번 변경
@@ -409,7 +411,7 @@ public class UserServiceImpl implements UserService {
 
     // 1. 장바구니에 상품 추가 (쿠키와 DB에 장바구니 담기)
     @Override
-    public String addProductToCart(@RequestParam Long productId,@RequestParam Long quantity, HttpServletRequest request, HttpServletResponse response) {
+    public String addProductToCart(Long productId,Long quantity, HttpServletRequest request, HttpServletResponse response) {
 
         // 쿠키에 담기
         Cookie[] cookies = request.getCookies();
@@ -579,7 +581,7 @@ public class UserServiceImpl implements UserService {
 
         List<Map<String, Long>> prdAndQntList = new ArrayList<>();
 
-        List<OrderProduct> orderProducts = orderProductRepository.findByOrderId(order.getId());
+        List<OrderProduct> orderProducts = orderProductRepository.findByOrderId(order.getId()); // jpql 로 바꾸기 ( )
         for (OrderProduct orderProduct : orderProducts) {
             Map<String, Long> prdAndQnt = new HashMap<>();
             prdAndQnt.put(orderProduct.getProduct().getName(), orderProduct.getQuantity());

@@ -35,8 +35,14 @@ public class MyPageController {
     @ApiOperation(value = "마이페이지 내정보 조회")
     public UserResponseDto getUser() {
         UserDto userDto = userService.retrieveUser();
-        UserResponseDto userResponseDto = userDto.convertToUserResponseDto();
-        return userResponseDto;
+        if (userDto != null) {
+            UserResponseDto userResponseDto = userDto.convertToUserResponseDto();
+            return userResponseDto;
+        }else {
+            UserResponseDto userResponseDto = new UserResponseDto();
+            userResponseDto.setMessage("존재하지 않는 이름입니다");
+            return userResponseDto;
+        }
     }
 
     // 230707
