@@ -89,7 +89,8 @@ public class UserServiceImpl implements UserService {
     public UserDto changePw(UserDto inUserDto) {
         User foundUser = userRepository.findByUsername(getUsernameFromAuthentication());
         if (foundUser != null) {
-            foundUser.setPassword(inUserDto.getPassword());
+            String encodedPassword = encoder.encode(inUserDto.getPassword());// 230726 추가
+            foundUser.setPassword(encodedPassword);
             userRepository.save(foundUser);
 
             // Entity -> UserDto
