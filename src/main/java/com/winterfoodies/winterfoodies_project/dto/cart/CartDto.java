@@ -21,4 +21,9 @@ public class CartDto {
     private Long totalPrice;
 
     private String EstimatedCookingTime;
+
+    public CartDto() {
+    }
+
+
 }

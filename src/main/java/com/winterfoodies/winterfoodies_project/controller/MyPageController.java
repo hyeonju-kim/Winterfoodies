@@ -1,5 +1,6 @@
 package com.winterfoodies.winterfoodies_project.controller;
 
+import com.winterfoodies.winterfoodies_project.ErrorBox;
 import com.winterfoodies.winterfoodies_project.dto.order.OrderResponseDto;
 import com.winterfoodies.winterfoodies_project.dto.store.StoreResponseDto;
 import com.winterfoodies.winterfoodies_project.dto.review.ReviewDto;
@@ -7,21 +8,27 @@ import com.winterfoodies.winterfoodies_project.dto.user.UserDto;
 import com.winterfoodies.winterfoodies_project.dto.user.UserRequestDto;
 import com.winterfoodies.winterfoodies_project.dto.user.UserResponseDto;
 import com.winterfoodies.winterfoodies_project.entity.*;
+import com.winterfoodies.winterfoodies_project.exception.RequestException;
 import com.winterfoodies.winterfoodies_project.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api")
+@Slf4j
 public class MyPageController {
     private final UserService userService; //서비스 클래스를 직접 주입받지 말고, 서비스 인터페이스를 주입받자!
-
-    // ################################################## 1. 마이페이지 ##################################################
     // 마이페이지 메인 화면(목록 조회)
     @GetMapping("/mypage") // 테스트용
     @ApiOperation(value = "메인화면 조회")
@@ -49,10 +56,29 @@ public class MyPageController {
     // 비밀번호 변경
     @PutMapping("/mypage/info/pw")
     @ApiOperation(value = "마이페이지 내정보 비밀번호 변경")
-    public UserResponseDto changePw(@RequestBody UserRequestDto userRequestDto) {
-        UserDto userDto = new UserDto(userRequestDto);
+    public UserResponseDto changePw(@Valid @RequestBody UserDto userDto, BindingResult bindingResult) {
+        // [230726] 추가
+        if (bindingResult.hasErrors()) {
+            List<ObjectError> allErrors = bindingResult.getAllErrors();
+            System.out.println("allErrors========== :  " + allErrors);
+            String message = allErrors.get(0).getDefaultMessage();
+            String code = allErrors.get(0).getCode();
+            LocalDateTime now = LocalDateTime.now();
+            String dateTime = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            ErrorBox errorBox = new ErrorBox();
+            errorBox.setCause(code);
+            errorBox.setMessage("[ 고객 id ] : 해당 없음" + " | [ 에러 유형 ] : "+ code + " | [ 에러 시간 ] : " + dateTime + " | [ 에러메시지 ] : "+ message);
+            log.error(errorBox.getMessage());
+            throw new RequestException(errorBox);
+        }
         UserDto updatedUserDto = userService.changePw(userDto);
+        updatedUserDto.setMessage("비밀번호 변경이 완료되었습니다.");
         return updatedUserDto.convertToUserResponseDto();
+    }
+
+    @ExceptionHandler(RequestException.class)
+    public ErrorBox requestException(RequestException requestException) {
+        return requestException.getErrorBox();
     }
 
     // ***************** 1-2. 찜 *****************

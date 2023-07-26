@@ -9,7 +9,9 @@ import lombok.Setter;
 @Setter
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class ProductResponseDto {
+    private Long id;
     private String productName;
     private Long price;
     private Long quantity;
+    private String message;
 }

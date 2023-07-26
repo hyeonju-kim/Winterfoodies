@@ -15,7 +15,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class MainPageController {
-
     private final UserService userService; //서비스 클래스를 직접 주입받지 말고, 서비스 인터페이스를 주입받자
 
     // 1. 메인페이지 (나와 가장 가까운 가게 - 가게명만)

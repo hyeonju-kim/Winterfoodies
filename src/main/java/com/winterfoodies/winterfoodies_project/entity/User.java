@@ -7,7 +7,8 @@ import javax.persistence.*;
 
 import lombok.*;
 import org.hibernate.usertype.UserType;
-//import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -72,8 +73,5 @@ public class User implements Serializable {
     public User() {
     }
 
-//    public void encryptPassword(PasswordEncoder passwordEncoder){
-//        this.password = passwordEncoder.encode(this.password);
-//    }
 
 }

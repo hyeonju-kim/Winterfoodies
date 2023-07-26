@@ -4,6 +4,7 @@ import com.winterfoodies.winterfoodies_project.AppRunner;
 import com.winterfoodies.winterfoodies_project.service.UserDetailsServiceImpl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,19 +22,25 @@ import java.io.IOException;
 import java.security.Security;
 
 @RequiredArgsConstructor
+@Slf4j
 public class JwtFilter extends OncePerRequestFilter {
     private final UserDetailsServiceImpl userDetailsService;
     private final JwtUtil jwtUtil;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String authorization = request.getHeader("Authorization"); // 1. 헤더 파싱
+        // 1. 헤더 파싱
+        String authorization = request.getHeader("Authorization");
         String username = "";
         String token = "";
 
-        if (authorization != null && authorization.startsWith("Bearer ")) { // 2. 토큰 파싱 해서 name 얻어오기
+        // 2. 토큰 파싱 해서 name 얻어오기
+        if (authorization != null && authorization.startsWith("Bearer ")) {
             token = authorization.substring(7);
             username = jwtUtil.getUsernameFromToken(token);
+
+            log.info("username = {}", username);
+
         }else{
                 filterChain.doFilter(request, response);
 
@@ -44,7 +51,7 @@ public class JwtFilter extends OncePerRequestFilter {
         // 3. 토큰은 있는데 현재 인증객체가 없으면 컨텍스트홀더에 유저토큰 세팅
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
+            log.info("userDatails = {}", userDetails);
 
             // 토큰 유효여부 확인
             if (jwtUtil.isValidToken(token, userDetails)) {

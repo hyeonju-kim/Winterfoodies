@@ -3,6 +3,8 @@ package com.winterfoodies.winterfoodies_project.service;
 import com.winterfoodies.winterfoodies_project.dto.cart.CartDto;
 import com.winterfoodies.winterfoodies_project.dto.order.OrderRequestDto;
 import com.winterfoodies.winterfoodies_project.dto.order.OrderResponseDto;
+import com.winterfoodies.winterfoodies_project.dto.product.ProductDto;
+import com.winterfoodies.winterfoodies_project.dto.product.ProductResponseDto;
 import com.winterfoodies.winterfoodies_project.dto.review.ReviewDto;
 import com.winterfoodies.winterfoodies_project.dto.store.StoreMainDto;
 import com.winterfoodies.winterfoodies_project.dto.store.StoreResponseDto;
@@ -20,7 +22,7 @@ public interface UserService { // 인터페이스 메소드 명세를 만들고 
     Long getUserId();
 
     // 회원가입
-    void signUp(UserRequestDto userRequestDto);
+    UserDto signUp(UserRequestDto userRequestDto);
 
 
     //마이페이지 내정보 조회
@@ -73,33 +75,18 @@ public interface UserService { // 인터페이스 메소드 명세를 만들고 
 
 
     //  가게 상세 조회 (메뉴 및 인기간식)
-    public StoreMainDto getStoreProducts(Long storeId);
+     StoreMainDto getStoreProducts(Long storeId);
 
     // 가게 상세 조회 (가게정보)
-    public StoreResponseDto getStoreDetails(Long storeId);
+     StoreResponseDto getStoreDetails(Long storeId);
 
     // 가게 상세 조회(리뷰)
-    public List<ReviewDto> getStoreReviews(Long storeId);
+     List<ReviewDto> getStoreReviews(Long storeId);
 
     // 가게 찜하기
-    public UserResponseDto  addFavoriteStore(Long storeId);
-
-    // 장바구니에 상품 추가
-//    public UserResponseDto addProductToCart(Long cartId, Long productId, int quantity);
-    public String addProductToCart(@RequestParam Long productId, @RequestParam Long quantity, HttpServletRequest request, HttpServletResponse response);
+     UserResponseDto  addFavoriteStore(Long storeId);
 
 
-   // 장바구니 상품 목록 조회
-    public List<CartDto> getCartProduct(HttpServletRequest request);
-
-    // 장바구니 특정 상품 삭제
-    public String removeProductFromCart(@RequestParam Long productId, HttpServletRequest request, HttpServletResponse response);
-
-        // 장바구니 초기화
-    public String clearCart(HttpServletResponse response);
-
-    // 주문완료 페이지 조회
-    public OrderResponseDto getOrderConfirmPage(OrderRequestDto orderRequestDto, HttpServletRequest request);
 
 }
 
