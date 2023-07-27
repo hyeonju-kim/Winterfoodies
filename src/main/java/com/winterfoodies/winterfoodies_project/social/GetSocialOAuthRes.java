@@ -9,9 +9,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class GetSocialOAuthRes {
-
     private String jwtToken;
-    private int user_num;
+    private String user_num;
     private String accessToken;
     private String tokenType;
 }
