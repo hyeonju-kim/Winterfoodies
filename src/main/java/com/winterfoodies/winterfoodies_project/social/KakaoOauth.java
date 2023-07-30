@@ -3,102 +3,111 @@ package com.winterfoodies.winterfoodies_project.social;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
+import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
+import org.springframework.web.util.UriComponentsBuilder;
+import java.net.URI;
+import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class KakaoOauth implements SocialOauth {
 
-    @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
+    @Value("${sns.kakao.client.id}")
     private String KAKAO_SNS_CLIENT_ID;
-    @Value("${spring.security.oauth2.client.registration.kakao.redirect-uri}")
+
+    @Value("${sns.kakao.redirect.uri}")
     private String KAKAO_SNS_CALLBACK_URL;
-    @Value("${spring.security.oauth2.client.registration.kakao.authorization-grant-type}")
+
+    @Value("${sns.kakao.authorization.grantType}")
     private String KAKAO_SNS_AUTH_TYPE;
 
+    @Value("${sns.kakao.authorization.uri}")
+    private String KAKAO_SNS_AUTHORIZATION_URI;
+
+    @Value("${sns.kakao.token.uri}")
+    private String KAKAO_SNS_TOKEN_URI;
+
+    @Value("${sns.kakao.user.info.uri}")
+    private String KAKAO_SNS_USER_INFO_URI;
 
     private final ObjectMapper objectMapper;
+
     private final RestTemplate restTemplate;
 
     // 1. redirect Url 생성
     @Override
     public String getOauthRedirectURL() {
-        Map<String, Object> params = new HashMap<>();
-//        params.put("scope", "profile");
-        params.put("response_type", "code");
-        params.put("client_id", KAKAO_SNS_CLIENT_ID);
-        params.put("redirect_uri", KAKAO_SNS_CALLBACK_URL);
+        MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+        queryParams.set("response_type", "code");
+        queryParams.set("client_id", KAKAO_SNS_CLIENT_ID);
+        queryParams.set("redirect_uri", KAKAO_SNS_CALLBACK_URL);
 
-        String parameterString = params.entrySet().stream()
-                .map(x -> x.getKey() + "=" + x.getValue())
-                .collect(Collectors.joining("&"));
-
-        return "https://kauth.kakao.com/oauth/authorize" + "?" + parameterString;
+        return UriComponentsBuilder
+                .fromUriString(KAKAO_SNS_AUTHORIZATION_URI)
+                .queryParams(queryParams)
+                .encode().build().toUriString();
     }
 
     // 2. 코드 추가한 url 생성
     @Override
     public ResponseEntity<String> requestAccessToken(String code) {
-        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.valueOf(MediaType.APPLICATION_FORM_URLENCODED_VALUE));
 
-        Map<String, Object> params = new HashMap<>();
-        params.put("code", code);
-        params.put("client_id", KAKAO_SNS_CLIENT_ID);
-//        params.put("client_secret", GOOGLE_SNS_CLIENT_SECRET);
-        params.put("redirect_uri", KAKAO_SNS_CALLBACK_URL);
-        params.put("grant_type", "authorization_code");
-//
-//        ResponseEntity<String> responseEntity =
-//                restTemplate.postForEntity("https://kauth.kakao.com/oauth/authorize", params, String.class);
+        MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+        queryParams.set("code", code);
+        queryParams.set("client_id", KAKAO_SNS_CLIENT_ID);
+        queryParams.set("redirect_uri", KAKAO_SNS_CALLBACK_URL);
+        queryParams.set("grant_type", KAKAO_SNS_AUTH_TYPE);
 
-//        if (responseEntity.getStatusCode() == HttpStatus.OK) {
-//            return responseEntity;
-//        }
+        URI uri = UriComponentsBuilder
+                .fromUriString(KAKAO_SNS_TOKEN_URI)
+                .queryParams(queryParams)
+                .encode().build().toUri();
 
-        KakaoUser kakaoUser = new KakaoUser("11", "asdasd123@naver.com", true, "밴틀리", "벤", "틀리", "ㅁㄴㅇ", "ko");
-        ResponseEntity<String> responseEntity = new ResponseEntity<>(HttpStatus.OK);
-
-        System.out.println("responseEntity =================" + responseEntity);
-//        return null;
-        return responseEntity;
+        return restTemplate.exchange(uri, HttpMethod.GET, new HttpEntity<>(headers), String.class);
     }
 
     // 3. responseEntity에 담긴 JSON String을 역직렬화해 KakaoOAuthToken 객체에 담고 반환
-    public KakaoOAuthToken getAccessToken(ResponseEntity<String> response) throws JsonProcessingException {
-        System.out.println("response.getBody() ============== " + response.getBody());
-        KakaoOAuthToken kakaoOAuthToken = objectMapper.readValue(response.getBody(),KakaoOAuthToken.class);
-
-        return kakaoOAuthToken;
-
+    public SocialOauthToken getAccessToken(ResponseEntity<String> response) throws JsonProcessingException {
+        log.info("response.getBody() : {}", response.getBody());
+        return objectMapper.readValue(response.getBody(),SocialOauthToken.class);
     }
 
     // 4. 다시 카카오로 3에서 받아온 액세스 토큰을 보내 카카오 사용자 정보를 받아온다.(email이 들어와야함!!!!!!!!!!!!!!)
-    public ResponseEntity<String> requestUserInfo(KakaoOAuthToken oAuthToken) {
-        String KAKAO_USERINFO_REQUEST_URL="https://kapi.kakao.com/v2/user/me";
-
-        //header에 accessToken을 담는다.
+    @Override
+    public ResponseEntity<String> requestUserInfo(SocialOauthToken oAuthToken) {
+        // Header에 AccessToken을 담는다.
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization","Bearer "+oAuthToken.getAccess_token());
+        headers.add("Authorization", "Bearer " + oAuthToken.getAccess_token());
+        headers.setContentType(MediaType.valueOf(MediaType.APPLICATION_FORM_URLENCODED_VALUE));
 
-        //HttpEntity를 하나 생성해 헤더를 담아서 restTemplate으로 구글과 통신하게 된다.
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity(headers);
-        ResponseEntity<String> response = restTemplate.exchange(KAKAO_USERINFO_REQUEST_URL, HttpMethod.GET,request,String.class);
+        URI uri = UriComponentsBuilder
+                .fromUriString(KAKAO_SNS_USER_INFO_URI)
+                .encode().build().toUri();
 
-        System.out.println("response.getBody() ==-=-=-=-=-=-======== " + response.getBody()); ///
-        return response;
+        return restTemplate.exchange(uri, HttpMethod.GET, new HttpEntity<>(headers), String.class);
     }
 
     // 5. 카카오 유저 정보가 담긴 JSON 문자열을 파싱하여 KakaoUser 객체에 담기
-    public KakaoUser getUserInfo(ResponseEntity<String> userInfoRes) throws JsonProcessingException{
-        KakaoUser kakaoUser = objectMapper.readValue(userInfoRes.getBody(),KakaoUser.class);
-        return kakaoUser;
+    public SocailUser getUserInfo(ResponseEntity<String> userInfoRes) {
+        JSONObject jsonObject = (JSONObject) JSONValue.parse(Objects.requireNonNull(userInfoRes.getBody()));
+        JSONObject accountObject = (JSONObject) jsonObject.get("kakao_account");
+        JSONObject profileObject = (JSONObject) accountObject.get("profile");
+
+        return SocailUser.builder()
+                .id(String.valueOf((Long)jsonObject.get("id")))
+                .name((String) profileObject.get("nickname"))
+                .email((String) accountObject.get("email"))
+                .build();
     }
 }

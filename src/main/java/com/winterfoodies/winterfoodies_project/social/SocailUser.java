@@ -1,6 +1,7 @@
 package com.winterfoodies.winterfoodies_project.social;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,7 +9,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class GoogleUser {
+@Builder
+public class SocailUser {
     public String id;
     public String email;
     public Boolean verifiedEmail;

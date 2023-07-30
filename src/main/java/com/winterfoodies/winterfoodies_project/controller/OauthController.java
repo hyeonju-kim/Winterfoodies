@@ -1,9 +1,12 @@
 package com.winterfoodies.winterfoodies_project.controller;
 import com.winterfoodies.winterfoodies_project.social.GetSocialOAuthRes;
+import com.winterfoodies.winterfoodies_project.social.OAuthException;
 import com.winterfoodies.winterfoodies_project.social.SocialLoginType;
 import com.winterfoodies.winterfoodies_project.social.OauthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.convert.ConversionException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,14 +45,6 @@ public class OauthController {
      * @param code            API Server 로부터 넘어노는 code
      * @return SNS Login 요청 결과로 받은 Json 형태의 String 문자열 (access_token, refresh_token 등)
      */
-//    @GetMapping(value = "/{socialLoginType}/callback")
-//    public ResponseEntity<String> callback(
-//            @PathVariable(name = "socialLoginType") SocialLoginType socialLoginType,
-//            @RequestParam(name = "code") String code) {
-//        log.info(">> 소셜 로그인 API 서버로부터 받은 code :: {}", code);
-//        return oauthService.requestAccessToken(socialLoginType, code);
-//    }
-
     @GetMapping(value = "/{socialLoginType}/callback")
     public GetSocialOAuthRes oAuthLogin(
             @PathVariable(name = "socialLoginType") SocialLoginType socialLoginType,
@@ -58,4 +53,23 @@ public class OauthController {
         return oauthService.oAuthLogin(socialLoginType, code);
     }
 
+    /**
+     * OAuth 처리 과정에 생기는 예외를 custom exception 으로 처리
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(OAuthException.class)
+    public ResponseEntity<String> oAuthExceptionHandler(OAuthException e) {
+        log.info("e : {}", e.getMessage());
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+    }
+
+    /**
+     * SocialLoginType Enum에 없는 type이 요청되면 ConversionException 이 발생하므로 그에 대한 예외 처리
+     * @return
+     */
+    @ExceptionHandler(ConversionException.class)
+    public ResponseEntity<String> conversionExceptionHandler() {
+        return new ResponseEntity<>("알 수 없는 SocialLoginType 입니다.", HttpStatus.NOT_FOUND);
+    }
 }

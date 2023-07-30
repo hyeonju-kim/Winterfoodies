@@ -8,7 +8,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class GoogleOAuthToken {
+public class SocialOauthToken {
     private String access_token;
     private int expires_in;
     private String scope;

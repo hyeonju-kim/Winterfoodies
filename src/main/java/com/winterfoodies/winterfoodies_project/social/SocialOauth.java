@@ -1,5 +1,6 @@
 package com.winterfoodies.winterfoodies_project.social;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.http.ResponseEntity;
 
 public interface SocialOauth {
@@ -12,11 +13,17 @@ public interface SocialOauth {
      * @return API 서버로 부터 응답받은 Json 형태의 결과를 string으로 반환 */
     ResponseEntity<String> requestAccessToken(String code);
 
+    SocialOauthToken getAccessToken(ResponseEntity<String> response) throws JsonProcessingException;
+
+    ResponseEntity<String> requestUserInfo(SocialOauthToken oauthToken);
+
+    SocailUser getUserInfo(ResponseEntity<String> userInfoRes) throws JsonProcessingException;
+
     default SocialLoginType type() {
         if (this instanceof GoogleOauth) {
             return SocialLoginType.GOOGLE;
-//        } else if (this instanceof NaverOauth) {
-//            return SocialLoginType.NAVER;
+        } else if (this instanceof NaverOauth) {
+            return SocialLoginType.NAVER;
         } else if (this instanceof KakaoOauth) {
             return SocialLoginType.KAKAO;
         } else {
