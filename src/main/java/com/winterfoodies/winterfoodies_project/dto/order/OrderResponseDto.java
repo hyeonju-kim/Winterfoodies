@@ -18,6 +18,8 @@ public class OrderResponseDto {
     private String storeName;
     private Long orderId;
     private Long customerId;
+    private String productId;
+    private String productName;
     private String customerName;
     private LocalDateTime orderDate;
     private String processYn;

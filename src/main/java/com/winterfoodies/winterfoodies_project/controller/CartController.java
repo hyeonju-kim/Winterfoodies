@@ -1,6 +1,10 @@
 package com.winterfoodies.winterfoodies_project.controller;
 
 import com.winterfoodies.winterfoodies_project.ErrorBox;
+import com.winterfoodies.winterfoodies_project.dto.cart.CartResponseDto;
+import com.winterfoodies.winterfoodies_project.dto.cartProduct.CartProductDto;
+import com.winterfoodies.winterfoodies_project.dto.cartProduct.CartProductRequestDto;
+import com.winterfoodies.winterfoodies_project.dto.cartProduct.CartProductResponseDto;
 import com.winterfoodies.winterfoodies_project.dto.product.ProductDto;
 import com.winterfoodies.winterfoodies_project.dto.product.ProductResponseDto;
 import com.winterfoodies.winterfoodies_project.exception.RequestException;
@@ -11,6 +15,7 @@ import com.winterfoodies.winterfoodies_project.dto.cart.CartDto;
 import com.winterfoodies.winterfoodies_project.repository.ProductRepository;
 import com.winterfoodies.winterfoodies_project.service.CartService;
 import com.winterfoodies.winterfoodies_project.service.UserService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindingResult;
@@ -22,6 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -53,7 +59,7 @@ public class CartController {
 
     // 장바구니에 상품 추가 API
     // 230707 valid 추가 !!!!!
-    @PostMapping("/items") // [230726] TODO 앱개발자 전달사항 :  Get -> Post로 변경
+    @PostMapping("/items") // [230726] Get -> Post로 변경
     public ProductResponseDto addProductToCart(@Valid @RequestBody ProductRequestDto productRequestDto, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response) throws Exception{
         if (bindingResult.hasErrors()) {
             ObjectError err = bindingResult.getAllErrors().get(0);
@@ -84,24 +90,37 @@ public class CartController {
         return requestException.getErrorBox();
     }
 
-
     // 장바구니에 상품 조회 API
     @GetMapping("/itemsList")
-    public List<CartDto> getCartProducts(HttpServletRequest request) {
-        return cartService.getCartProduct(request);
+    public List<CartProductResponseDto> getCartProducts(HttpServletRequest request) {
+        List<CartProductDto> cartProductDtoList = cartService.getCartProduct(request);
+        ArrayList<CartProductResponseDto> cartProductResponseDtoList = new ArrayList<>();
+        for (CartProductDto cartProductDto : cartProductDtoList) {
+            cartProductResponseDtoList.add(cartProductDto.convertToCartProductResponseDto());
+        }
+        return cartProductResponseDtoList;
     }
 
 
     // 장바구니 특정 상품 삭제
-    @GetMapping("/remove") // Delete로변경()
-    public String removeProduct(@RequestParam Long productId, HttpServletRequest request, HttpServletResponse response){
-       return cartService.removeProductFromCart(productId, request, response);
+    @DeleteMapping  ("/{productId}") // 230731 Get -> Delete로 변경, @requestParam -> @PathVariable로 변경
+    public CartProductResponseDto removeProduct(@PathVariable Long productId, HttpServletRequest request, HttpServletResponse response){
+        CartProductDto cartProductDto = cartService.removeProductFromCart(productId, request, response);
+        return cartProductDto.convertToCartProductResponseDto();
     }
 
     // 장바구니 초기화
-    @GetMapping("/clear")
-    public String clearCart(HttpServletResponse response) {
-        return cartService.clearCart(response);
+    @PutMapping // 230731 Get -> Put 으로 변경
+    public CartProductResponseDto clearCart(HttpServletResponse response) {
+        CartProductDto cartProductDto = cartService.clearCart(response);
+        return cartProductDto.convertToCartProductResponseDto();
+    }
+
+    // 장바구니 페이지
+    @GetMapping("/basket")
+    @ApiOperation(value = "장바구니 페이지")
+    public void basket() {
+        return;
     }
 
     // 주문완료 페이지

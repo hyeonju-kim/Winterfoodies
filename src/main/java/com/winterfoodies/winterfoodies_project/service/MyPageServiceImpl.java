@@ -1,0 +1,177 @@
+package com.winterfoodies.winterfoodies_project.service;
+
+import com.winterfoodies.winterfoodies_project.dto.order.OrderResponseDto;
+import com.winterfoodies.winterfoodies_project.dto.review.ReviewDto;
+import com.winterfoodies.winterfoodies_project.dto.store.StoreResponseDto;
+import com.winterfoodies.winterfoodies_project.dto.user.UserDto;
+import com.winterfoodies.winterfoodies_project.entity.*;
+import com.winterfoodies.winterfoodies_project.repository.*;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+@RequiredArgsConstructor
+public class MyPageServiceImpl implements MypageService{
+    private final UserRepository userRepository;
+    private final FavoriteStoreRepository favoriteStoreRepository;
+    private final ReviewRepository reviewRepository;
+    private final StoreRepository storeRepository;
+    private final BCryptPasswordEncoder encoder;
+    private final OrderRepository orderRepository;
+
+    // jwt 토큰으로 현재 인증된 사용자의 Authentication 객체에서 이름 가져오기
+    public String getUsernameFromAuthentication() {
+        String username = null;
+        if (SecurityContextHolder.getContext().getAuthentication() != null) {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+            // 인증된 사용자의 이름 가져오기
+            username = authentication.getName();
+        }
+        return username;
+    }
+
+    // 인증된 사용자의 id 가져오기
+    public Long getUserId() {
+        User foundUser = userRepository.findByUsername(getUsernameFromAuthentication());
+        return foundUser.getId();
+    }
+
+
+    // 마이페이지 내정보
+    @Override
+    public UserDto retrieveUser() {
+        User foundUser = userRepository.findByUsername(getUsernameFromAuthentication());
+        if (foundUser != null) {  // respository에서 가져온건 꼭 분기처리 해야한다!!!!
+            return new UserDto(foundUser);
+        } else {
+
+            UserDto notFoundUserDto = new UserDto();
+            notFoundUserDto.setMessage("해당 유저를 찾을 수 없습니다.");
+            return notFoundUserDto;
+        }
+    }
+
+    // 마이페이지 비번 변경
+    @Override
+    public UserDto changePw(UserDto inUserDto) {
+        User foundUser = userRepository.findByUsername(getUsernameFromAuthentication());
+        if (foundUser != null) {
+            String encodedPassword = encoder.encode(inUserDto.getPassword());// 230726 추가
+            foundUser.setPassword(encodedPassword);
+            userRepository.save(foundUser);
+
+            // Entity -> UserDto
+            UserDto outUserDto = new UserDto(foundUser);
+            outUserDto.setMessage("변경완료!!");
+            return outUserDto;
+        }
+
+        UserDto notFoundOutUserDto = new UserDto();
+        notFoundOutUserDto.setMessage("해당 유저를 찾을 수 없습니다.");
+        return notFoundOutUserDto;
+    }
+
+
+    // 찜한 가게 목록 조회
+    @Override
+    public List<StoreResponseDto> getFavoriteStoresByUserId() {
+        List<FavoriteStore> foundFavoriteStore = favoriteStoreRepository.findByUserId(getUserId());
+        List<StoreResponseDto> storeResponseDtoList = new ArrayList<>();
+
+        for (FavoriteStore favoriteStore : foundFavoriteStore) {
+            Long foundStoreId = favoriteStore.getStoreId();
+            Optional<Store> foundStore = storeRepository.findById(foundStoreId);
+
+            StoreResponseDto storeResponseDto = new StoreResponseDto();
+            storeResponseDto.setName(foundStore.get().getStoreDetail().getName());
+            storeResponseDto.setBasicAddress(foundStore.get().getStoreDetail().getBasicAddress());
+            storeResponseDto.setAvergeRating(foundStore.get().getStoreDetail().getAverageRating());
+
+            storeResponseDtoList.add(storeResponseDto);
+        }
+        return storeResponseDtoList;
+    }
+
+    // 리뷰 쓴 가게 목록 조회
+    @Override
+    public List<ReviewDto> getReview() {
+        List<Review> foundReview = reviewRepository.findByUserId(getUserId());
+        List<ReviewDto> reviewDtoList = new ArrayList<>();
+        for (Review review : foundReview) {
+            ReviewDto reviewDto2 = new ReviewDto();
+            reviewDto2.setStoreName(review.getStoreName());
+            reviewDto2.setRating(review.getRating());
+            reviewDto2.setContent(review.getContent());
+            reviewDtoList.add(reviewDto2);
+        }
+        return reviewDtoList;
+    }
+
+
+    // 주문한 가게 목록 조회
+    @Override
+    public List<OrderResponseDto> getOrderByUserId() {
+        List<Order> foundOrderList = orderRepository.findByUserId(getUserId());
+        List<OrderResponseDto> orderResponseDtoList = new ArrayList<>();
+
+        for (Order order : foundOrderList) {
+            OrderResponseDto orderResponseDto = new OrderResponseDto();
+//            orderResponseDto.setStoreName(order.getStore().getStoreDetail().getName());
+
+            List<OrderProduct> foundOrderProducts = order.getOrderProducts();
+            List<String> tempProducts = new ArrayList<>();
+            for (OrderProduct foundOrderProduct : foundOrderProducts) {
+                tempProducts.add(foundOrderProduct.getProduct().getName());
+            }
+//            orderResponseDto.setProductId(tempProducts.)
+//            orderResponseDto.setTotalAmount(order.getTotalAmount());
+//            orderResponseDto.setOrderDate(order.getCreateAt().toString());
+            orderResponseDto.setProductName("신천붕어빵");
+
+            orderResponseDtoList.add(orderResponseDto);
+        }
+        return orderResponseDtoList;
+//        return null;
+
+    }
+
+    // 리뷰 삭제
+    @Override
+    public UserDto delReviewByUserId(Long reviewId) {
+        reviewRepository.deleteById(reviewId);
+        UserDto userDto = new UserDto();
+        userDto.setMessage("삭제완료!!");
+        return userDto;
+    }
+
+    // 리뷰 등록
+    @Override
+    public ReviewDto postReview(ReviewDto inReviewDto) {
+        Review review = new Review(inReviewDto);
+        review.setUserId(getUserId());
+        reviewRepository.save(review);
+
+        ReviewDto reviewDto = new ReviewDto(review);
+        reviewDto.setMessage("리뷰가 등록되었습니다");
+        return reviewDto;
+    }
+
+    // 환경설정
+    @Override
+    public Configuration getConfig() {
+        Configuration configuration = new Configuration(); // TODO DTO로 변경예정
+        configuration.setConfig("환경설정 샘플1");
+        configuration.setAnnounce("공지사항 샘플2");
+
+        return configuration;
+    }
+
+}

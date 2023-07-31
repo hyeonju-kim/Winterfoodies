@@ -29,4 +29,8 @@ public class UserRequestDto {
     @NotBlank(message = "사용자 이름은 필수 입력 값입니다.")
     @Pattern(regexp = "^[ㄱ-ㅎ가-힣a-z0-9-_]{2,10}$", message = "사용자 이름은 특수문자를 제외한 2~10자리여야 합니다.")
     private String username;
+
+    private double latitude;
+
+    private double longitude;
 }

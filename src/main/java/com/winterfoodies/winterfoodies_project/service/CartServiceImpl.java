@@ -1,6 +1,7 @@
 package com.winterfoodies.winterfoodies_project.service;
 
 import com.winterfoodies.winterfoodies_project.dto.cart.CartDto;
+import com.winterfoodies.winterfoodies_project.dto.cartProduct.CartProductDto;
 import com.winterfoodies.winterfoodies_project.dto.order.OrderRequestDto;
 import com.winterfoodies.winterfoodies_project.dto.order.OrderResponseDto;
 import com.winterfoodies.winterfoodies_project.dto.product.ProductDto;
@@ -26,6 +27,7 @@ public class CartServiceImpl implements CartService {
     private final CartProductRepository cartProductRepository;
     private final OrderRepository orderRepository;
     private final OrderProductRepository orderProductRepository;
+    private final StoreRepository storeRepository;
 
     // jwt 토큰으로 현재 인증된 사용자의 Authentication 객체에서 이름 가져오기
     public String getUsernameFromAuthentication() {
@@ -89,6 +91,7 @@ public class CartServiceImpl implements CartService {
         // 새로운 상품과 수량을 StringBuilder에 추가
         Long id = inProductDto.getId();
         Long quantity = inProductDto.getQuantity();
+//        Long storeId = inProductDto.getStoreId();
         cartValueBuilder.append(id.toString());
         cartValueBuilder.append(":");
         cartValueBuilder.append(quantity.toString());
@@ -106,6 +109,7 @@ public class CartServiceImpl implements CartService {
         CartProduct cartProduct = new CartProduct(cart, product);
         cartProduct.setQuantity(quantity);
         cartProduct.setTotalPrice(product.getPrice() * quantity);
+//        cartProduct.setStore(storeRepository.findById(storeId).get());
         cartProductRepository.save(cartProduct);
 
         ProductDto outProductDto = new ProductDto(product);
@@ -116,9 +120,9 @@ public class CartServiceImpl implements CartService {
 
     // 2. 장바구니 상품 목록 조회 (쿠키에서 조회)
     @Override
-    public List<CartDto> getCartProduct(HttpServletRequest request) {
+    public List<CartProductDto> getCartProduct(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
-        List<CartDto> cartDtoList = new ArrayList<>();
+        List<CartProductDto> cartProductDtoList = new ArrayList<>();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("Cart")) {
@@ -135,24 +139,23 @@ public class CartServiceImpl implements CartService {
 
                         if (optionalProduct.isPresent()) {
                             Product foundProduct = optionalProduct.get();
-                            String productName = foundProduct.getName();
 
-                            CartDto cartDto = new CartDto();
-                            cartDto.setName(productName);
-                            cartDto.setQuantity(quantity);
-                            cartDtoList.add(cartDto);
+                            CartProductDto cartProductDto = new CartProductDto();
+                            cartProductDto.setProductId(productId);
+                            cartProductDto.setQuantity(quantity);
+                            cartProductDtoList.add(cartProductDto);
                         }
                     }
                     break;
                 }
             }
         }
-        return cartDtoList;
+        return cartProductDtoList;
     }
 
     // 3. 장바구니 특정 상품 삭제 (쿠키와 DB에서 삭제)
     @Override
-    public String removeProductFromCart(Long productId, HttpServletRequest request, HttpServletResponse response) {
+    public CartProductDto removeProductFromCart(Long productId, HttpServletRequest request, HttpServletResponse response) {
         Cookie[] cookies = request.getCookies();
 
         // 쿠키에서 삭제
@@ -186,12 +189,14 @@ public class CartServiceImpl implements CartService {
         }
         // 디비에서 삭제
         cartProductRepository.deleteByProductId(productId);
-        return "장바구니에서 상품을 삭제했습니다.";
+        CartProductDto cartProductDto = new CartProductDto();
+        cartProductDto.setMessage("장바구니에서 [" + productId +  "] 상품을 삭제했습니다.");
+        return cartProductDto;
     }
 
     // 4. 장바구니 초기화 (쿠키와 DB 초기화)
     @Override
-    public String clearCart(HttpServletResponse response) {
+    public CartProductDto clearCart(HttpServletResponse response) {
         // 쿠키 초기화
         Cookie cookie = new Cookie("Cart", "");
         cookie.setMaxAge(0);
@@ -199,10 +204,12 @@ public class CartServiceImpl implements CartService {
 
         // 디비 초기화
         cartProductRepository.deleteAll();
-        return "모두 삭제 되었습니다.";
+        CartProductDto cartProductDto = new CartProductDto();
+        cartProductDto.setMessage("장바구니가 초기화 되었습니다.");
+        return cartProductDto;
     }
 
-    // 5. 주문등록 & 주문완료 페이지 조회 (쿠키에서 조회)
+    // 5. 주문하기 & 주문완료 페이지 조회 (쿠키에서 조회)
     @Override
     public OrderResponseDto getOrderConfirmPage(OrderRequestDto orderRequestDto, HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
@@ -213,6 +220,9 @@ public class CartServiceImpl implements CartService {
         order.setUser(userOptional.get());
         order.setMessage(orderRequestDto.getMessage());
         order.setCreateAt(LocalDateTime.now());
+        CartProduct foundCartProduct = cartProductRepository.findByUserId(getUserId());
+//        order.setStore(foundCartProduct.getStore());
+//        order.setTotalAmount(foundCartProduct.getTotalPrice());
 
         orderRepository.save(order);
 

@@ -12,6 +12,7 @@ public class ProductDto {
     private Long id;
     private Long quantity;
     private String message;
+    private Long storeId;
 
     public ProductDto() {
     }

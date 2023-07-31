@@ -35,6 +35,7 @@ public class Review extends Timestamped{
         this.content = reviewDto.getContent();
         this.photo = reviewDto.getPhoto();
         this.storeName = reviewDto.getStoreName();
+        this.userId = reviewDto.getUserId();
     }
 
     public Review() {

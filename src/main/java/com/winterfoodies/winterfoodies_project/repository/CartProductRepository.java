@@ -10,4 +10,6 @@ public interface CartProductRepository extends JpaRepository<CartProduct, Long> 
 
     @Transactional
     public void deleteByProductId(Long productId);
+
+    public CartProduct findByUserId(Long userId);
 }

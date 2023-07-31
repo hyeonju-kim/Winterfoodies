@@ -24,6 +24,10 @@ public class CartProduct {
     @JoinColumn(name = "cart_id")
     private Cart cart;
 
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "store_id")
+    private Store store;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
@@ -40,4 +44,6 @@ public class CartProduct {
     public CartProduct() {
 
     }
+
+    private Long userId;
 }

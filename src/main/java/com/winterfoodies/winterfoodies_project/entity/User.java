@@ -61,6 +61,8 @@ public class User implements Serializable {
         this.email = userRequestDto.getEmail();
         this.phoneNumber = userRequestDto.getPhoneNumber();
         this.password = userRequestDto.getPassword();
+        this.latitude = userRequestDto.getLatitude();
+        this.longitude = userRequestDto.getLongitude();
     }
 
     public User(UserRequestDto userRequestDto) {
@@ -68,6 +70,8 @@ public class User implements Serializable {
         this.email = userRequestDto.getEmail();
         this.phoneNumber = userRequestDto.getPhoneNumber();
         this.password = userRequestDto.getPassword();
+        this.latitude = userRequestDto.getLatitude();
+        this.longitude = userRequestDto.getLongitude();
     }
 
     public User() {
