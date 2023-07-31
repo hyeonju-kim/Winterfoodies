@@ -60,6 +60,7 @@ public class CartController {
     // 장바구니에 상품 추가 API
     // 230707 valid 추가 !!!!!
     @PostMapping("/items") // [230726] Get -> Post로 변경
+    @ApiOperation(value = "장바구니에 상품 추가")
     public ProductResponseDto addProductToCart(@Valid @RequestBody ProductRequestDto productRequestDto, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response) throws Exception{
         if (bindingResult.hasErrors()) {
             ObjectError err = bindingResult.getAllErrors().get(0);
@@ -92,6 +93,7 @@ public class CartController {
 
     // 장바구니에 상품 조회 API
     @GetMapping("/itemsList")
+    @ApiOperation(value = "장바구니 상품 조회")
     public List<CartProductResponseDto> getCartProducts(HttpServletRequest request) {
         List<CartProductDto> cartProductDtoList = cartService.getCartProduct(request);
         ArrayList<CartProductResponseDto> cartProductResponseDtoList = new ArrayList<>();
@@ -104,6 +106,7 @@ public class CartController {
 
     // 장바구니 특정 상품 삭제
     @DeleteMapping  ("/{productId}") // 230731 Get -> Delete로 변경, @requestParam -> @PathVariable로 변경
+    @ApiOperation(value = "장바구니 특정 상품 삭제")
     public CartProductResponseDto removeProduct(@PathVariable Long productId, HttpServletRequest request, HttpServletResponse response){
         CartProductDto cartProductDto = cartService.removeProductFromCart(productId, request, response);
         return cartProductDto.convertToCartProductResponseDto();
@@ -111,6 +114,7 @@ public class CartController {
 
     // 장바구니 초기화
     @PutMapping // 230731 Get -> Put 으로 변경
+    @ApiOperation(value = "장바구니 초기화")
     public CartProductResponseDto clearCart(HttpServletResponse response) {
         CartProductDto cartProductDto = cartService.clearCart(response);
         return cartProductDto.convertToCartProductResponseDto();
@@ -125,6 +129,7 @@ public class CartController {
 
     // 주문완료 페이지
     @PostMapping("/items/confirm")
+    @ApiOperation(value = "주문 완료 페이지")
     public OrderResponseDto getOrderConfirmPage(@RequestBody OrderRequestDto orderRequestDto, HttpServletRequest request){
         return cartService.getOrderConfirmPage(orderRequestDto, request);
     }
