@@ -21,4 +21,6 @@ public class ProductRequestDto {
     @Min(0)
     private Long quantity;
     private String clientMessage;
+
+    private Long storeId;
 }

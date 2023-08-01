@@ -82,9 +82,10 @@ public class MyPageServiceImpl implements MypageService{
 
     // 찜한 가게 목록 조회
     @Override
-    public List<StoreResponseDto> getFavoriteStoresByUserId() {
+    public List<List<StoreResponseDto>> getFavoriteStoresByUserId() {
         List<FavoriteStore> foundFavoriteStore = favoriteStoreRepository.findByUserId(getUserId());
         List<StoreResponseDto> storeResponseDtoList = new ArrayList<>();
+        List<List<StoreResponseDto>> outerStoreResponseDtoList = new ArrayList<>();
 
         for (FavoriteStore favoriteStore : foundFavoriteStore) {
             Long foundStoreId = favoriteStore.getStoreId();
@@ -97,14 +98,16 @@ public class MyPageServiceImpl implements MypageService{
 
             storeResponseDtoList.add(storeResponseDto);
         }
-        return storeResponseDtoList;
+        outerStoreResponseDtoList.add(storeResponseDtoList);
+        return outerStoreResponseDtoList;
     }
 
     // 리뷰 쓴 가게 목록 조회
     @Override
-    public List<ReviewDto> getReview() {
+    public List<List<ReviewDto>> getReview() {
         List<Review> foundReview = reviewRepository.findByUserId(getUserId());
         List<ReviewDto> reviewDtoList = new ArrayList<>();
+        List<List<ReviewDto>> outerReviewDtoList = new ArrayList<>();
         for (Review review : foundReview) {
             ReviewDto reviewDto2 = new ReviewDto();
             reviewDto2.setStoreName(review.getStoreName());
@@ -112,15 +115,17 @@ public class MyPageServiceImpl implements MypageService{
             reviewDto2.setContent(review.getContent());
             reviewDtoList.add(reviewDto2);
         }
-        return reviewDtoList;
+        outerReviewDtoList.add(reviewDtoList);
+        return outerReviewDtoList;
     }
 
 
     // 주문한 가게 목록 조회
     @Override
-    public List<OrderResponseDto> getOrderByUserId() {
+    public List<List<OrderResponseDto>> getOrderByUserId() {
         List<Order> foundOrderList = orderRepository.findByUserId(getUserId());
         List<OrderResponseDto> orderResponseDtoList = new ArrayList<>();
+        List<List<OrderResponseDto>> outerOrderResponseDtoList = new ArrayList<>();
 
         for (Order order : foundOrderList) {
             OrderResponseDto orderResponseDto = new OrderResponseDto();
@@ -131,15 +136,12 @@ public class MyPageServiceImpl implements MypageService{
             for (OrderProduct foundOrderProduct : foundOrderProducts) {
                 tempProducts.add(foundOrderProduct.getProduct().getName());
             }
-//            orderResponseDto.setProductId(tempProducts.)
-//            orderResponseDto.setTotalAmount(order.getTotalAmount());
-//            orderResponseDto.setOrderDate(order.getCreateAt().toString());
             orderResponseDto.setProductName("신천붕어빵");
 
             orderResponseDtoList.add(orderResponseDto);
         }
-        return orderResponseDtoList;
-//        return null;
+        outerOrderResponseDtoList.add(orderResponseDtoList);
+        return outerOrderResponseDtoList;
 
     }
 

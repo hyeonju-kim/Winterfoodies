@@ -39,26 +39,6 @@ public class CartController {
     private final CartService cartService;
     private final ProductRepository productRepository;
 
-//    // jwt 토큰으로 현재 인증된 사용자의 Authentication 객체에서 이름 가져오기
-//    public String getUsernameFromAuthentication() {
-//        String username = null;
-//        if (SecurityContextHolder.getContext().getAuthentication() != null) {
-//            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//
-//            // 인증된 사용자의 이름 가져오기
-//            username = authentication.getName();
-//        }
-//        return username;
-//    }
-//
-//    // 인증된 사용자의 id 가져오기
-//    public Long getUserId() {
-//        User foundUser = userRepository.findByUsername(getUsernameFromAuthentication());
-//        return foundUser.getId();
-//    }
-
-    // 장바구니에 상품 추가 API
-    // 230707 valid 추가 !!!!!
     @PostMapping("/items") // [230726] Get -> Post로 변경
     @ApiOperation(value = "장바구니에 상품 추가")
     public ProductResponseDto addProductToCart(@Valid @RequestBody ProductRequestDto productRequestDto, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response) throws Exception{
@@ -86,14 +66,14 @@ public class CartController {
         return productDto1.convertToProductResponseDto();
     }
 
-    @ExceptionHandler(RequestException.class)
-    public ErrorBox requestExceptionHandler(RequestException requestException) {
-        return requestException.getErrorBox();
-    }
+//    @ExceptionHandler(RequestException.class)
+//    public ErrorBox requestExceptionHandler(RequestException requestException) {
+//        return requestException.getErrorBox();
+//    }
 
     // 장바구니에 상품 조회 API
     @GetMapping("/itemsList")
-    @ApiOperation(value = "장바구니 상품 조회")
+    @ApiOperation(value = "장바구니 상품 조회 - 쿠키에서 조회")
     public List<CartProductResponseDto> getCartProducts(HttpServletRequest request) {
         List<CartProductDto> cartProductDtoList = cartService.getCartProduct(request);
         ArrayList<CartProductResponseDto> cartProductResponseDtoList = new ArrayList<>();
@@ -103,6 +83,17 @@ public class CartController {
         return cartProductResponseDtoList;
     }
 
+    // 장바구니 상품 목록 조회 (DB에서)
+    @GetMapping("/itemsListByDB")
+    @ApiOperation(value = "장바구니 상품 조회 - DB에서 조회")
+    public List<CartProductResponseDto> getCartProductByDB() {
+        List<CartProductDto> cartProductDtoList = cartService.getCartProductByDB();
+        ArrayList<CartProductResponseDto> cartProductResponseDtoList = new ArrayList<>();
+        for (CartProductDto cartProductDto : cartProductDtoList) {
+            cartProductResponseDtoList.add(cartProductDto.convertToCartProductResponseDto());
+        }
+        return cartProductResponseDtoList;
+    }
 
     // 장바구니 특정 상품 삭제
     @DeleteMapping  ("/{productId}") // 230731 Get -> Delete로 변경, @requestParam -> @PathVariable로 변경
@@ -120,17 +111,17 @@ public class CartController {
         return cartProductDto.convertToCartProductResponseDto();
     }
 
-    // 장바구니 페이지
-    @GetMapping("/basket")
-    @ApiOperation(value = "장바구니 페이지")
-    public void basket() {
-        return;
-    }
-
     // 주문완료 페이지
     @PostMapping("/items/confirm")
-    @ApiOperation(value = "주문 완료 페이지")
+    @ApiOperation(value = "주문 완료 페이지 - 쿠키에서 조회")
     public OrderResponseDto getOrderConfirmPage(@RequestBody OrderRequestDto orderRequestDto, HttpServletRequest request){
         return cartService.getOrderConfirmPage(orderRequestDto, request);
+    }
+
+    // 주문완료 페이지 (DB에서 조회)
+    @PostMapping("/items/confirmByDB")
+    @ApiOperation(value = "주문 완료 페이지 - DB에서 조회")
+    public OrderResponseDto getOrderConfirmPageByDB(@RequestBody OrderRequestDto orderRequestDto){
+        return cartService.getOrderConfirmPageByDB(orderRequestDto);
     }
 }

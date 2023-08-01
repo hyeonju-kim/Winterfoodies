@@ -75,10 +75,10 @@
             return ResponseEntity.ok(new LoginSuccessResponseDto(token));
         }
 
-        @ExceptionHandler(BadCredentialsException.class)
-        public String requestException(BadCredentialsException badCredentialsException) {
-            return badCredentialsException.getMessage();
-        }
+//        @ExceptionHandler(BadCredentialsException.class)
+//        public String requestException(BadCredentialsException badCredentialsException) {
+//            return badCredentialsException.getMessage();
+//        }
 
 
         // 회원가입
@@ -103,8 +103,8 @@
             return ResponseEntity.ok(userResponseDto);
         }
 
-        @ExceptionHandler(RequestException.class)
-        public ErrorBox requestException(RequestException requestException) {
-            return requestException.getErrorBox();
-        }
+//        @ExceptionHandler(RequestException.class)
+//        public ErrorBox requestException(RequestException requestException) {
+//            return requestException.getErrorBox();
+//        }
     }

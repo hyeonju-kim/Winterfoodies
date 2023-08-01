@@ -16,16 +16,16 @@ public interface MypageService {
     public UserDto changePw(UserDto userDto);
 
     // 찜 한 가게 목록 조회
-    public List<StoreResponseDto> getFavoriteStoresByUserId();
+    public List<List<StoreResponseDto>> getFavoriteStoresByUserId();
 
     // 주문한 가게 목록 조회
 //    List<OrderProduct> getOrderProductByUserId(Long userId);
 
     // 리뷰 쓴 가게 목록 조회
-    List<ReviewDto> getReview();
+    List<List<ReviewDto>> getReview();
 
     // 주문한 가게 목록 조회
-    List<OrderResponseDto> getOrderByUserId();
+    List<List<OrderResponseDto>> getOrderByUserId();
 
     // 리뷰 삭제
     public UserDto delReviewByUserId(Long reviewId);

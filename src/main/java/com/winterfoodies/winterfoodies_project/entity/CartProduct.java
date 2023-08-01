@@ -10,6 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.JoinColumn;
 import javax.persistence.*;
+import java.util.List;
+import java.util.Map;
 
 @Entity
 @Getter
@@ -33,6 +35,7 @@ public class CartProduct {
     private Product product;
 
     private Long quantity;
+
 
     private Long totalPrice;
 

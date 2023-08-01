@@ -58,18 +58,18 @@ public class OauthController {
      * @param e
      * @return
      */
-    @ExceptionHandler(OAuthException.class)
-    public ResponseEntity<String> oAuthExceptionHandler(OAuthException e) {
-        log.info("e : {}", e.getMessage());
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
-    }
+//    @ExceptionHandler(OAuthException.class)
+//    public ResponseEntity<String> oAuthExceptionHandler(OAuthException e) {
+//        log.info("e : {}", e.getMessage());
+//        return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+//    }
 
     /**
      * SocialLoginType Enum에 없는 type이 요청되면 ConversionException 이 발생하므로 그에 대한 예외 처리
      * @return
      */
-    @ExceptionHandler(ConversionException.class)
-    public ResponseEntity<String> conversionExceptionHandler() {
-        return new ResponseEntity<>("알 수 없는 SocialLoginType 입니다.", HttpStatus.NOT_FOUND);
-    }
+//    @ExceptionHandler(ConversionException.class)
+//    public ResponseEntity<String> conversionExceptionHandler() {
+//        return new ResponseEntity<>("알 수 없는 SocialLoginType 입니다.", HttpStatus.NOT_FOUND);
+//    }
 }

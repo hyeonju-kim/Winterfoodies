@@ -78,16 +78,16 @@ public class MyPageController {
         return updatedUserDto.convertToUserResponseDto();
     }
 
-    @ExceptionHandler(RequestException.class)
-    public ErrorBox requestException(RequestException requestException) {
-        return requestException.getErrorBox();
-    }
+//    @ExceptionHandler(RequestException.class)
+//    public ErrorBox requestException(RequestException requestException) {
+//        return requestException.getErrorBox();
+//    }
 
     // ***************** 1-2. 찜 *****************
     // 찜한 가게 목록 조회
     @GetMapping("/likes")
     @ApiOperation(value = "찜한 가게목록 조회")
-    public List<StoreResponseDto> getFavoriteStoresByUserId() {
+    public List<List<StoreResponseDto>> getFavoriteStoresByUserId() {
         return mypageService.getFavoriteStoresByUserId();
     }
 
@@ -95,7 +95,7 @@ public class MyPageController {
     // 내가 쓴 리뷰 목록 조회
     @GetMapping("/reviews")
     @ApiOperation(value = "작성한 리뷰 조회")
-    public List<ReviewDto> getMyReviews(){
+    public List<List<ReviewDto>> getMyReviews(){
         return mypageService.getReview();
     }
 
@@ -111,7 +111,7 @@ public class MyPageController {
     // 내가 주문한 주문목록 조회
     @GetMapping("/orderlist")
     @ApiOperation(value = "주문내역 조회")
-    public List<OrderResponseDto> getMyOrders() {
+    public List<List<OrderResponseDto>> getMyOrders() {
         return mypageService.getOrderByUserId();
     }
 

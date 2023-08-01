@@ -1,11 +1,13 @@
 package com.winterfoodies.winterfoodies_project.service;
 
+import com.winterfoodies.winterfoodies_project.ErrorBox;
 import com.winterfoodies.winterfoodies_project.dto.cart.CartDto;
 import com.winterfoodies.winterfoodies_project.dto.cartProduct.CartProductDto;
 import com.winterfoodies.winterfoodies_project.dto.order.OrderRequestDto;
 import com.winterfoodies.winterfoodies_project.dto.order.OrderResponseDto;
 import com.winterfoodies.winterfoodies_project.dto.product.ProductDto;
 import com.winterfoodies.winterfoodies_project.entity.*;
+import com.winterfoodies.winterfoodies_project.exception.RequestException;
 import com.winterfoodies.winterfoodies_project.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -47,29 +49,6 @@ public class CartServiceImpl implements CartService {
         return foundUser.getId();
     }
 
-
-    // 장바구니에 상품 추가
-//    @Override
-//    public UserResponseDto addProductToCart(Long cartId, Long productId, int quantity) {
-//        Optional<Cart> optionalCart = cartRepository.findById(cartId);
-//        if (optionalCart.isPresent()) {
-//
-//            Cart cart = optionalCart.get();
-//            Optional<Product> optionalProduct = productRepository.findById(productId);
-//            Product product = optionalProduct.get();
-//            CartProduct cartProduct = new CartProduct(cart, product, quantity);
-//            cartProductRepository.save(cartProduct);
-//
-//            UserResponseDto userResponseDto = new UserResponseDto();
-//            userResponseDto.setMessage("장바구니에 상품을 담았습니다.");
-//
-//            return userResponseDto;
-//        }
-//        UserResponseDto notFoundUserDto = new UserResponseDto();
-//        notFoundUserDto.setMessage("장바구니를 찾을 수 없습니다.");
-//        return notFoundUserDto;
-//    }
-
     // 1. 장바구니에 상품 추가 (쿠키와 DB에 장바구니 담기)
     @Override
     public ProductDto addProductToCart(ProductDto inProductDto, HttpServletRequest request, HttpServletResponse response) {
@@ -91,7 +70,8 @@ public class CartServiceImpl implements CartService {
         // 새로운 상품과 수량을 StringBuilder에 추가
         Long id = inProductDto.getId();
         Long quantity = inProductDto.getQuantity();
-//        Long storeId = inProductDto.getStoreId();
+        Long storeId = inProductDto.getStoreId();
+
         cartValueBuilder.append(id.toString());
         cartValueBuilder.append(":");
         cartValueBuilder.append(quantity.toString());
@@ -103,13 +83,19 @@ public class CartServiceImpl implements CartService {
         response.addCookie(cookie);
 
         // 디비에 담기
+        Optional<Store> optionalStore = storeRepository.findById(storeId);
+        Store selectedStore = optionalStore.get();
+        if (!cartProductRepository.findByUserId(getUserId()).isEmpty() && !cartProductRepository.findByUserId(getUserId()).get(0).getStore().getId().equals(storeId)) {
+            throw new RequestException(new ErrorBox("장바구니에는 한 가게의 음식만 담을 수 있습니다."));
+        }
         Cart cart = new Cart();
         Optional<Product> optionalProduct = productRepository.findById(id);
         Product product = optionalProduct.get();
         CartProduct cartProduct = new CartProduct(cart, product);
         cartProduct.setQuantity(quantity);
         cartProduct.setTotalPrice(product.getPrice() * quantity);
-//        cartProduct.setStore(storeRepository.findById(storeId).get());
+        cartProduct.setStore(storeRepository.findById(storeId).get());
+        cartProduct.setUserId(getUserId());
         cartProductRepository.save(cartProduct);
 
         ProductDto outProductDto = new ProductDto(product);
@@ -152,6 +138,25 @@ public class CartServiceImpl implements CartService {
         }
         return cartProductDtoList;
     }
+
+    // 2-2 장바구니 상품 목록 조회 (DB에서)
+    @Override
+    public List<CartProductDto> getCartProductByDB() {
+        Long userId = getUserId();
+        List<CartProduct> cartProductList = cartProductRepository.findByUserId(userId);
+
+        if (cartProductList.isEmpty()) {
+            throw new RequestException(new ErrorBox("널이래"));
+        }
+        ArrayList<CartProductDto> cartProductDtoList = new ArrayList<>();
+
+        for (CartProduct cartProduct : cartProductList) {
+            CartProductDto cartProductDto = new CartProductDto(cartProduct);
+            cartProductDtoList.add(cartProductDto);
+        }
+        return cartProductDtoList;
+    }
+
 
     // 3. 장바구니 특정 상품 삭제 (쿠키와 DB에서 삭제)
     @Override
@@ -220,9 +225,16 @@ public class CartServiceImpl implements CartService {
         order.setUser(userOptional.get());
         order.setMessage(orderRequestDto.getMessage());
         order.setCreateAt(LocalDateTime.now());
-        CartProduct foundCartProduct = cartProductRepository.findByUserId(getUserId());
-//        order.setStore(foundCartProduct.getStore());
-//        order.setTotalAmount(foundCartProduct.getTotalPrice());
+        List<CartProduct> foundCartProductList = cartProductRepository.findByUserId(getUserId());
+
+        order.setStore(foundCartProductList.get(0).getStore());
+
+        Long totalPrice = 0L;
+        for (CartProduct cartProduct : foundCartProductList) {
+            totalPrice += cartProduct.getTotalPrice();
+        }
+
+        order.setTotalAmount(totalPrice);
 
         orderRepository.save(order);
 
@@ -270,4 +282,27 @@ public class CartServiceImpl implements CartService {
 
     }
 
-}
+    // 5-2. 주문하기 & 주문완료 페이지 조회 (DB에서 조회)
+    @Override
+    public OrderResponseDto getOrderConfirmPageByDB(OrderRequestDto orderRequestDto) {
+        List<CartProduct> cartProductList = cartProductRepository.findByUserId(getUserId());
+        OrderResponseDto orderResponseDto = new OrderResponseDto();
+        ArrayList<Map<String, Long>> prdAndQntMapList = new ArrayList<>();
+
+        Long totalAmt = 0L;
+
+        for (CartProduct cartProduct : cartProductList) {
+            String prdName = cartProduct.getProduct().getName();
+            Long prdQnt = cartProduct.getQuantity();
+            Map<String, Long> map = new HashMap<>();
+            map.put(prdName, prdQnt);
+            prdAndQntMapList.add(map);
+            totalAmt += cartProduct.getTotalPrice();
+        }
+        orderResponseDto.setProductAndQuantityList(prdAndQntMapList);
+        orderResponseDto.setCustomerMessage(orderRequestDto.getMessage());
+        orderResponseDto.setTotalAmount(totalAmt);
+
+        return orderResponseDto;
+    }
+ }

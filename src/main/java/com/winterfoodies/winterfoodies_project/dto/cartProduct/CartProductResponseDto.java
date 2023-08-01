@@ -14,4 +14,5 @@ public class CartProductResponseDto {
     private Long quantity;
     private Long totalPrice;
     private String message;
+    private Long storeId;
 }

@@ -20,11 +20,11 @@ public class ProductDto {
     public ProductDto(ProductRequestDto requestDto) {
         this.id= requestDto.getId();
         this.quantity = requestDto.getQuantity();
+        this.storeId = requestDto.getStoreId();
     }
 
     public ProductDto(Product product) {
         this.id = product.getId();
-        this.quantity = product.getPrice();
     }
 
     public ProductResponseDto convertToProductResponseDto() {
