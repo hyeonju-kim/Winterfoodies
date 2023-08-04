@@ -12,6 +12,7 @@ import com.winterfoodies.winterfoodies_project.exception.RequestException;
 import com.winterfoodies.winterfoodies_project.service.MainPageService;
 import com.winterfoodies.winterfoodies_project.service.MypageService;
 import com.winterfoodies.winterfoodies_project.service.UserService;
+import com.winterfoodies.winterfoodies_project.service.UserServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +32,7 @@ import java.util.List;
 @Slf4j
 public class MyPageController {
     private final MypageService mypageService; //서비스 클래스를 직접 주입받지 말고, 서비스 인터페이스를 주입받자!
+    private final UserServiceImpl userService;
     // 마이페이지 메인 화면(목록 조회)
     @GetMapping // 테스트용
     @ApiOperation(value = "메인화면 조회")
@@ -69,7 +71,7 @@ public class MyPageController {
             String dateTime = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
             ErrorBox errorBox = new ErrorBox();
             errorBox.setCause(code);
-            errorBox.setMessage("[ 고객 id ] : 해당 없음" + " | [ 에러 유형 ] : "+ code + " | [ 에러 시간 ] : " + dateTime + " | [ 에러메시지 ] : "+ message);
+            errorBox.setMessage("[ 고객 id ] : " + userService.getUserId() + " | [ 에러 유형 ] : "+ code + " | [ 에러 시간 ] : " + dateTime + " | [ 에러메시지 ] : "+ message);
             log.error(errorBox.getMessage());
             throw new RequestException(errorBox);
         }

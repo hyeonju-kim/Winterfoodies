@@ -40,11 +40,14 @@
 <!--            <artifactId>thymeleaf-extras-springsecurity6</artifactId>-->
 <!--        </dependency>-->
 
+
+
+        <!-- mysql과 연동하기 위해서 사용하는 라이브러리-->
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>runtime</scope>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>

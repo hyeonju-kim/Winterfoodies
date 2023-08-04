@@ -19,9 +19,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 @Slf4j
 public class ExceptionControllerAdvice {
-    // 장바구니 상품추가 익셉션
+    // 회원가입 익셉션, 마이페이지 비번 변경 익셉션, 장바구니 상품추가 익셉션
     @ExceptionHandler(RequestException.class)
-    public ErrorBox requestExceptionHandler(RequestException requestException) {
+    public ErrorBox requestException(RequestException requestException) {
         return requestException.getErrorBox();
     }
 
@@ -44,11 +44,7 @@ public class ExceptionControllerAdvice {
         return new ResponseEntity<>("알 수 없는 SocialLoginType 입니다.", HttpStatus.NOT_FOUND);
     }
 
-    // 회원가입 익셉션, 마이페이지 비번 변경 익셉션,
-    @ExceptionHandler(RequestException.class)
-    public ErrorBox requestException(RequestException requestException) {
-        return requestException.getErrorBox();
-    }
+
 
 
 

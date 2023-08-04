@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -53,8 +54,16 @@ public class User implements Serializable {
     @JoinColumn(name = "STORE_ID")
     private Store store;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @OneToMany(mappedBy = "user")
     private List<Order> order = new ArrayList<>();
+
+    public Collection<Order> getOrder() {
+        return order;
+    }
+
+//    public void setOrder(Collection<Order> order) {
+//        this.order = order;
+//    }
 
     public User(UserRequestDto userRequestDto, UserType type){
         this.username = userRequestDto.getUsername();
