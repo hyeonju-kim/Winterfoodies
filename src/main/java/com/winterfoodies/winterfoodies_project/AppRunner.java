@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +31,7 @@ public class AppRunner implements ApplicationRunner {
     private final FavoriteStoreRepository favoriteStoreRepository;
     private final ReviewRepository reviewRepository;
     private final CartRepository cartRepository;
+    private final BCryptPasswordEncoder encoder;
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -43,8 +45,8 @@ public class AppRunner implements ApplicationRunner {
     public void testScenario(){
         //사장 - 홍길동
         User ceo = new User();
-        ceo.setEmail("asdf@naver.com");
-        ceo.setPassword("asdf123!");
+        ceo.setEmail("ghd123@naver.com");
+        ceo.setPassword(encoder.encode("ghd123!@#"));
         ceo.setUsername("홍길동");
 
         //가게 생성 1 - 신천붕어빵
@@ -177,20 +179,20 @@ public class AppRunner implements ApplicationRunner {
 
         //사용자 - 헨리, 김소라, 방성훈
         User customer = new User();
-        customer.setPassword("33");
-        customer.setEmail("aa@naver.com");
+        customer.setEmail("gpsfl123@naver.com");
+        customer.setPassword(encoder.encode("gpsfl123!@#"));
         customer.setUsername("헨리");
         userRepository.save(customer);
 
         User customer2 = new User();
-        customer2.setPassword("asdf123!");
-        customer2.setEmail("bb@naver.com");
+        customer2.setPassword(encoder.encode("thfk123!@#"));
+        customer2.setEmail("thfk123@naver.com");
         customer2.setUsername("김소라");
         userRepository.save(customer2);
 
         User customer3 = new User();
-        customer3.setPassword("qwer123!");
-        customer3.setEmail("bang@naver.com");
+        customer3.setPassword(encoder.encode("qkd123!@#"));
+        customer3.setEmail("qkd123@naver.com");
         customer3.setUsername("방성훈");
         userRepository.save(customer3);
 

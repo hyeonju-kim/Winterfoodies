@@ -40,7 +40,10 @@
 <!--            <artifactId>thymeleaf-extras-springsecurity6</artifactId>-->
 <!--        </dependency>-->
 
-
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+        </dependency>
 
         <!-- mysql과 연동하기 위해서 사용하는 라이브러리-->
         <dependency>
@@ -131,8 +134,12 @@
             <artifactId>json-simple</artifactId>
             <version>1.1.1</version>
         </dependency>
-
-
+<!--        jasypt 추가-->
+        <dependency>
+            <groupId>com.github.ulisesbocchio</groupId>
+            <artifactId>jasypt-spring-boot-starter</artifactId>
+            <version>3.0.4</version>
+        </dependency>
 
     </dependencies>
 
