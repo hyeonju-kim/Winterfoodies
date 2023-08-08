@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -19,12 +20,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
-        if (user == null) {
-
-            throw new IllegalArgumentException("존재하지 않는 이름입니다.");
-
+        User foundUser = userRepository.findByUsername(username);
+        if (foundUser == null) {
+            throw new UsernameNotFoundException("해당 계정이 존재하지 않습니다.");
         }
+        User user = new User(username, foundUser.getEmail());
+
         return new UserDetailsImpl(user);
     }
 }
