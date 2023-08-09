@@ -1,15 +1,11 @@
 package com.winterfoodies.winterfoodies_project.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.winterfoodies.winterfoodies_project.dto.user.UserRequestDto;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
-
-import lombok.*;
-import org.hibernate.usertype.UserType;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -46,7 +42,14 @@ public class User implements Serializable {
     @Column(name = "USER_STATUS")
     private UserStatus status;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "USER_ROLE")
+    private UserType role;
+
+    @Column(name = "LATITUDE")
     private double latitude;
+
+    @Column(name = "LONGITUDE")
     private double longitude;
 
     @JsonIgnore // 재귀순환 방지

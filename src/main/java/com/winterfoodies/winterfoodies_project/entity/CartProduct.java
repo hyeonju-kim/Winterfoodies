@@ -36,8 +36,9 @@ public class CartProduct {
 
     private Long quantity;
 
-
     private Long totalPrice;
+
+    private Long userId;
 
     public CartProduct(Cart cart, Product product) {
         this.cart = cart;
@@ -48,5 +49,5 @@ public class CartProduct {
 
     }
 
-    private Long userId;
+
 }

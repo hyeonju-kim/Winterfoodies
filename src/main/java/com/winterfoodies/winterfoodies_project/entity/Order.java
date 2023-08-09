@@ -24,7 +24,6 @@ public class Order {
     @Column(name = "ORDER_ID")
     private Long id;
 
-
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "USER_ID")
@@ -52,6 +51,7 @@ public class Order {
     @Column(name = "TOTAL_AMOUNT")
     private Long totalAmount;
 
+    @Column(name = "MESSAGE")
     private String message;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
