@@ -24,8 +24,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (foundUser == null) {
             throw new UsernameNotFoundException("해당 계정이 존재하지 않습니다.");
         }
-        User user = new User(username, foundUser.getEmail());
+//        User user = new User(username);
 
-        return new UserDetailsImpl(user);
+        return new UserDetailsImpl(foundUser);
     }
 }

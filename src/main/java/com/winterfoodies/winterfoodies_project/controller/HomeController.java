@@ -17,6 +17,7 @@
     import org.springframework.security.authentication.BadCredentialsException;
     import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
     import org.springframework.security.core.userdetails.UserDetails;
+    import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
     import org.springframework.validation.BindingResult;
     import org.springframework.validation.ObjectError;
     import org.springframework.web.bind.annotation.*;
@@ -37,6 +38,8 @@
         private final UserServiceImpl userService;
         private final JwtUtil jwtUtil;
         private final AuthenticationManager authenticationManager;
+        private final BCryptPasswordEncoder encoder;
+
 
         // 로그인
         @PostMapping("/login")
@@ -57,13 +60,19 @@
                 throw new RequestException(errorBox);
             }
 
-            // [230726] 추가
-            // 1. username, password로 인증시도
-            try {
-                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequestDto.getUsername(), loginRequestDto.getPassword()));
-            } catch (BadCredentialsException e) {
-                throw new BadCredentialsException("아이디, 비밀번호를 확인해주세요");
-            }
+
+
+            // 1. username, password로 인증시도 -> 잘되다가 230810에 에러나서 일단 주석처리함....ㅜㅜ
+//            try {
+////                String encodedPassword = encoder.encode(loginRequestDto.getPassword()); //DD
+////                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequestDto.getUsername(), encodedPassword));
+//                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequestDto.getUsername(), loginRequestDto.getPassword()));
+//            } catch (BadCredentialsException e) {
+//                System.out.println("비번=" + loginRequestDto.getPassword());
+//                throw new BadCredentialsException("아이디, 비밀번호를 확인해주세요");
+//            }
+
+
 
             // 2. 인증 성공(회원저장소에 해당 이름이 있으면) 후 인증된 user의 정보를 갖고옴
             UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequestDto.getUsername());

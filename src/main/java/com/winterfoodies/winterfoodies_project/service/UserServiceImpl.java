@@ -53,8 +53,9 @@ public class UserServiceImpl implements UserService {
     // 회원가입
     @Override
     public UserDto signUp(UserRequestDto userRequestDto) {
-        String encodedPassword = encoder.encode(userRequestDto.getPassword()); // 230726 추가
+        String encodedPassword = encoder.encode(userRequestDto.getPassword()); // 230726 추가 DD
         userRequestDto.setPassword(encodedPassword);
+        userRequestDto.setPassword(userRequestDto.getPassword());
         User user = new User(userRequestDto);
         userRepository.save(user);
         return new UserDto(user);

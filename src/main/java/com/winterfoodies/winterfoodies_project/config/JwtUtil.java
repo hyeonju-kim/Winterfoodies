@@ -1,16 +1,20 @@
 package com.winterfoodies.winterfoodies_project.config;
 
+import com.winterfoodies.winterfoodies_project.service.UserDetailsServiceImpl;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
 @Component
+@RequiredArgsConstructor
 public class JwtUtil {
     private final String SECRET = "secret";
+
 
     // 1. 토큰 생성
     public String generateToken(UserDetails userDetails) {
@@ -33,6 +37,7 @@ public class JwtUtil {
         String username = getUsernameFromToken(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
+
 
     // 3. 토큰의 claim 디코딩
     private Claims getAllClaims(String token) {
