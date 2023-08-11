@@ -31,4 +31,7 @@ public interface MainPageService {
 
     // 가게 찜하기
     UserResponseDto addFavoriteStore(Long storeId);
+
+    // 가게 찜하기 취소
+    UserResponseDto revokeFavoriteStore(Long storeId);
 }

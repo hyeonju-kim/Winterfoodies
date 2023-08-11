@@ -20,9 +20,9 @@ public class SearchController {
 
     // ********** 3. 검색 **********
     // 상호명 검색
-    @GetMapping("/{keyword}")
+    @GetMapping
     @ApiOperation(value = "상호명 검색")
-    public List<StoreResponseDto> search(@PathVariable("keyword") String keyword) {
+    public List<StoreResponseDto> search(@RequestParam("keyword") String keyword) {
         List<StoreDto> storeDtoList = searchService.searchStores(keyword);
         ArrayList<StoreResponseDto> storeResponseDtoList = new ArrayList<>();
         for (StoreDto storeDto : storeDtoList) {
@@ -33,9 +33,9 @@ public class SearchController {
     }
 
     // 지도 검색
-    @GetMapping("/map/{addressNo}")
+    @GetMapping("/map")
     @ApiOperation(value = "지도로 검색")
-    public List<StoreResponseDto> searchMap(@PathVariable("addressNo") String addressNo) {
+    public List<StoreResponseDto> searchMap(@RequestParam("addressNo") String addressNo) {
         List<StoreDto> storeDtoList = searchService.searchStoresByAddressNo(addressNo);
         System.out.println(storeDtoList);
         ArrayList<StoreResponseDto> storeResponseDtoList = new ArrayList<>();

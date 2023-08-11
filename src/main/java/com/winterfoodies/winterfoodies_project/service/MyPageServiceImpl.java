@@ -89,9 +89,11 @@ public class MyPageServiceImpl implements MypageService{
 
         for (FavoriteStore favoriteStore : foundFavoriteStore) {
             Long foundStoreId = favoriteStore.getStoreId();
+            Long id = favoriteStore.getId();
             Optional<Store> foundStore = storeRepository.findById(foundStoreId);
 
             StoreResponseDto storeResponseDto = new StoreResponseDto();
+            storeResponseDto.setId(id);
             storeResponseDto.setName(foundStore.get().getStoreDetail().getName());
             storeResponseDto.setBasicAddress(foundStore.get().getStoreDetail().getBasicAddress());
             storeResponseDto.setAvergeRating(foundStore.get().getStoreDetail().getAverageRating());
@@ -110,6 +112,7 @@ public class MyPageServiceImpl implements MypageService{
         List<List<ReviewDto>> outerReviewDtoList = new ArrayList<>();
         for (Review review : foundReview) {
             ReviewDto reviewDto2 = new ReviewDto();
+            reviewDto2.setId(review.getId());
             reviewDto2.setStoreName(review.getStoreName());
             reviewDto2.setRating(review.getRating());
             reviewDto2.setContent(review.getContent());

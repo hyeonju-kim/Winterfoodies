@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @Setter
 @JsonInclude(JsonInclude.Include.NON_EMPTY) //비어있지 않은 필드만 나타내는 어노테이션
 public class ReviewDto extends Timestamped {
+    private  Long id;
     private Long userId;
 
     private String storeName;

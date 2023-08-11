@@ -77,4 +77,11 @@ public class MainPageController {
         return mainPageService.addFavoriteStore(storeId);
     }
 
+    // 9. 가게 찜하기 취소
+    @PutMapping("/{storeId}/like")
+    @ApiOperation(value = "가게 찜하기 취소")
+    public UserResponseDto revokeFavoriteStore(@PathVariable("storeId") Long storeId) {
+        return mainPageService.revokeFavoriteStore(storeId);
+    }
+
 }
