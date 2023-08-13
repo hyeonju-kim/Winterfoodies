@@ -1,6 +1,7 @@
 package com.winterfoodies.winterfoodies_project.exception;
 
 import com.winterfoodies.winterfoodies_project.ErrorBox;
+import com.winterfoodies.winterfoodies_project.dto.user.UserResponseDto;
 import com.winterfoodies.winterfoodies_project.social.OAuthException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,6 +26,13 @@ public class ExceptionControllerAdvice {
         return requestException.getErrorBox();
     }
 
+    // 같은 메일이 중복될 경우 익셉션
+    @ExceptionHandler(UserException.class)
+    public ResponseEntity<UserResponseDto> userExceptionHandler(UserException userException) {
+        UserResponseDto userResponseDto = new UserResponseDto(userException.getMessage());
+        return ResponseEntity.status(userException.getStatus()).body(userResponseDto);
+    }
+
     // 로그인 익셉션
     @ExceptionHandler(BadCredentialsException.class)
     public String requestException(BadCredentialsException badCredentialsException) {
@@ -46,7 +54,7 @@ public class ExceptionControllerAdvice {
 
 
 
- 
+
 
 
 

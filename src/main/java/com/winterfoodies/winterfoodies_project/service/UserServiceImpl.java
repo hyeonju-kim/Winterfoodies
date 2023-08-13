@@ -10,8 +10,10 @@ import com.winterfoodies.winterfoodies_project.dto.store.StoreMainDto;
 import com.winterfoodies.winterfoodies_project.dto.store.StoreResponseDto;
 import com.winterfoodies.winterfoodies_project.dto.user.*;
 import com.winterfoodies.winterfoodies_project.entity.*;
+import com.winterfoodies.winterfoodies_project.exception.UserException;
 import com.winterfoodies.winterfoodies_project.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -53,7 +55,11 @@ public class UserServiceImpl implements UserService {
     // 회원가입
     @Override
     public UserDto signUp(UserRequestDto userRequestDto) {
-        String encodedPassword = encoder.encode(userRequestDto.getPassword()); // 230726 추가 DD
+        Optional<User> userOptional = userRepository.findByEmail(userRequestDto.getEmail());
+        if (userOptional.isPresent()) {
+            throw new UserException("해당 이메일이 이미 존재합니다.", HttpStatus.BAD_REQUEST, null);
+        }
+        String encodedPassword = encoder.encode(userRequestDto.getPassword()); // 230726 추가
         userRequestDto.setPassword(encodedPassword);
         userRequestDto.setPassword(userRequestDto.getPassword());
         User user = new User(userRequestDto);

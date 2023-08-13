@@ -22,4 +22,7 @@ public class UserResponseDto{
     @JsonIgnore
     private HttpStatus status;
 
+    public UserResponseDto(String message) {
+        this.message = message;
+    }
 }
