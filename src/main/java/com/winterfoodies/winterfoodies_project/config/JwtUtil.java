@@ -14,22 +14,30 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class JwtUtil {
     private final String SECRET = "secret";
+    private static final long ACCESS_TOKEN_EXPIRATION = 3600000;      // 1시간
+    private static final long REFRESH_TOKEN_EXPIRATION = 604800000;  // 7일
 
-
-    // 1. 토큰 생성
-    public String generateToken(UserDetails userDetails) {
+    // 액세스 토큰 생성
+    public String generateAccessToken(UserDetails userDetails) {
         Claims claims = Jwts.claims();
         claims.put("username", userDetails.getUsername());
-        return createToken(claims, userDetails.getUsername());
+        return createToken(claims, userDetails.getUsername(), ACCESS_TOKEN_EXPIRATION);
     }
 
-    public String createToken(Claims claims, String subject) {
+    // 230814 추가 - 리프레시 토큰 생성
+    public String generateRefreshToken(UserDetails userDetails) {
+        Claims claims = Jwts.claims();
+        claims.put("username", userDetails.getUsername());
+        return createToken(claims, userDetails.getUsername(), REFRESH_TOKEN_EXPIRATION);
+    }
+
+    private String createToken(Claims claims, String subject, long expirationMillis) {
         return Jwts.builder()
-            .setClaims(claims)
-            .setIssuedAt(new Date(System.currentTimeMillis()))
-            .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
-            .signWith(SignatureAlgorithm.HS256, SECRET)
-            .compact();
+                .setClaims(claims)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + expirationMillis))
+                .signWith(SignatureAlgorithm.HS256, SECRET)
+                .compact();
     }
 
     // 2. 토큰 유효여부 확인
@@ -51,6 +59,12 @@ public class JwtUtil {
     public String getUsernameFromToken(String token) {
         String username = String.valueOf(getAllClaims(token).get("username"));
         return username;
+    }
+
+    // 4. 토큰에서 email 가져오기
+    public String getEmailFromToken(String token) {
+        String email = String.valueOf(getAllClaims(token).get("email"));
+        return email;
     }
 
     // 5. 토큰 만료기한 가져오기

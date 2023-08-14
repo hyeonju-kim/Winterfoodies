@@ -3,15 +3,19 @@ package com.winterfoodies.winterfoodies_project.config;
 import com.winterfoodies.winterfoodies_project.AppRunner;
 import com.winterfoodies.winterfoodies_project.service.UserDetailsServiceImpl;
 
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -20,12 +24,22 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.Security;
+import java.util.concurrent.TimeUnit;
 
 @RequiredArgsConstructor
 @Slf4j
 public class JwtFilter extends OncePerRequestFilter {
     private final UserDetailsServiceImpl userDetailsService;
     private final JwtUtil jwtUtil;
+
+    // redisTemplate 생성
+    RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
+
+    public void someMethod() {
+        redisTemplate.afterPropertiesSet(); // RedisTemplate 초기화
+
+        // Your code that uses the template
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -55,12 +69,44 @@ public class JwtFilter extends OncePerRequestFilter {
 
             // 토큰 유효여부 확인
             if (jwtUtil.isValidToken(token, userDetails)) {
-                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+
+                // 230814 추가 - Redis 에 해당 Access Token logout여부 확인
+                String isLogout = (String)redisTemplate.opsForValue().get(token);
+
+                if (ObjectUtils.isEmpty(isLogout)) {
+                    UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                }
             }
+            // 230814 추가
+            // 액세스 토큰이 만료되었을 경우 리프레시 토큰을 사용하여 새로운 액세스 토큰 발급
+            if (jwtUtil.isTokenExpired(token)) {
+                // Redis에서 해당 리프레시 토큰 가져오기
+                String refreshToken = (String) redisTemplate.opsForValue().get("RT:" + username);
+
+                if (refreshToken != null && jwtUtil.isValidToken(refreshToken, userDetails)) {
+                    // 리프레시 토큰이 유효하면 새로운 액세스 토큰 생성
+                    String newAccessToken = jwtUtil.generateAccessToken(userDetails);
+
+                    // 새로운 액세스 토큰을 Response 헤더에 설정
+                    response.setHeader("Authorization", "Bearer " + newAccessToken);
+
+                    // SecurityContextHolder에 새로운 Authentication 설정
+                    UsernamePasswordAuthenticationToken newAuthenticationToken =
+                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    newAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(newAuthenticationToken);
+
+                    // 이전 액세스 토큰을 Redis에 저장하여 로그아웃 처리 (Blacklist 역할)
+                    redisTemplate.opsForValue().set(token, "logout", jwtUtil.getExpirationDate(token).getTime() - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
+                }
+            }
+
         }
         filterChain.doFilter(request, response);
 
     }
+
+
 }

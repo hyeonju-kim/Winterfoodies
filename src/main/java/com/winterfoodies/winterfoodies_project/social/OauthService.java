@@ -78,7 +78,7 @@ public class OauthService {
         }
 
         UserDetailsImpl userDetails = new UserDetailsImpl(user);
-        String jwtToken = jwtUtil.generateToken(userDetails);
+        String jwtToken = jwtUtil.generateAccessToken(userDetails);
         log.info("jwtToken : {}", jwtToken);
 
         // 액세스 토큰과 위에서 만든 jwtToken, 이외 정보들이 담긴 자바 객체를 다시 전송한다.

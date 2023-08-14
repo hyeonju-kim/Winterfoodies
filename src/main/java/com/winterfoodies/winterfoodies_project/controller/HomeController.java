@@ -1,9 +1,11 @@
     package com.winterfoodies.winterfoodies_project.controller;
 
+    import com.sun.xml.bind.v2.TODO;
     import com.winterfoodies.winterfoodies_project.ErrorBox;
     import com.winterfoodies.winterfoodies_project.config.JwtUtil;
     import com.winterfoodies.winterfoodies_project.dto.auth.LoginRequestDto;
     import com.winterfoodies.winterfoodies_project.dto.auth.LoginSuccessResponseDto;
+    import com.winterfoodies.winterfoodies_project.dto.user.TokenRequestDto;
     import com.winterfoodies.winterfoodies_project.dto.user.UserDto;
     import com.winterfoodies.winterfoodies_project.dto.user.UserRequestDto;
     import com.winterfoodies.winterfoodies_project.dto.user.UserResponseDto;
@@ -15,6 +17,7 @@
     import com.winterfoodies.winterfoodies_project.service.UserServiceImpl;
     import lombok.RequiredArgsConstructor;
     import lombok.extern.slf4j.Slf4j;
+    import org.springframework.data.redis.core.RedisTemplate;
     import org.springframework.http.HttpStatus;
     import org.springframework.http.ResponseEntity;
     import org.springframework.security.authentication.AuthenticationManager;
@@ -32,8 +35,10 @@
     import javax.validation.Valid;
     import java.time.LocalDateTime;
     import java.time.format.DateTimeFormatter;
+    import java.util.Date;
     import java.util.List;
     import java.util.Optional;
+    import java.util.concurrent.TimeUnit;
 
     @RequiredArgsConstructor
     @RestController
@@ -47,6 +52,7 @@
         private final AuthenticationManager authenticationManager;
         private final BCryptPasswordEncoder encoder;
         private final UserRepository userRepository;
+        private final RedisTemplate redisTemplate;
 
 
         // 로그인
@@ -70,6 +76,7 @@
 
             String password = loginRequestDto.getPassword();
             String email = loginRequestDto.getEmail();
+            String username = loginRequestDto.getUsername();
             Optional<User> retrievedUser = userRepository.findByEmail(email);
             retrievedUser.orElseThrow(() -> {
                 return new UserException("가입되지 않은 이메일입니다.", HttpStatus.BAD_REQUEST, null);
@@ -98,10 +105,20 @@
             UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequestDto.getUsername());
 
             // 3. subject, claim 모두 UserDetails를 사용하므로 객체를 그대로 전달
-            String token = jwtUtil.generateToken(userDetails);
+            String token = jwtUtil.generateAccessToken(userDetails);
+            String refreshToken = jwtUtil.generateRefreshToken(userDetails); // 230814 추가
+
+
+            // 230814 추가 - redis에 refresh 토큰 저장하기!
+            // RT:13@gmail.com(key) / 23jijiofj2io3hi32hiongiodsninioda(value) 형태로
+
+            Date refreshTokenExpiration = jwtUtil.getExpirationDate(refreshToken);
+            long remainingTimeInMillis = refreshTokenExpiration.getTime() - System.currentTimeMillis();// 만료까지 남은시간
+
+            redisTemplate.opsForValue().set("RT:"+username, refreshToken,remainingTimeInMillis, TimeUnit.MILLISECONDS);
 
             // 4. 생성된 토큰을 응답
-            return ResponseEntity.ok(new LoginSuccessResponseDto(token));
+            return ResponseEntity.ok(new LoginSuccessResponseDto(token, refreshToken));
         }
 
 //        @ExceptionHandler(BadCredentialsException.class)
@@ -138,21 +155,28 @@
 //        }
 
         // 로그아웃
+        // 230814 추가 - Redis에서 로그인할때 저장했던 refresh토큰 삭제하고, access토큰을 다시 저장하기 (value값을 logout으로)
         @PostMapping("/logout")
-        public ResponseEntity<UserResponseDto> logout(HttpServletRequest request) {
-            String authorizationHeader = request.getHeader("Authorization");
-            System.out.println(authorizationHeader);
-
-            if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-                String token = authorizationHeader.substring(7); // "Bearer " 다음 부분을 추출
-                System.out.println(token);
-
-                // 토큰을 사용하여 JWT 무효화 처리 또는 관련 작업을 수행
-                jwtUtil.setExpirationZero(token);
+        public ResponseEntity<UserResponseDto> logout(@RequestBody TokenRequestDto tokenRequestDto) {
+            //로그아웃 하고싶은 토큰이 유효한 지 먼저 검증하기
+            if (jwtUtil.isTokenExpired(tokenRequestDto.getAccessToken())) {
+                throw new UserException("로그아웃 : 유효하지 않은 토큰입니다.", HttpStatus.BAD_REQUEST, null);
             }
 
-            // Spring Security의 현재 인증 상태 비우기
-            SecurityContextHolder.clearContext();
+            // access토큰에서 username을 가져온다
+            String usernameFromToken = jwtUtil.getUsernameFromToken(tokenRequestDto.getAccessToken());
+
+            // redis에서 해당 username으로 저장된 refresh토큰이 있는지 여부 확인 후에 있을 경우 삭제하기
+            if (redisTemplate.opsForValue().get("RT:" + usernameFromToken) != null){
+                // refresh token 삭제
+                redisTemplate.delete("RT:" + usernameFromToken);
+            }
+
+            // 해당 access token 유효시간을 가지고 와서 블랙리스트에 저장하기
+            Date accessTokenExpiration = jwtUtil.getExpirationDate(tokenRequestDto.getAccessToken());
+            long remainingTimeInMillis = accessTokenExpiration.getTime() - System.currentTimeMillis();// 만료까지 남은시간
+
+            redisTemplate.opsForValue().set(tokenRequestDto.getAccessToken(), "logout", remainingTimeInMillis, TimeUnit.MILLISECONDS);
 
             return ResponseEntity.ok(new UserResponseDto("로그아웃 되었습니다."));
         }

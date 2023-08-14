@@ -8,10 +8,16 @@ import lombok.RequiredArgsConstructor;
 @Data
 public class LoginSuccessResponseDto {
     private String token;
+    private String refreshToken;
     private String message = "로그인 성공";
 
     public LoginSuccessResponseDto(String token) {
         this.token = token;
+    }
+
+    public LoginSuccessResponseDto(String token, String refreshToken) {
+        this.token = token;
+        this.refreshToken = refreshToken;
     }
 
 }
