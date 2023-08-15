@@ -12,9 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +23,8 @@ public class MyPageServiceImpl implements MypageService{
     private final StoreRepository storeRepository;
     private final BCryptPasswordEncoder encoder;
     private final OrderRepository orderRepository;
+    private final CartProductRepository cartProductRepository;
+    private final ProductRepository productRepository;
 
     // jwt 토큰으로 현재 인증된 사용자의 Authentication 객체에서 이름 가져오기
     public String getUsernameFromAuthentication() {
@@ -128,23 +128,35 @@ public class MyPageServiceImpl implements MypageService{
         List<Order> foundOrderList = orderRepository.findByUserId(getUserId());
         List<OrderResponseDto> orderResponseDtoList = new ArrayList<>();
         List<List<OrderResponseDto>> outerOrderResponseDtoList = new ArrayList<>();
+        List<CartProduct> cartProductList = cartProductRepository.findByUserId(getUserId());
 
         for (Order order : foundOrderList) {
             OrderResponseDto orderResponseDto = new OrderResponseDto();
-//            orderResponseDto.setStoreName(order.getStore().getStoreDetail().getName());
+            orderResponseDto.setOrderId(order.getId());
+            orderResponseDto.setOrderDate(order.getCreateAt());
+            orderResponseDto.setStoreName(order.getStore().getStoreDetail().getName());
+            orderResponseDto.setTotalAmount(order.getTotalAmount());
 
-            List<OrderProduct> foundOrderProducts = order.getOrderProducts();
-            List<String> tempProducts = new ArrayList<>();
-            for (OrderProduct foundOrderProduct : foundOrderProducts) {
-                tempProducts.add(foundOrderProduct.getProduct().getName());
+            List<OrderProduct> foundOrderProductsList = order.getOrderProducts();
+            List<Map<String, Object>> tempProductsList = new ArrayList<>();
+
+
+            for (OrderProduct foundOrderProduct : foundOrderProductsList) {
+                Map<String, Object> productInfoMap = new HashMap<>(); // 가격 정보를 포함하는 Map으로 변경
+                Product product = productRepository.findById(foundOrderProduct.getProduct().getId()).get();
+                productInfoMap.put("name", foundOrderProduct.getProduct().getName());
+                productInfoMap.put("quantity", foundOrderProduct.getQuantity());
+                productInfoMap.put("price", foundOrderProduct.getQuantity() * product.getPrice()); // 가격 정보 추가
+
+                tempProductsList.add(productInfoMap);
             }
-            orderResponseDto.setProductName("신천붕어빵");
+
+            orderResponseDto.setProductAndQuantityList(tempProductsList);
 
             orderResponseDtoList.add(orderResponseDto);
         }
         outerOrderResponseDtoList.add(orderResponseDtoList);
         return outerOrderResponseDtoList;
-
     }
 
     // 리뷰 삭제

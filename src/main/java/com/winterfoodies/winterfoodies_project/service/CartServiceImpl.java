@@ -1,7 +1,6 @@
 package com.winterfoodies.winterfoodies_project.service;
 
 import com.winterfoodies.winterfoodies_project.ErrorBox;
-import com.winterfoodies.winterfoodies_project.dto.cart.CartDto;
 import com.winterfoodies.winterfoodies_project.dto.cartProduct.CartProductDto;
 import com.winterfoodies.winterfoodies_project.dto.order.OrderRequestDto;
 import com.winterfoodies.winterfoodies_project.dto.order.OrderResponseDto;
@@ -13,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -265,11 +265,11 @@ public class CartServiceImpl implements CartService {
 
         OrderResponseDto orderResponseDto = new OrderResponseDto();
 
-        List<Map<String, Long>> prdAndQntList = new ArrayList<>();
+        List<Map<String, Object>> prdAndQntList = new ArrayList<>();
 
         List<OrderProduct> orderProducts = orderProductRepository.findByOrderId(order.getId()); // jpql 로 바꾸기 ( )
         for (OrderProduct orderProduct : orderProducts) {
-            Map<String, Long> prdAndQnt = new HashMap<>();
+            Map<String, Object> prdAndQnt = new HashMap<>();
             prdAndQnt.put(orderProduct.getProduct().getName(), orderProduct.getQuantity());
             prdAndQntList.add(prdAndQnt);
         }
@@ -283,22 +283,40 @@ public class CartServiceImpl implements CartService {
     }
 
     // 5-2. 주문하기 & 주문완료 페이지 조회 (DB에서 조회)
+    @Transactional
     @Override
     public OrderResponseDto getOrderConfirmPageByDB(OrderRequestDto orderRequestDto) {
         List<CartProduct> cartProductList = cartProductRepository.findByUserId(getUserId());
         OrderResponseDto orderResponseDto = new OrderResponseDto();
-        ArrayList<Map<String, Long>> prdAndQntMapList = new ArrayList<>();
+        List<Map<String, Object>> prdAndQntMapList = new ArrayList<>();
+        Order order = new Order();
+        orderRepository.save(order);
 
         Long totalAmt = 0L;
 
         for (CartProduct cartProduct : cartProductList) {
             String prdName = cartProduct.getProduct().getName();
             Long prdQnt = cartProduct.getQuantity();
-            Map<String, Long> map = new HashMap<>();
+            Map<String, Object> map = new HashMap<>();
             map.put(prdName, prdQnt);
             prdAndQntMapList.add(map);
             totalAmt += cartProduct.getTotalPrice();
+
+            order.setStore(cartProduct.getStore());
+            order.setUser(userRepository.findById(getUserId()).get());
+            order.setTotalAmount(totalAmt);
+
+            OrderProduct orderProduct = new OrderProduct();
+            orderProduct.setQuantity(prdQnt);
+            orderProduct.setVisitTime(LocalDateTime.now());
+            orderProduct.setOrder(order);
+            orderProduct.setProduct(cartProduct.getProduct());
+            orderProduct.setClientMessage(orderRequestDto.getMessage());
+            orderProductRepository.save(orderProduct);
         }
+        order.setCreateAt(LocalDateTime.now());
+        order.setMessage(orderRequestDto.getMessage());
+
         orderResponseDto.setProductAndQuantityList(prdAndQntMapList);
         orderResponseDto.setCustomerMessage(orderRequestDto.getMessage());
         orderResponseDto.setTotalAmount(totalAmt);

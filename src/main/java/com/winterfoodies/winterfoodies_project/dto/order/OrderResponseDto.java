@@ -24,6 +24,6 @@ public class OrderResponseDto {
     private LocalDateTime orderDate;
     private String processYn;
     private String customerMessage;
-    private List<Map<String, Long>> productAndQuantityList;
+    private List<Map<String, Object>> productAndQuantityList;
     private Long totalAmount;
 }

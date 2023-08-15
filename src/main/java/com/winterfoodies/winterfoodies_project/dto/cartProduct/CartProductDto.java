@@ -29,6 +29,7 @@ public class CartProductDto {
 
     // 2. entity -> Dto
     public CartProductDto(CartProduct cartProduct) {
+        this.id = cartProduct.getId();
         this.productId = cartProduct.getProduct().getId();
         this.quantity = cartProduct.getQuantity();
         this.totalPrice = cartProduct.getTotalPrice();

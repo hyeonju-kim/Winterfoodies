@@ -25,6 +25,7 @@ public class SearchServiceImpl implements SearchService{
         List<StoreDto> storeDtoList = new ArrayList<>();
         for (Store store : storeList) {
             StoreDto storeDto = new StoreDto();
+            storeDto.setId(store.getId());
             storeDto.setName(store.getStoreDetail().getName());
             storeDto.setBasicAddress(store.getStoreDetail().getBasicAddress());
             storeDto.setAvergeRating(store.getStoreDetail().getAverageRating());
@@ -42,6 +43,7 @@ public class SearchServiceImpl implements SearchService{
         List<StoreDto> storeDtoList = new ArrayList<>();
         for (Store store : storeList) {
             StoreDto storeDto = new StoreDto();
+            storeDto.setId(store.getId());
             storeDto.setName(store.getStoreDetail().getName());
             storeDto.setBasicAddress(store.getStoreDetail().getBasicAddress());
             storeDto.setAvergeRating(store.getStoreDetail().getAverageRating());

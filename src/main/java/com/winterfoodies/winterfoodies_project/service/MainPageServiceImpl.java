@@ -136,6 +136,7 @@ public class MainPageServiceImpl implements MainPageService{
 
         for (StoreProduct storeProduct : storeProductList) {
             ProductResponseDto productResponseDto = new ProductResponseDto();
+            productResponseDto.setId(storeProduct.getId());
             productResponseDto.setProductName(storeProduct.getProduct().getName());
             productResponseDto.setPrice(storeProduct.getProduct().getPrice());
             productResponseDto.setQuantity(1L);
