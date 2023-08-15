@@ -31,15 +31,8 @@ import java.util.concurrent.TimeUnit;
 public class JwtFilter extends OncePerRequestFilter {
     private final UserDetailsServiceImpl userDetailsService;
     private final JwtUtil jwtUtil;
+    private final RedisTemplate<String, String> redisTemplate;
 
-    // redisTemplate 생성
-    RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
-
-    public void someMethod() {
-        redisTemplate.afterPropertiesSet(); // RedisTemplate 초기화
-
-        // Your code that uses the template
-    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {

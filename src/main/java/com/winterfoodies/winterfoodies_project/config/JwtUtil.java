@@ -77,11 +77,11 @@ public class JwtUtil {
     public boolean isTokenExpired(String token) {
         return getExpirationDate(token).before(new Date());
     }
-
-    // 7. 토큰 만료기간을 0으로 만들어 토큰 무효화하기 (로그아웃)
-    public void setExpirationZero(String token) {
-        Claims claims = getAllClaims(token);
-        claims.setExpiration(new Date());
-    }
+//
+//    // 7. 토큰 만료기간을 0으로 만들어 토큰 무효화하기 (로그아웃)
+//    public void setExpirationZero(String token) {
+//        Claims claims = getAllClaims(token);
+//        claims.setExpiration(new Date());
+//    }
 }
 

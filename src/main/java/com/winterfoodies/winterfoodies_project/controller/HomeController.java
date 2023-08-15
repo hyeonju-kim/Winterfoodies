@@ -110,12 +110,15 @@
 
 
             // 230814 추가 - redis에 refresh 토큰 저장하기!
-            // RT:13@gmail.com(key) / 23jijiofj2io3hi32hiongiodsninioda(value) 형태로
+            // RT:나나(key) / 23jijiofj2io3hi32hiongiodsninioda(value) 형태로
 
             Date refreshTokenExpiration = jwtUtil.getExpirationDate(refreshToken);
             long remainingTimeInMillis = refreshTokenExpiration.getTime() - System.currentTimeMillis();// 만료까지 남은시간
 
             redisTemplate.opsForValue().set("RT:"+username, refreshToken,remainingTimeInMillis, TimeUnit.MILLISECONDS);
+            System.out.println("key==========RT:" + username);
+            System.out.println("refreshToken===========" + refreshToken);
+
 
             // 4. 생성된 토큰을 응답
             return ResponseEntity.ok(new LoginSuccessResponseDto(token, refreshToken));
@@ -158,6 +161,7 @@
         // 230814 추가 - Redis에서 로그인할때 저장했던 refresh토큰 삭제하고, access토큰을 다시 저장하기 (value값을 logout으로)
         @PostMapping("/logout")
         public ResponseEntity<UserResponseDto> logout(@RequestBody TokenRequestDto tokenRequestDto) {
+            System.out.println("dto=================" + tokenRequestDto.getAccessToken() + "=========" + tokenRequestDto.getRefreshToken());
             //로그아웃 하고싶은 토큰이 유효한 지 먼저 검증하기
             if (jwtUtil.isTokenExpired(tokenRequestDto.getAccessToken())) {
                 throw new UserException("로그아웃 : 유효하지 않은 토큰입니다.", HttpStatus.BAD_REQUEST, null);
@@ -165,6 +169,7 @@
 
             // access토큰에서 username을 가져온다
             String usernameFromToken = jwtUtil.getUsernameFromToken(tokenRequestDto.getAccessToken());
+            System.out.println("토큰에서가져온이름==================" + usernameFromToken);
 
             // redis에서 해당 username으로 저장된 refresh토큰이 있는지 여부 확인 후에 있을 경우 삭제하기
             if (redisTemplate.opsForValue().get("RT:" + usernameFromToken) != null){
@@ -175,6 +180,8 @@
             // 해당 access token 유효시간을 가지고 와서 블랙리스트에 저장하기
             Date accessTokenExpiration = jwtUtil.getExpirationDate(tokenRequestDto.getAccessToken());
             long remainingTimeInMillis = accessTokenExpiration.getTime() - System.currentTimeMillis();// 만료까지 남은시간
+            System.out.println("accessTokenExpiration====" + accessTokenExpiration);
+            System.out.println("remainingTimeInMillis====" + remainingTimeInMillis);
 
             redisTemplate.opsForValue().set(tokenRequestDto.getAccessToken(), "logout", remainingTimeInMillis, TimeUnit.MILLISECONDS);
 

@@ -52,7 +52,6 @@ public class MyPageServiceImpl implements MypageService{
         if (foundUser != null) {  // respository에서 가져온건 꼭 분기처리 해야한다!!!!
             return new UserDto(foundUser);
         } else {
-
             UserDto notFoundUserDto = new UserDto();
             notFoundUserDto.setMessage("해당 유저를 찾을 수 없습니다.");
             return notFoundUserDto;

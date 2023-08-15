@@ -4,6 +4,7 @@ import com.winterfoodies.winterfoodies_project.service.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -21,6 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class  SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsServiceImpl userDetailsService;
     private final JwtUtil jwtUtil;
+    private final RedisTemplate<String, String> redisTemplate;
 
     private static final String[] AUTH_WHITE_LIST = {
             "/v2/api-docs",
@@ -72,7 +74,7 @@ public class  SecurityConfig extends WebSecurityConfigurerAdapter {
 
         // 5. jwt필터 넣어주기
         // UsernamePasswordAuthenticationFilter에 도달하기 전에 커스텀한 필터를 먼저 동작시킴
-        http.addFilterBefore(new JwtFilter(userDetailsService, jwtUtil),UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new JwtFilter(userDetailsService, jwtUtil, redisTemplate),UsernamePasswordAuthenticationFilter.class); //230815 redisTemplate추가하니까 로그아웃 잘됨!!
 
 
     }
