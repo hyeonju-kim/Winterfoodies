@@ -17,6 +17,8 @@
     import com.winterfoodies.winterfoodies_project.service.UserServiceImpl;
     import lombok.RequiredArgsConstructor;
     import lombok.extern.slf4j.Slf4j;
+    import org.jasypt.encryption.StringEncryptor;
+    import org.springframework.beans.factory.annotation.Value;
     import org.springframework.data.redis.core.RedisTemplate;
     import org.springframework.http.HttpStatus;
     import org.springframework.http.ResponseEntity;
@@ -45,7 +47,6 @@
     @Slf4j
     @RequestMapping("/api")
     public class HomeController {
-
         private final UserDetailsServiceImpl userDetailsService;
         private final UserServiceImpl userService;
         private final JwtUtil jwtUtil;
@@ -55,10 +56,10 @@
         private final RedisTemplate redisTemplate;
 
 
+
         // 로그인
         @PostMapping("/login")
         public ResponseEntity<LoginSuccessResponseDto> loginTest(@Valid @RequestBody LoginRequestDto loginRequestDto, BindingResult bindingResult) {
-
             // [230726] 추가
             if (bindingResult.hasErrors()) {
                 List<ObjectError> allErrors = bindingResult.getAllErrors();
@@ -115,7 +116,7 @@
             Date refreshTokenExpiration = jwtUtil.getExpirationDate(refreshToken);
             long remainingTimeInMillis = refreshTokenExpiration.getTime() - System.currentTimeMillis();// 만료까지 남은시간
 
-            redisTemplate.opsForValue().set("RT:"+username, refreshToken,remainingTimeInMillis, TimeUnit.MILLISECONDS);
+            redisTemplate.opsForValue().set("RT:" + username, refreshToken, remainingTimeInMillis, TimeUnit.MILLISECONDS);
             System.out.println("key==========RT:" + username);
             System.out.println("refreshToken===========" + refreshToken);
 

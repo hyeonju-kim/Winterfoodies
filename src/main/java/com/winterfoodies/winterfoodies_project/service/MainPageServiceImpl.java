@@ -185,6 +185,7 @@ public class MainPageServiceImpl implements MainPageService{
 
         for (Review review : reviewList) {
             ReviewDto reviewDto = new ReviewDto();
+            reviewDto.setId(review.getId());
             reviewDto.setRating(review.getRating());
             reviewDto.setPhoto(review.getPhoto());
             reviewDto.setContent(review.getContent());
