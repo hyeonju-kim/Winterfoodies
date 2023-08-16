@@ -26,6 +26,7 @@ public class SearchServiceImpl implements SearchService{
         for (Store store : storeList) {
             StoreDto storeDto = new StoreDto();
             storeDto.setId(store.getId());
+            System.out.println("storeId======" + store.getId());
             storeDto.setName(store.getStoreDetail().getName());
             storeDto.setBasicAddress(store.getStoreDetail().getBasicAddress());
             storeDto.setAvergeRating(store.getStoreDetail().getAverageRating());

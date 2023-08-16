@@ -33,4 +33,4 @@ build/
 .vscode/
 
 ### .gitignore 파일 내용 ###
-application-dev.properties
+#application-dev.properties
