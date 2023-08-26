@@ -46,11 +46,10 @@ public class MainPageServiceImpl implements MainPageService{
 
     // 메인페이지 - 나와 가까운 가게 목록 보이기
     @Override
-    public List<StoreResponseDto> getNearbyStores() {
+    public List<StoreResponseDto> getNearbyStores(double latitude, double longitude) {
         double radius = 2.0; // 검색 반경 설정 (예: 2.0km)
-        User foundUser = userRepository.findByUsername(getUsernameFromAuthentication());
 
-        List<Store> nearbyStores = storeRepository.findNearbyStores(foundUser.getLatitude(), foundUser.getLongitude(), radius);
+        List<Store> nearbyStores = storeRepository.findNearbyStores(latitude, longitude, radius);
         List<StoreResponseDto> nearbyStoreDtoList = new ArrayList<>();
 
         for (Store store : nearbyStores) {
@@ -65,12 +64,10 @@ public class MainPageServiceImpl implements MainPageService{
 
     // 메뉴별, 가까운순별 가게목록 - 가게명, 위치, 평점
     @Override
-    public List<StoreResponseDto> getNearbyStores2(Long productId) {
+    public List<StoreResponseDto> getNearbyStores2(Long productId, double latitude, double longitude) {
         double radius = 2.0; // 검색 반경 설정 (예: 2.0km)
 
-        User foundUser = userRepository.findByUsername(getUsernameFromAuthentication());
-
-        List<Store> nearbyStores = storeRepository.findNearbyStores(foundUser.getLatitude(), foundUser.getLongitude(), radius);
+        List<Store> nearbyStores = storeRepository.findNearbyStores(latitude, longitude, radius);
         List<StoreResponseDto> nearbyStoreDtoList = new ArrayList<>();
 
         for (Store store : nearbyStores) {

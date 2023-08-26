@@ -45,12 +45,12 @@ public class User implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "USER_ROLE")
     private UserType role;
-
-    @Column(name = "LATITUDE")
-    private double latitude;
-
-    @Column(name = "LONGITUDE")
-    private double longitude;
+//
+//    @Column(name = "LATITUDE")
+//    private double latitude;
+//
+//    @Column(name = "LONGITUDE")
+//    private double longitude;
 
     @JsonIgnore // 재귀순환 방지
     @OneToOne
@@ -73,8 +73,8 @@ public class User implements Serializable {
         this.email = userRequestDto.getEmail();
         this.phoneNumber = userRequestDto.getPhoneNumber();
         this.password = userRequestDto.getPassword();
-        this.latitude = userRequestDto.getLatitude();
-        this.longitude = userRequestDto.getLongitude();
+//        this.latitude = userRequestDto.getLatitude();
+//        this.longitude = userRequestDto.getLongitude();
     }
 
     public User(UserRequestDto userRequestDto) {
@@ -82,8 +82,8 @@ public class User implements Serializable {
         this.email = userRequestDto.getEmail();
         this.phoneNumber = userRequestDto.getPhoneNumber();
         this.password = userRequestDto.getPassword();
-        this.latitude = userRequestDto.getLatitude();
-        this.longitude = userRequestDto.getLongitude();
+//        this.latitude = userRequestDto.getLatitude();
+//        this.longitude = userRequestDto.getLongitude();
     }
 
     public User() {

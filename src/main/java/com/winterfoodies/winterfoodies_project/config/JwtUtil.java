@@ -14,7 +14,7 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class JwtUtil {
     private final String SECRET = "secret";
-    private static final long ACCESS_TOKEN_EXPIRATION = 3600000;      // 1시간
+    private static final long ACCESS_TOKEN_EXPIRATION = 3600000;     // 1시간
     private static final long REFRESH_TOKEN_EXPIRATION = 604800000;  // 7일
 
     // 액세스 토큰 생성

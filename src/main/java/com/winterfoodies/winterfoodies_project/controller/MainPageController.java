@@ -18,18 +18,27 @@ import java.util.List;
 public class MainPageController {
     private final MainPageService mainPageService; //서비스 클래스를 직접 주입받지 말고, 서비스 인터페이스를 주입받자
 
-    // 1. 메인페이지 (나와 가장 가까운 가게 - 가게명만)
+    // 1. 메인페이지 (나와 가장 가까운 가게 - 가게명만) - 로그인 하면 바로 보이는 화면
     @GetMapping
-    @ApiOperation(value = "메인페이지(나와 가장 가까운 가게 - 가게명만)")
-    public List<StoreResponseDto> mainPage() {
-        return mainPageService.getNearbyStores();
+    @ApiOperation(value = "메인페이지(나와 가장 가까운 가게 - 가게명만) - 로그인 하면 바로 보이는 화면")
+    public List<StoreResponseDto> mainPage(@RequestParam(required = false) Double latitude,
+                                           @RequestParam(required = false) Double longitude) {
+        if (latitude != null && longitude != null) {
+            // 위도와 경도가 전달된 경우
+            return mainPageService.getNearbyStores(latitude, longitude);
+        } else {
+            // 위치 정보가 전달되지 않은 경우에 대한 처리
+            return null;
+        }
     }
 
     // 2. 메뉴별, 가까운순별 가게목록 - 가게명, 위치, 평점
     @GetMapping("/{productId}/near")
     @ApiOperation(value = "메뉴별, 가까운순별 가게목록")
-    public List<StoreResponseDto> nearbyStoreList(@PathVariable("productId") Long productId) {
-        return mainPageService.getNearbyStores2(productId);
+    public List<StoreResponseDto> nearbyStoreList(@PathVariable("productId") Long productId,
+                                                  @RequestParam(required = false) Double latitude,
+                                                  @RequestParam(required = false) Double longitude) {
+        return mainPageService.getNearbyStores2(productId, latitude, longitude);
     }
 
     // 3. 메뉴별, 인기순(판매순)별 가게목록

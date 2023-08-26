@@ -9,10 +9,10 @@ import java.util.List;
 
 public interface MainPageService {
     // 메인 페이지 - 위치 정보 가져오기
-    public List<StoreResponseDto> getNearbyStores();
+    public List<StoreResponseDto> getNearbyStores(double latitude, double longitude);
 
     // 메뉴별, 가까운순별 가게목록 - 가게명, 위치, 평점
-    public List<StoreResponseDto> getNearbyStores2(Long productId);
+    public List<StoreResponseDto> getNearbyStores2(Long productId, double latitude, double longitude);
 
     // 메뉴별, 인기순(판매순)별 가게목록
     public List<StoreResponseDto> getStoresSortedByMenuSales(Long productId);
