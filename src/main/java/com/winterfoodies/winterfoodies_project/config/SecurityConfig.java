@@ -41,7 +41,7 @@ public class  SecurityConfig extends WebSecurityConfigurerAdapter {
             "/vendor/**",
             "/img/**",
             "/store-img/**",
-            "/api/mypage",
+//            "/api/mypage",
             "/h2-console/**",
             "/api/login"
     };

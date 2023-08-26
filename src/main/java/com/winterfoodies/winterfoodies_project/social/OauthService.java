@@ -73,7 +73,7 @@ public class OauthService {
         user.setPassword(encoder.encode(userId)); //이메일을 비밀번호로 사용
 
         // DB에 해당 유저가 있는지 조회 후 없으면 save
-        if (userRepository.findByEmail(userId).isEmpty()) {
+        if (userRepository.findByUsername(userId)==null) {
             userRepository.save(user);
         }
 

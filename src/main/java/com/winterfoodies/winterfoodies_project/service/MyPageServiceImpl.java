@@ -34,6 +34,7 @@ public class MyPageServiceImpl implements MypageService{
 
             // 인증된 사용자의 이름 가져오기
             username = authentication.getName();
+            System.out.println("인증객체에서 꺼낸 유저네임 ==== "+username);
         }
         return username;
     }

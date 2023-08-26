@@ -13,7 +13,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "USERS", indexes = {
-        @Index(name = "USER_IDX", columnList = "USER_EMAIL", unique = true)
+        @Index(name = "USER_IDX", columnList = "USER_NAME", unique = true)
 })
 @Getter
 @Setter
@@ -32,8 +32,8 @@ public class User implements Serializable {
     @Column(name = "USER_PASSWORD")
     private String password;
 
-    @Column(name = "USER_EMAIL", nullable = false, unique = true)
-    private String email;
+//    @Column(name = "USER_EMAIL", nullable = false, unique = true)
+//    private String email;
 
     @Column(name = "USER_PHONE_NUMBER")
     private String phoneNumber;
@@ -70,7 +70,7 @@ public class User implements Serializable {
 
     public User(UserRequestDto userRequestDto, UserType type){
         this.username = userRequestDto.getUsername();
-        this.email = userRequestDto.getEmail();
+//        this.email = userRequestDto.getEmail();
         this.phoneNumber = userRequestDto.getPhoneNumber();
         this.password = userRequestDto.getPassword();
 //        this.latitude = userRequestDto.getLatitude();
@@ -79,7 +79,7 @@ public class User implements Serializable {
 
     public User(UserRequestDto userRequestDto) {
         this.username = userRequestDto.getUsername();
-        this.email = userRequestDto.getEmail();
+//        this.email = userRequestDto.getEmail();
         this.phoneNumber = userRequestDto.getPhoneNumber();
         this.password = userRequestDto.getPassword();
 //        this.latitude = userRequestDto.getLatitude();
@@ -95,7 +95,7 @@ public class User implements Serializable {
 
     public User(String username, String email) {
         this.username = username;
-        this.email = email;
+//        this.email = email;
     }
 
 

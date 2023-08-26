@@ -21,6 +21,7 @@ public class JwtUtil {
     public String generateAccessToken(UserDetails userDetails) {
         Claims claims = Jwts.claims();
         claims.put("username", userDetails.getUsername());
+        System.out.println("유저디테일 겟네임===="+ userDetails.getUsername());
         return createToken(claims, userDetails.getUsername(), ACCESS_TOKEN_EXPIRATION);
     }
 

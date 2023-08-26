@@ -1,6 +1,6 @@
 package com.winterfoodies.winterfoodies_project.config;
 
-import com.winterfoodies.winterfoodies_project.AppRunner;
+//import com.winterfoodies.winterfoodies_project.AppRunner;
 import com.winterfoodies.winterfoodies_project.service.UserDetailsServiceImpl;
 
 import lombok.AllArgsConstructor;
@@ -90,6 +90,7 @@ public class JwtFilter extends OncePerRequestFilter {
                             new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                     newAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(newAuthenticationToken);
+                    System.out.println("jwt필터에서 인증객체에 잘 저장되는지 확인 === "+SecurityContextHolder.getContext().getAuthentication());
 
                     // 이전 액세스 토큰을 Redis에 저장하여 로그아웃 처리 (Blacklist 역할)
                     redisTemplate.opsForValue().set(token, "logout", jwtUtil.getExpirationDate(token).getTime() - System.currentTimeMillis(), TimeUnit.MILLISECONDS);

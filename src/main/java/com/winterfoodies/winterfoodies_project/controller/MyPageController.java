@@ -9,6 +9,7 @@ import com.winterfoodies.winterfoodies_project.dto.user.UserRequestDto;
 import com.winterfoodies.winterfoodies_project.dto.user.UserResponseDto;
 import com.winterfoodies.winterfoodies_project.entity.*;
 import com.winterfoodies.winterfoodies_project.exception.RequestException;
+import com.winterfoodies.winterfoodies_project.repository.UserRepository;
 import com.winterfoodies.winterfoodies_project.service.MainPageService;
 import com.winterfoodies.winterfoodies_project.service.MypageService;
 import com.winterfoodies.winterfoodies_project.service.UserService;
@@ -17,6 +18,8 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
@@ -33,10 +36,41 @@ import java.util.List;
 public class MyPageController {
     private final MypageService mypageService; //서비스 클래스를 직접 주입받지 말고, 서비스 인터페이스를 주입받자!
     private final UserServiceImpl userService;
+    private final UserRepository userRepository;
+
+    // jwt 토큰으로 현재 인증된 사용자의 Authentication 객체에서 이름 가져오기
+    public String getUsernameFromAuthentication() {
+        String username = null;
+        if (SecurityContextHolder.getContext().getAuthentication() != null) {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+            // 인증된 사용자의 이름 가져오기
+            username = authentication.getName();
+            System.out.println("authentication ===="+authentication);
+            System.out.println("authentication에서 꺼낸 유저네임 ==== "+username);
+        }
+        return username;
+    }
+
+    // 인증된 사용자의 id 가져오기
+    public Long getUserId() {
+        User foundUser = userRepository.findByUsername(getUsernameFromAuthentication());
+        return foundUser.getId();
+    }
+
+
     // 마이페이지 메인 화면(목록 조회)
     @GetMapping // 테스트용
     @ApiOperation(value = "메인화면 조회")
     public ResponseEntity<String> getMyPageList() { // 반환값 List로 바꾸기
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println("authentication == "+authentication);
+        System.out.println("authentication.getName() == "+authentication.getName());
+        System.out.println("authentication.getAuthorities() == "+authentication.getAuthorities());
+        System.out.println("authentication.getCredentials() == "+authentication.getCredentials());
+        System.out.println("authentication.getDetails() == "+authentication.getDetails());
+        System.out.println("getUsernameFromAuthentication() -> 유저네임 반환== "+getUsernameFromAuthentication());
+        System.out.println("getUserId() -> 유저아이디 반환== "+getUserId());
         return ResponseEntity.ok("굿~~");
     }
 

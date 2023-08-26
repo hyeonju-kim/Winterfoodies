@@ -16,7 +16,7 @@ public class LoginDto {
     }
 
     public LoginDto(LoginRequestDto requestDto) {
-        this.email = requestDto.getEmail();
+//        this.email = requestDto.getEmail();
         this.password = requestDto.getPassword();
         this.username = requestDto.getUsername();
     }
