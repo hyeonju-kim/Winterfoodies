@@ -43,7 +43,7 @@ public class MainPageController {
 
     // 3. 메뉴별, 인기순(판매순)별 가게목록
     @GetMapping("/{productId}/popular")
-    @ApiOperation(value = "메뉴별, 인기순별 가게목록")
+    @ApiOperation(value = "메뉴별, 인기순(판매량순)별 가게목록")
     public List<StoreResponseDto> popularList(@PathVariable("productId") Long productId) {
         return mainPageService.getStoresSortedByMenuSales(productId);
     }

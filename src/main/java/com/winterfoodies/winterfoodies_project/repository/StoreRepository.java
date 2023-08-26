@@ -17,14 +17,26 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
             "6371 * acos(cos(radians(:latitude)) * cos(radians(s.storeDetail.latitude)) * cos(radians(s.storeDetail.longitude) - radians(:longitude)) + sin(radians(:latitude)) * sin(radians(s.storeDetail.latitude))) < :radius")
     List<Store> findNearbyStores(@Param("latitude") double latitude, @Param("longitude") double longitude, @Param("radius") double radius);
 
-    // 판매량 순으로 정렬하여 가게목록 가져오기 (신천3주문 - 소새울2주문 - 대야1주문)
-    @Query("SELECT s FROM Store s JOIN s.orders o GROUP BY s.id ORDER BY SUM(o.size) DESC")
+
+
+//    // 판매량 순으로 정렬하여 가게목록 가져오기 (신천3주문 - 소새울2주문 - 대야1주문)
+//    @Query("SELECT s FROM Store s JOIN s.orders o GROUP BY s.id ORDER BY SUM(o.size) DESC")
+//    List<Store> getStoresSortedByMenuSales();
+//
+//    // 상품별, 리뷰순으로 정렬하여 가게목록 가져오기 (신천3리뷰 - 소새울2리뷰 - 대야1리뷰)
+//    @Query("SELECT s FROM Store s JOIN s.reviews r GROUP BY s.id ORDER BY SUM(r.size) DESC ")
+//    List<Store> getStoreByReviews();
+
+    // 인기순(판매량 순)으로 정렬하여 가게목록 가져오기 - 쿼리 삭제하고 프론트에서 처리하기로 함 8/26
+    @Query("SELECT s FROM Store s JOIN s.orders o GROUP BY s.id")
     List<Store> getStoresSortedByMenuSales();
 
-    // 상품별, 리뷰순으로 정렬하여 가게목록 가져오기 (신천3리뷰 - 소새울2리뷰 - 대야1리뷰)
-    @Query("SELECT s FROM Store s JOIN s.reviews r GROUP BY s.id ORDER BY SUM(r.size) DESC ")
+    // 상품별, 리뷰순으로 정렬하여 가게목록 가져오기  - 쿼리 삭제하고 프론트에서 처리하기로 함 8/26
+    @Query("SELECT s FROM Store s JOIN s.reviews r GROUP BY s.id")
     List<Store> getStoreByReviews();
 
+
+    // ==================== 검색 ======================
     // 상호명 검색
     @Query("SELECT s FROM Store s WHERE s.storeDetail.name LIKE %:keyword%")
     List<Store> searchStores(@Param("keyword") String keyword);
