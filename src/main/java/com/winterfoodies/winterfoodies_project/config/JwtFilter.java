@@ -51,7 +51,7 @@ public class JwtFilter extends OncePerRequestFilter {
         }else{
                 filterChain.doFilter(request, response);
 
-                // 추가!! IllegalStateException: Cannot call sendRedirect() after the response has been committed 해결 위해 추가함. 비 로그인 상태일 경우 소셜로그인창을 두번 호출해서 발생하는 에러임
+                // return;추가!! IllegalStateException: Cannot call sendRedirect() after the response has been committed 해결 위해 추가함. 비 로그인 상태일 경우 소셜로그인창을 두번 호출해서 발생하는 에러임
                 return;
         }
 
@@ -66,6 +66,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 // 230814 추가 - Redis 에 해당 Access Token logout여부 확인
                 String isLogout = (String)redisTemplate.opsForValue().get(token);
 
+                // logout딱지가 없다면 토큰 만들어주고, logout딱지가 있으면 토큰 안만들어줌~!!
                 if (ObjectUtils.isEmpty(isLogout)) {
                     UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                     usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
