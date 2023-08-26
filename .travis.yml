@@ -53,7 +53,7 @@ deploy: # 외부 서비스와 연동될 행위들을 선언
 notifications:
   email:
     recipients:
-      - yocu1784@gmail.com
+      - yocu1784@naver.com
 
 # 권한 부여 (빌드시 에러 방지)
 before_install:
