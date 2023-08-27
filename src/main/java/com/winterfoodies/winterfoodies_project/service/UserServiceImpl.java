@@ -55,10 +55,10 @@ public class UserServiceImpl implements UserService {
     // 회원가입
     @Override
     public UserDto signUp(UserRequestDto userRequestDto) {
-        User userOptional = userRepository.findByUsername(userRequestDto.getUsername());
-//        if (userOptional.isPresent()) {
-//            throw new UserException("해당 이메일이 이미 존재합니다.", HttpStatus.BAD_REQUEST, null);
-//        }
+        User foundUser = userRepository.findByUsername(userRequestDto.getUsername());
+        if (foundUser != null) {
+            throw new UserException("해당 이메일이 이미 존재합니다.", HttpStatus.BAD_REQUEST, null);
+        }
         String encodedPassword = encoder.encode(userRequestDto.getPassword()); // 230726 추가
         userRequestDto.setPassword(encodedPassword);
         userRequestDto.setPassword(userRequestDto.getPassword());
