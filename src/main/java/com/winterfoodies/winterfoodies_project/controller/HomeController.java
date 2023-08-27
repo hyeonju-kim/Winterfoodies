@@ -78,6 +78,7 @@
             String password = loginRequestDto.getPassword();
             String username = loginRequestDto.getUsername();
             User retrievedUser = userRepository.findByUsername(username);
+            log.info("retrievedUser = {}", retrievedUser);
 
             if (retrievedUser == null) {
                 throw new UserException("가입되지 않은 이메일입니다.", HttpStatus.BAD_REQUEST, null);
@@ -86,6 +87,7 @@
 
             // 조회한 비밀번호
             String foundPw = retrievedUser.getPassword();
+            log.info("foundPw = {}", foundPw);
 
             //비밀번호 같은지 여부 파악
             if (!encoder.matches(password, foundPw)) {
