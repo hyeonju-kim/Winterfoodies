@@ -1,5 +1,6 @@
 package com.winterfoodies.winterfoodies_project.service;
 
+import com.winterfoodies.winterfoodies_project.dto.product.ProductResponseDto;
 import com.winterfoodies.winterfoodies_project.dto.review.ReviewDto;
 import com.winterfoodies.winterfoodies_project.dto.store.StoreMainDto;
 import com.winterfoodies.winterfoodies_project.dto.store.StoreResponseDto;
@@ -8,6 +9,9 @@ import com.winterfoodies.winterfoodies_project.dto.user.UserResponseDto;
 import java.util.List;
 
 public interface MainPageService {
+    // 상품명 목록만 제공하는 API
+    public List<ProductResponseDto> getProductList();
+
     // 메인 페이지 - 위치 정보 가져오기
     public List<StoreResponseDto> getNearbyStores(double latitude, double longitude);
 

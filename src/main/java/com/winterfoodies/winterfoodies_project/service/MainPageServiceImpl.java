@@ -1,5 +1,6 @@
 package com.winterfoodies.winterfoodies_project.service;
 
+import com.winterfoodies.winterfoodies_project.dto.product.ProductDto;
 import com.winterfoodies.winterfoodies_project.dto.product.ProductResponseDto;
 import com.winterfoodies.winterfoodies_project.dto.review.ReviewDto;
 import com.winterfoodies.winterfoodies_project.dto.store.StoreMainDto;
@@ -25,6 +26,25 @@ public class MainPageServiceImpl implements MainPageService{
     private final ReviewRepository reviewRepository;
     private final StoreRepository storeRepository;
     private final StoreProductRepository storeProductRepository;
+    private final ProductRepository productRepository;
+
+
+    // 가게명 다 가져오기
+    @Override
+    public List<ProductResponseDto> getProductList() {
+        List<Product> foundProduct = productRepository.findAll();
+        List<ProductResponseDto> productResponseDtoList = new ArrayList<>();
+
+        for (Product product : foundProduct) {
+            ProductResponseDto productResponseDto = new ProductResponseDto();
+            productResponseDto.setId(product.getId());
+            productResponseDto.setProductName(product.getName());
+            productResponseDtoList.add(productResponseDto);
+        }
+
+
+        return productResponseDtoList;
+    }
 
     // jwt 토큰으로 현재 인증된 사용자의 Authentication 객체에서 이름 가져오기
     public String getUsernameFromAuthentication() {
@@ -43,6 +63,7 @@ public class MainPageServiceImpl implements MainPageService{
         User foundUser = userRepository.findByUsername(getUsernameFromAuthentication());
         return foundUser.getId();
     }
+
 
     // 메인페이지 - 나와 가까운 가게 목록 보이기
     @Override

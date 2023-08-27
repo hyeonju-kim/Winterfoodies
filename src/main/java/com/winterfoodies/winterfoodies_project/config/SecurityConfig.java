@@ -41,7 +41,7 @@ public class  SecurityConfig extends WebSecurityConfigurerAdapter {
             "/vendor/**",
             "/img/**",
             "/store-img/**",
-//            "/api/mypage",
+            "/api/mypage", // 주석을 해야하나 말아야하나..
             "/h2-console/**",
             "/api/login"
     };

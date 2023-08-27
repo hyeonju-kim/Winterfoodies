@@ -1,5 +1,6 @@
 package com.winterfoodies.winterfoodies_project.controller;
 
+import com.winterfoodies.winterfoodies_project.dto.product.ProductResponseDto;
 import com.winterfoodies.winterfoodies_project.dto.store.StoreMainDto;
 import com.winterfoodies.winterfoodies_project.dto.store.StoreResponseDto;
 import com.winterfoodies.winterfoodies_project.dto.review.ReviewDto;
@@ -18,6 +19,13 @@ import java.util.List;
 @RequestMapping("/api/main")
 public class MainPageController {
     private final MainPageService mainPageService; //서비스 클래스를 직접 주입받지 말고, 서비스 인터페이스를 주입받자
+
+    // 상품명 목록만 제공하는 API
+    @GetMapping("/productList")
+    @ApiOperation(value = "상품명 모두 보여주기")
+    public List<ProductResponseDto> storeList() {
+        return mainPageService.getProductList();
+    }
 
     // 1. 메인페이지 (나와 가장 가까운 가게 - 가게명만) - 로그인 하면 바로 보이는 화면
     @GetMapping
