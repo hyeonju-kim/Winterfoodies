@@ -42,6 +42,7 @@
     import java.util.Optional;
     import java.util.concurrent.TimeUnit;
 
+    @CrossOrigin
     @RequiredArgsConstructor
     @RestController
     @Slf4j
