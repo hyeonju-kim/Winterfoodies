@@ -130,16 +130,36 @@ public class AppRunner implements ApplicationRunner {
         product.setPrice(1500L);
 
         Product product2 = new Product();
-        product2.setName("델리만쥬");
+        product2.setName("어묵");
         product2.setPrice(3000L);
 
         Product product3 = new Product();
-        product3.setName("다코야끼");
+        product3.setName("군밤");
         product3.setPrice(4000L);
 
         Product product4 = new Product();
         product4.setName("호떡");
         product4.setPrice(2000L);
+
+        Product product5 = new Product();
+        product5.setName("계란빵");
+        product5.setPrice(1500L);
+
+        Product product6 = new Product();
+        product6.setName("군고구마");
+        product6.setPrice(1500L);
+
+        Product product7 = new Product();
+        product7.setName("다코야키");
+        product7.setPrice(1500L);
+
+        Product product8 = new Product();
+        product8.setName("호두과자");
+        product8.setPrice(1500L);
+
+        Product product9 = new Product();
+        product9.setName("국화빵");
+        product9.setPrice(1500L);
 
         productRepository.save(product);
         productRepository.save(product2);
