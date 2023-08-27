@@ -165,6 +165,11 @@ public class AppRunner implements ApplicationRunner {
         productRepository.save(product2);
         productRepository.save(product3);
         productRepository.save(product4);
+        productRepository.save(product5);
+        productRepository.save(product6);
+        productRepository.save(product7);
+        productRepository.save(product8);
+        productRepository.save(product9);
 
         //가게에 상품 생성 후 연결
         StoreProduct storeProduct = new StoreProduct();
