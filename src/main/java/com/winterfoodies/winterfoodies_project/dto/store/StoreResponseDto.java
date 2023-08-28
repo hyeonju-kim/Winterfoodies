@@ -24,6 +24,7 @@ public class StoreResponseDto {
     private String info;
     private String roadCodeNo;
     private Long avergeRating; // 평균 별점
+    private Long orders; // 판매량
 
     private String officialCodeNo;
 

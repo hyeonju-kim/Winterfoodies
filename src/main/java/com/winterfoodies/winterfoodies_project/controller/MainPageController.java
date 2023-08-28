@@ -71,7 +71,6 @@ public class MainPageController {
     @ApiOperation(value = "가게 상세 조회(메뉴)")
     public StoreMainDto storeDetail(@PathVariable Long storeId) {
         return mainPageService.getStoreProducts(storeId);
-
     }
 
     // 6. 가게 상세 조회 (가게정보)
