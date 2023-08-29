@@ -22,7 +22,7 @@ public class StoreDto {
     private String detailAddress;
     private String info;
     private String roadCodeNo;
-    private Long avergeRating; // 평균 별점
+    private Long averageRating; // 평균 별점
 
     public StoreDto() {
 
@@ -32,14 +32,14 @@ public class StoreDto {
     public StoreDto(StoreRequestDto requestDto) {
         this.name = requestDto.getName();
         this.basicAddress = requestDto.getBasicAddress();
-        this.avergeRating = requestDto.getAvergeRating();
+        this.averageRating = requestDto.getAverageRating();
     }
 
     // repository -> service
     public StoreDto(Store store) {
         this.name = store.getStoreDetail().getName();
         this.basicAddress = store.getStoreDetail().getBasicAddress();
-        this.avergeRating = store.getStoreDetail().getAverageRating();
+        this.averageRating = store.getStoreDetail().getAverageRating();
     }
 
     // UserDto -> UserResponseDto (Dto에서 responseDto로 변환해준다)
@@ -48,7 +48,7 @@ public class StoreDto {
         storeResponseDto.setId(this.id);
         storeResponseDto.setName(this.name);
         storeResponseDto.setBasicAddress(this.basicAddress);
-        storeResponseDto.setAvergeRating(this.avergeRating);
+        storeResponseDto.setAverageRating(this.averageRating);
         return storeResponseDto;
     }
 }

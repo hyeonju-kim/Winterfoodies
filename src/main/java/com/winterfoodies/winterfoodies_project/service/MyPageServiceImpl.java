@@ -96,7 +96,7 @@ public class MyPageServiceImpl implements MypageService{
             storeResponseDto.setId(id);
             storeResponseDto.setName(foundStore.get().getStoreDetail().getName());
             storeResponseDto.setBasicAddress(foundStore.get().getStoreDetail().getBasicAddress());
-            storeResponseDto.setAvergeRating(foundStore.get().getStoreDetail().getAverageRating());
+            storeResponseDto.setAverageRating(foundStore.get().getStoreDetail().getAverageRating());
 
             storeResponseDtoList.add(storeResponseDto);
         }

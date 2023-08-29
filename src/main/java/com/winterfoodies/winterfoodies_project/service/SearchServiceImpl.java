@@ -29,7 +29,7 @@ public class SearchServiceImpl implements SearchService{
             System.out.println("storeId======" + store.getId());
             storeDto.setName(store.getStoreDetail().getName());
             storeDto.setBasicAddress(store.getStoreDetail().getBasicAddress());
-            storeDto.setAvergeRating(store.getStoreDetail().getAverageRating());
+            storeDto.setAverageRating(store.getStoreDetail().getAverageRating());
 
             storeDtoList.add(storeDto);
         }
@@ -47,7 +47,7 @@ public class SearchServiceImpl implements SearchService{
             storeDto.setId(store.getId());
             storeDto.setName(store.getStoreDetail().getName());
             storeDto.setBasicAddress(store.getStoreDetail().getBasicAddress());
-            storeDto.setAvergeRating(store.getStoreDetail().getAverageRating());
+            storeDto.setAverageRating(store.getStoreDetail().getAverageRating());
 
             storeDtoList.add(storeDto);
         }

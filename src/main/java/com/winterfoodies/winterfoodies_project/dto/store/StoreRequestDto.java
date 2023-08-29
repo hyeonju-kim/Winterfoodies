@@ -42,6 +42,6 @@ public class StoreRequestDto {
 
     private double longitude;
 
-    private Long avergeRating; // 평균 별점
+    private Long averageRating; // 평균 별점
 
 }

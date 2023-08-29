@@ -17,7 +17,7 @@ class JasyptConfigTest { // public제거
 
     @Test
     public void encryptDecryptTest() {
-        String text = "HAHA"; // 암호화 대상 평문
+        String text = "haha"; // 암호화 대상 평문
 
 
         StandardPBEStringEncryptor jasypt = new StandardPBEStringEncryptor();

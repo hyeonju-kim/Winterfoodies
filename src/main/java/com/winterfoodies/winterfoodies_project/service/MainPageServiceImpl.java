@@ -99,7 +99,7 @@ public class MainPageServiceImpl implements MainPageService{
                     storeResponseDto.setId(store.getId());
                     storeResponseDto.setName(store.getStoreDetail().getName());
                     storeResponseDto.setBasicAddress(store.getStoreDetail().getBasicAddress());
-                    storeResponseDto.setAvergeRating(store.getStoreDetail().getAverageRating());
+                    storeResponseDto.setAverageRating(store.getStoreDetail().getAverageRating());
                     nearbyStoreDtoList.add(storeResponseDto);
                 }
             }
@@ -118,7 +118,7 @@ public class MainPageServiceImpl implements MainPageService{
             storeResponseDto.setId(store.getId());
             storeResponseDto.setName(store.getStoreDetail().getName());
             storeResponseDto.setBasicAddress(store.getStoreDetail().getBasicAddress());
-            storeResponseDto.setAvergeRating(store.getStoreDetail().getAverageRating());
+            storeResponseDto.setAverageRating(store.getStoreDetail().getAverageRating());
 
             storeBySalesStoreList.add(storeResponseDto);
         }
@@ -136,7 +136,7 @@ public class MainPageServiceImpl implements MainPageService{
             storeResponseDto.setId(store.getId());
             storeResponseDto.setName(store.getStoreDetail().getName());
             storeResponseDto.setBasicAddress(store.getStoreDetail().getBasicAddress());
-            storeResponseDto.setAvergeRating(store.getStoreDetail().getAverageRating());
+            storeResponseDto.setAverageRating(store.getStoreDetail().getAverageRating());
 
             storeByReiviewsStoreList.add(storeResponseDto);
         }
