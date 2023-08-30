@@ -75,35 +75,35 @@ public class MainPageController {
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-    // 5. 가게 상세 조회 (메뉴 및 인기메뉴)
+    // 6. 가게 상세 조회 (메뉴 및 인기메뉴)
     @GetMapping("/{storeId}")
     @ApiOperation(value = "가게 상세 조회(메뉴)")
     public StoreMainDto storeDetail(@PathVariable Long storeId) {
         return mainPageService.getStoreProducts(storeId);
     }
 
-    // 6. 가게 상세 조회 (가게정보)
+    // 7. 가게 상세 조회 (가게정보)
     @GetMapping("/{storeId}/info")
     @ApiOperation(value = "가게 상세 조회(가게정보)")
     public StoreResponseDto storeDetailInfo(@PathVariable Long storeId) {
         return mainPageService.getStoreDetails(storeId);
     }
 
-    // 7. 가게 상세 조회(리뷰)
+    // 8. 가게 상세 조회(리뷰)
     @GetMapping("/{storeId}/review")
     @ApiOperation(value = "가게 상세 조회(리뷰)")
     public List<ReviewDto> storeDetailReview(@PathVariable Long storeId) {
         return mainPageService.getStoreReviews(storeId);
     }
 
-    // 8. 가게 찜하기
+    //9. 가게 찜하기
     @PostMapping("/{storeId}/like")
     @ApiOperation(value = "가게 찜하기")
     public UserResponseDto addFavoriteStore(@PathVariable("storeId") Long storeId) {
         return mainPageService.addFavoriteStore(storeId);
     }
 
-    // 9. 가게 찜하기 취소
+    // 10. 가게 찜하기 취소
     @PutMapping("/{storeId}/like")
     @ApiOperation(value = "가게 찜하기 취소")
     public UserResponseDto revokeFavoriteStore(@PathVariable("storeId") Long storeId) {

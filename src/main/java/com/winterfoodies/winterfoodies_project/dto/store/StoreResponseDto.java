@@ -26,6 +26,8 @@ public class StoreResponseDto {
     private Long averageRating; // 평균 별점
     private Long orders; // 판매량
     private Long countReviews; // 리뷰개수
+    private double latitude;
+    private double longitude;
 
     private String officialCodeNo;
 

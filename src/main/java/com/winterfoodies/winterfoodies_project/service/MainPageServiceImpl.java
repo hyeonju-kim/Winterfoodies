@@ -66,7 +66,7 @@ public class MainPageServiceImpl implements MainPageService{
     }
 
 
-    // 메인페이지 - 나와 가까운 가게 목록 보이기
+    // 1. 메인페이지 - 나와 가까운 가게 목록 보이기
     @Override
     public List<StoreResponseDto> getNearbyStores(double latitude, double longitude) {
         double radius = 2.0; // 검색 반경 설정 (예: 2.0km)
@@ -84,7 +84,7 @@ public class MainPageServiceImpl implements MainPageService{
         return nearbyStoreDtoList;
     }
 
-    // 메뉴별, 가까운순별 가게목록 - 가게명, 위치, 평점
+    // 2. 메뉴별, 가까운순별 가게목록 - 가게명, 위치, 평점
     @Override
     public List<StoreResponseDto> getNearbyStores2(Long productId, double latitude, double longitude) {
         double radius = 2.0; // 검색 반경 설정 (예: 2.0km)
@@ -101,6 +101,10 @@ public class MainPageServiceImpl implements MainPageService{
                     storeResponseDto.setName(store.getStoreDetail().getName());
                     storeResponseDto.setBasicAddress(store.getStoreDetail().getBasicAddress());
                     storeResponseDto.setAverageRating(store.getStoreDetail().getAverageRating());
+                    storeResponseDto.setLatitude(store.getStoreDetail().getLatitude());
+                    storeResponseDto.setLongitude(store.getStoreDetail().getLongitude());
+
+
                     nearbyStoreDtoList.add(storeResponseDto);
                 }
             }
@@ -108,7 +112,7 @@ public class MainPageServiceImpl implements MainPageService{
         return nearbyStoreDtoList;
     }
 
-    // 메뉴별, 인기순(판매순)별 가게목록
+    // 3. 메뉴별, 인기순(판매순)별 가게목록
     @Override
     public List<StoreResponseDto> getStoresSortedByMenuSales(Long productId) {
 
@@ -128,7 +132,7 @@ public class MainPageServiceImpl implements MainPageService{
         return storeBySalesStoreList;
     }
 
-    // 메뉴별, 리뷰순 가게목록
+    // 4. 메뉴별, 리뷰순 가게목록
     @Override
     public List<StoreResponseDto> getStoresSortedByReiviews(Long productId) {
         List<Store> storeByReviews = storeRepository.getStoreByReviewsByProductId(productId);
@@ -149,7 +153,7 @@ public class MainPageServiceImpl implements MainPageService{
         return storeByReiviewsStoreList;
     }
 
-    // 메뉴별, 별점순 가게목록 - 230830추가
+    // 5. 메뉴별, 별점순 가게목록 - 230830추가
     @Override
     public List<StoreResponseDto> getStoreByAverageRating(Long productId) {
         List<Store> storeByAverageRating = storeRepository.getStoreByAverageRatingByProductId(productId);
@@ -169,7 +173,7 @@ public class MainPageServiceImpl implements MainPageService{
 
 
 
-    //  가게 상세 조회 (메뉴 및 인기간식)
+    //  6. 가게 상세 조회 (메뉴 및 인기간식)
     @Override
     public StoreMainDto getStoreProducts(Long storeId) {
         StoreMainDto storeMainDto = new StoreMainDto();
@@ -205,7 +209,7 @@ public class MainPageServiceImpl implements MainPageService{
         return storeMainDto;
     }
 
-    // 가게 상세 조회 (가게정보)
+    // 7. 가게 상세 조회 (가게정보)
     @Override
     public StoreResponseDto getStoreDetails(Long storeId) {
         Optional<Store> optionalStore = storeRepository.findById(storeId);
@@ -220,7 +224,7 @@ public class MainPageServiceImpl implements MainPageService{
         return storeResponseDto;
     }
 
-    // 가게 상세 조회(리뷰)
+    // 8. 가게 상세 조회(리뷰)
     @Override
     public List<ReviewDto> getStoreReviews(Long storeId) {
 
@@ -240,7 +244,7 @@ public class MainPageServiceImpl implements MainPageService{
 
     }
 
-    // 가게 찜하기
+    // 9. 가게 찜하기
     @Override
     public UserResponseDto addFavoriteStore(Long storeId) {
         FavoriteStore favoriteStore = new FavoriteStore();
@@ -253,7 +257,7 @@ public class MainPageServiceImpl implements MainPageService{
         return userDto;
     }
 
-    // 가게 찜하기 취소
+    // 10. 가게 찜하기 취소
     @Override
     public UserResponseDto revokeFavoriteStore(Long storeId) {
         favoriteStoreRepository.deleteById(storeId);
