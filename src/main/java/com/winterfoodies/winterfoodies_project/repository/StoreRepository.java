@@ -18,6 +18,12 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
     List<Store> findNearbyStores(@Param("latitude") double latitude, @Param("longitude") double longitude, @Param("radius") double radius);
 
 
+    // 상품별로 가까운 가게 가져오기 (2중조인) -230830추가
+    @Query("SELECT s FROM Store s JOIN s.storeDetail sd JOIN s.storeProducts sp WHERE " +
+            "sp.product.id = :productId AND " + // productId에 해당하는 것만 가져오도록
+            "6371 * acos(cos(radians(:latitude)) * cos(radians(sd.latitude)) * cos(radians(sd.longitude) - radians(:longitude)) + sin(radians(:latitude)) * sin(radians(sd.latitude))) < :radius")
+    List<Store> findNearbyStoresByProductId(@Param("productId") Long productId, @Param("latitude") double latitude, @Param("longitude") double longitude, @Param("radius") double radius);
+
 
 //    // 판매량 순으로 정렬하여 가게목록 가져오기 (신천3주문 - 소새울2주문 - 대야1주문)
 //    @Query("SELECT s FROM Store s JOIN s.orders o GROUP BY s.id ORDER BY SUM(o.size) DESC")
@@ -28,16 +34,22 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
 //    List<Store> getStoreByReviews();
 
     // 인기순(판매량 순)으로 정렬하여 가게목록 가져오기 - 쿼리 삭제하고 프론트에서 처리하기로 함 8/26
-    @Query("SELECT s FROM Store s JOIN s.orders o GROUP BY s.id")
-    List<Store> getStoresSortedByMenuSales();
+    @Query("SELECT s FROM Store s JOIN s.orders o JOIN s.storeProducts sp WHERE "+
+            "sp.product.id = :productId " + // productId에 해당하는 것만 가져오도록
+            "GROUP BY s.id")
+    List<Store> getStoresSortedByMenuSalesByProductId(@Param("productId") Long productId);
 
     // 상품별, 리뷰순으로 정렬하여 가게목록 가져오기  - 쿼리 삭제하고 프론트에서 처리하기로 함 8/26
-    @Query("SELECT s FROM Store s JOIN s.reviews r GROUP BY s.id")
-    List<Store> getStoreByReviews();
+    @Query("SELECT s FROM Store s JOIN s.reviews r JOIN s.storeProducts sp WHERE "+
+            "sp.product.id = :productId  " + // productId에 해당하는 것만 가져오도록
+            "GROUP BY s.id")
+    List<Store> getStoreByReviewsByProductId(@Param("productId") Long productId);
 
     // 별점순으로 가게목록 가져오기 - 230830 추가
-    @Query("SELECT s FROM Store s JOIN s.storeDetail sd ORDER BY sd.averageRating")
-    List<Store> getStoreByAverageRating();
+    @Query("SELECT s FROM Store s JOIN s.storeDetail sd JOIN s.storeProducts sp WHERE "+
+            "sp.product.id = :productId  " + // productId에 해당하는 것만 가져오도록
+            "ORDER BY sd.averageRating")
+    List<Store> getStoreByAverageRatingByProductId(@Param("productId") Long productId);
 
 
 

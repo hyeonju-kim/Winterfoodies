@@ -88,7 +88,7 @@ public class MainPageServiceImpl implements MainPageService{
     public List<StoreResponseDto> getNearbyStores2(Long productId, double latitude, double longitude) {
         double radius = 2.0; // 검색 반경 설정 (예: 2.0km)
 
-        List<Store> nearbyStores = storeRepository.findNearbyStores(latitude, longitude, radius);
+        List<Store> nearbyStores = storeRepository.findNearbyStoresByProductId(productId, latitude, longitude, radius);
         List<StoreResponseDto> nearbyStoreDtoList = new ArrayList<>();
 
         for (Store store : nearbyStores) {
@@ -111,7 +111,7 @@ public class MainPageServiceImpl implements MainPageService{
     @Override
     public List<StoreResponseDto> getStoresSortedByMenuSales(Long productId) {
 
-        List<Store> storesSortedByMenuSales = storeRepository.getStoresSortedByMenuSales();
+        List<Store> storesSortedByMenuSales = storeRepository.getStoresSortedByMenuSalesByProductId(productId);
         List<StoreResponseDto> storeBySalesStoreList = new ArrayList<>();
         for (Store store : storesSortedByMenuSales) {
             StoreResponseDto storeResponseDto = new StoreResponseDto();
@@ -128,7 +128,7 @@ public class MainPageServiceImpl implements MainPageService{
     // 메뉴별, 리뷰순 가게목록
     @Override
     public List<StoreResponseDto> getStoresSortedByReiviews(Long productId) {
-        List<Store> storeByReviews = storeRepository.getStoreByReviews(); // TODO productId넣기!
+        List<Store> storeByReviews = storeRepository.getStoreByReviewsByProductId(productId);
         List<StoreResponseDto> storeByReiviewsStoreList = new ArrayList<>();
 
         for (Store store : storeByReviews) {
@@ -146,7 +146,7 @@ public class MainPageServiceImpl implements MainPageService{
     // 메뉴별, 별점순 가게목록 - 230830추가
     @Override
     public List<StoreResponseDto> getStoreByAverageRating(Long productId) {
-        List<Store> storeByAverageRating = storeRepository.getStoreByAverageRating();
+        List<Store> storeByAverageRating = storeRepository.getStoreByAverageRatingByProductId(productId);
         List<StoreResponseDto> storeByAverageRatingList = new ArrayList<>();
 
         for (Store store : storeByAverageRating) {
