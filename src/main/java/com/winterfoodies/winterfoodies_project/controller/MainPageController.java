@@ -53,22 +53,28 @@ public class MainPageController {
     // 3. 메뉴별, 인기순(판매순)별 가게목록
     @GetMapping("/{productId}/popular")
     @ApiOperation(value = "메뉴별, 인기순(판매량순)별 가게목록")
-    public List<StoreResponseDto> popularList(@PathVariable("productId") Long productId) {
-        return mainPageService.getStoresSortedByMenuSales(productId);
+    public List<StoreResponseDto> popularList(@PathVariable("productId") Long productId,
+                                              @RequestParam(required = false) Double latitude,
+                                              @RequestParam(required = false) Double longitude) {
+        return mainPageService.getStoresSortedByMenuSales(productId, latitude, longitude);
     }
 
     // 4. 메뉴별, 리뷰순별 가게목록
     @GetMapping("/{productId}/reviewstore")
     @ApiOperation(value = "메뉴별, 리뷰순별 가게목록")
-    public List<StoreResponseDto> reviewList(@PathVariable("productId") Long productId) {
-        return mainPageService.getStoresSortedByReiviews(productId);
+    public List<StoreResponseDto> reviewList(@PathVariable("productId") Long productId,
+                                             @RequestParam(required = false) Double latitude,
+                                             @RequestParam(required = false) Double longitude) {
+        return mainPageService.getStoresSortedByReiviews(productId, latitude, longitude);
     }
 
     // 5. 메뉴별, 별점순 가게목록
     @GetMapping("/{productId}/averageRating")
     @ApiOperation(value = "메뉴별, 평점별 가게목록")
-    public List<StoreResponseDto> ratingList(@PathVariable("productId") Long productId) {
-        return mainPageService.getStoreByAverageRating(productId);
+    public List<StoreResponseDto> ratingList(@PathVariable("productId") Long productId,
+                                             @RequestParam(required = false) Double latitude,
+                                             @RequestParam(required = false) Double longitude) {
+        return mainPageService.getStoreByAverageRating(productId, latitude, longitude);
     }
 
 

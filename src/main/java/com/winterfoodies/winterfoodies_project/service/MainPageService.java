@@ -19,13 +19,13 @@ public interface MainPageService {
     public List<StoreResponseDto> getNearbyStores2(Long productId, double latitude, double longitude);
 
     // 메뉴별, 인기순(판매순)별 가게목록
-    public List<StoreResponseDto> getStoresSortedByMenuSales(Long productId);
+    public List<StoreResponseDto> getStoresSortedByMenuSales(Long productId, double latitude, double longitude);
 
     // 메뉴별, 리뷰순 가게목록
-    public List<StoreResponseDto> getStoresSortedByReiviews(Long productId);
+    public List<StoreResponseDto> getStoresSortedByReiviews(Long productId, double latitude, double longitude);
 
     // 별점 순 가게목록 - 230830 추가
-    public List<StoreResponseDto> getStoreByAverageRating(Long productId);
+    public List<StoreResponseDto> getStoreByAverageRating(Long productId, double latitude, double longitude);
 
     //  가게 상세 조회 (메뉴 및 인기간식)
     StoreMainDto getStoreProducts(Long storeId);

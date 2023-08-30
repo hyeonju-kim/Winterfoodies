@@ -79,6 +79,8 @@ public class MainPageServiceImpl implements MainPageService{
             storeResponseDto.setId(store.getId());
             storeResponseDto.setName(store.getStoreDetail().getName());
             nearbyStoreDtoList.add(storeResponseDto);
+            storeResponseDto.setLatitude(store.getStoreDetail().getLatitude());
+            storeResponseDto.setLongitude(store.getStoreDetail().getLongitude());
         }
 
         return nearbyStoreDtoList;
@@ -87,7 +89,7 @@ public class MainPageServiceImpl implements MainPageService{
     // 2. 메뉴별, 가까운순별 가게목록 - 가게명, 위치, 평점
     @Override
     public List<StoreResponseDto> getNearbyStores2(Long productId, double latitude, double longitude) {
-        double radius = 2.0; // 검색 반경 설정 (예: 2.0km)
+        double radius = 2.0; // 검색 반경 설정 (2.0km)
 
         List<Store> nearbyStores = storeRepository.findNearbyStoresByProductId(productId, latitude, longitude, radius);
         List<StoreResponseDto> nearbyStoreDtoList = new ArrayList<>();
@@ -114,9 +116,10 @@ public class MainPageServiceImpl implements MainPageService{
 
     // 3. 메뉴별, 인기순(판매순)별 가게목록
     @Override
-    public List<StoreResponseDto> getStoresSortedByMenuSales(Long productId) {
+    public List<StoreResponseDto> getStoresSortedByMenuSales(Long productId, double latitude, double longitude) {
+        double radius = 4.0; // 검색 반경 설정
 
-        List<Store> storesSortedByMenuSales = storeRepository.getStoresSortedByMenuSalesByProductId(productId);
+        List<Store> storesSortedByMenuSales = storeRepository.getStoresSortedByMenuSalesByProductId(productId, latitude, longitude, radius);
         List<StoreResponseDto> storeBySalesStoreList = new ArrayList<>();
         for (Store store : storesSortedByMenuSales) {
             StoreResponseDto storeResponseDto = new StoreResponseDto();
@@ -126,6 +129,8 @@ public class MainPageServiceImpl implements MainPageService{
             storeResponseDto.setAverageRating(store.getStoreDetail().getAverageRating());
             Long countOrders = orderRepository.countByStoreId(store.getId());
             storeResponseDto.setOrders(countOrders);
+            storeResponseDto.setLatitude(store.getStoreDetail().getLatitude());
+            storeResponseDto.setLongitude(store.getStoreDetail().getLongitude());
 
             storeBySalesStoreList.add(storeResponseDto);
         }
@@ -134,8 +139,9 @@ public class MainPageServiceImpl implements MainPageService{
 
     // 4. 메뉴별, 리뷰순 가게목록
     @Override
-    public List<StoreResponseDto> getStoresSortedByReiviews(Long productId) {
-        List<Store> storeByReviews = storeRepository.getStoreByReviewsByProductId(productId);
+    public List<StoreResponseDto> getStoresSortedByReiviews(Long productId, double latitude, double longitude) {
+        double radius = 4.0; // 검색 반경 설정
+        List<Store> storeByReviews = storeRepository.getStoreByReviewsByProductId(productId, latitude, longitude, radius);
         List<StoreResponseDto> storeByReiviewsStoreList = new ArrayList<>();
 
         for (Store store : storeByReviews) {
@@ -145,8 +151,9 @@ public class MainPageServiceImpl implements MainPageService{
             storeResponseDto.setBasicAddress(store.getStoreDetail().getBasicAddress());
             storeResponseDto.setAverageRating(store.getStoreDetail().getAverageRating());
             Long countReviews = reviewRepository.countByStoreId(store.getId());
-            System.out.println("=======" + countReviews);
             storeResponseDto.setCountReviews(countReviews);
+            storeResponseDto.setLatitude(store.getStoreDetail().getLatitude());
+            storeResponseDto.setLongitude(store.getStoreDetail().getLongitude());
 
             storeByReiviewsStoreList.add(storeResponseDto);
         }
@@ -155,8 +162,9 @@ public class MainPageServiceImpl implements MainPageService{
 
     // 5. 메뉴별, 별점순 가게목록 - 230830추가
     @Override
-    public List<StoreResponseDto> getStoreByAverageRating(Long productId) {
-        List<Store> storeByAverageRating = storeRepository.getStoreByAverageRatingByProductId(productId);
+    public List<StoreResponseDto> getStoreByAverageRating(Long productId, double latitude, double longitude) {
+        double radius = 4.0; // 검색 반경 설정
+        List<Store> storeByAverageRating = storeRepository.getStoreByAverageRatingByProductId(productId, latitude, longitude, radius);
         List<StoreResponseDto> storeByAverageRatingList = new ArrayList<>();
 
         for (Store store : storeByAverageRating) {
@@ -165,6 +173,8 @@ public class MainPageServiceImpl implements MainPageService{
             storeResponseDto.setName(store.getStoreDetail().getName());
             storeResponseDto.setBasicAddress(store.getStoreDetail().getBasicAddress());
             storeResponseDto.setAverageRating(store.getStoreDetail().getAverageRating());
+            storeResponseDto.setLatitude(store.getStoreDetail().getLatitude());
+            storeResponseDto.setLongitude(store.getStoreDetail().getLongitude());
 
             storeByAverageRatingList.add(storeResponseDto);
         }

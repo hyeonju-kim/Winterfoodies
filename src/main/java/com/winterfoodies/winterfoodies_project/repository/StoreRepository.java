@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface StoreRepository extends JpaRepository<Store, Long> {
 
-    // 가까운 가게 가져오기 . JPQL 사용
+    // 1. 가까운 가게 가져오기 . JPQL 사용
     // H2 데이터베이스에서 주어진 반경 내에 있는 가게를 조회. Haversine 공식을 사용하여 두 지점 간의 거리를 계산하고, 6371을 곱해 거리를 킬로미터 단위로 변환.
     // 1킬로미터 이내에 있는 모든 가게 가져옴
     @Query("SELECT s FROM Store s WHERE " +
@@ -18,7 +18,7 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
     List<Store> findNearbyStores(@Param("latitude") double latitude, @Param("longitude") double longitude, @Param("radius") double radius);
 
 
-    // 상품별로 가까운 가게 가져오기 (2중조인) -230830추가
+    // 2. 상품별로 가까운 가게 가져오기 (2중조인) -230830추가
     @Query("SELECT s FROM Store s JOIN s.storeDetail sd JOIN s.storeProducts sp WHERE " +
             "sp.product.id = :productId AND " + // productId에 해당하는 것만 가져오도록
             "6371 * acos(cos(radians(:latitude)) * cos(radians(sd.latitude)) * cos(radians(sd.longitude) - radians(:longitude)) + sin(radians(:latitude)) * sin(radians(sd.latitude))) < :radius")
@@ -33,23 +33,45 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
 //    @Query("SELECT s FROM Store s JOIN s.reviews r GROUP BY s.id ORDER BY SUM(r.size) DESC ")
 //    List<Store> getStoreByReviews();
 
-    // 인기순(판매량 순)으로 정렬하여 가게목록 가져오기 - 쿼리 삭제하고 프론트에서 처리하기로 함 8/26
-    @Query("SELECT s FROM Store s JOIN s.orders o JOIN s.storeProducts sp WHERE "+
-            "sp.product.id = :productId " + // productId에 해당하는 것만 가져오도록
-            "GROUP BY s.id")
-    List<Store> getStoresSortedByMenuSalesByProductId(@Param("productId") Long productId);
+    // 3. 인기순(판매량 순)으로 정렬하여 가게목록 가져오기 - 쿼리 삭제하고 프론트에서 처리하기로 함 8/26
+//    @Query("SELECT s FROM Store s JOIN s.orders o JOIN s.storeProducts sp WHERE "+
+//            "sp.product.id = :productId " + // productId에 해당하는 것만 가져오도록
+//            "GROUP BY s.id")
+//    List<Store> getStoresSortedByMenuSalesByProductId(@Param("productId") Long productId);
 
-    // 상품별, 리뷰순으로 정렬하여 가게목록 가져오기  - 쿼리 삭제하고 프론트에서 처리하기로 함 8/26
-    @Query("SELECT s FROM Store s JOIN s.reviews r JOIN s.storeProducts sp WHERE "+
-            "sp.product.id = :productId  " + // productId에 해당하는 것만 가져오도록
+    @Query("SELECT s FROM Store s JOIN s.storeDetail sd JOIN s.storeProducts sp WHERE " +
+            "sp.product.id = :productId AND " + // productId에 해당하는 것만 가져오도록
+            "6371 * acos(cos(radians(:latitude)) * cos(radians(sd.latitude)) * cos(radians(sd.longitude) - radians(:longitude)) + sin(radians(:latitude)) * sin(radians(sd.latitude))) < :radius " +
             "GROUP BY s.id")
-    List<Store> getStoreByReviewsByProductId(@Param("productId") Long productId);
+    List<Store> getStoresSortedByMenuSalesByProductId(@Param("productId") Long productId, @Param("latitude") double latitude, @Param("longitude") double longitude, @Param("radius") double radius);
 
-    // 별점순으로 가게목록 가져오기 - 230830 추가
-    @Query("SELECT s FROM Store s JOIN s.storeDetail sd JOIN s.storeProducts sp WHERE "+
-            "sp.product.id = :productId  " + // productId에 해당하는 것만 가져오도록
-            "ORDER BY sd.averageRating")
-    List<Store> getStoreByAverageRatingByProductId(@Param("productId") Long productId);
+
+    // 4. 상품별, 리뷰순으로 정렬하여 가게목록 가져오기  - 쿼리 삭제하고 프론트에서 처리하기로 함 8/26
+//    @Query("SELECT s FROM Store s JOIN s.reviews r JOIN s.storeProducts sp WHERE "+
+//            "sp.product.id = :productId  " + // productId에 해당하는 것만 가져오도록
+//            "GROUP BY s.id")
+//    List<Store> getStoreByReviewsByProductId(@Param("productId") Long productId);
+
+    @Query("SELECT s FROM Store s JOIN s.storeDetail sd JOIN s.storeProducts sp JOIN s.reviews r WHERE " +
+            "sp.product.id = :productId AND " +
+            "6371 * acos(cos(radians(:latitude)) * cos(radians(sd.latitude)) * cos(radians(sd.longitude) - radians(:longitude)) + sin(radians(:latitude)) * sin(radians(sd.latitude))) < :radius " +
+            "GROUP BY s.id " +
+            "ORDER BY COUNT(r.id) DESC")
+    List<Store> getStoreByReviewsByProductId(@Param("productId") Long productId, @Param("latitude") double latitude, @Param("longitude") double longitude, @Param("radius") double radius);
+
+
+    // 5. 별점순으로 가게목록 가져오기 - 230830 추가
+//    @Query("SELECT s FROM Store s JOIN s.storeDetail sd JOIN s.storeProducts sp WHERE "+
+//            "sp.product.id = :productId  " + // productId에 해당하는 것만 가져오도록
+//            "ORDER BY sd.averageRating")
+//    List<Store> getStoreByAverageRatingByProductId(@Param("productId") Long productId);
+
+
+    @Query("SELECT s FROM Store s JOIN s.storeDetail sd JOIN s.storeProducts sp WHERE " +
+            "sp.product.id = :productId AND " +
+            "6371 * acos(cos(radians(:latitude)) * cos(radians(sd.latitude)) * cos(radians(sd.longitude) - radians(:longitude)) + sin(radians(:latitude)) * sin(radians(sd.latitude))) < :radius " +
+            "ORDER BY sd.averageRating DESC")
+    List<Store> getStoreByAverageRatingByProductId(@Param("productId") Long productId, @Param("latitude") double latitude, @Param("longitude") double longitude, @Param("radius") double radius);
 
 
 
