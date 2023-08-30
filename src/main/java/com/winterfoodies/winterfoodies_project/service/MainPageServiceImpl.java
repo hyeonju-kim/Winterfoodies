@@ -27,6 +27,7 @@ public class MainPageServiceImpl implements MainPageService{
     private final StoreRepository storeRepository;
     private final StoreProductRepository storeProductRepository;
     private final ProductRepository productRepository;
+    private final OrderRepository orderRepository;
 
 
     // 가게명 다 가져오기
@@ -119,6 +120,8 @@ public class MainPageServiceImpl implements MainPageService{
             storeResponseDto.setName(store.getStoreDetail().getName());
             storeResponseDto.setBasicAddress(store.getStoreDetail().getBasicAddress());
             storeResponseDto.setAverageRating(store.getStoreDetail().getAverageRating());
+            Long countOrders = orderRepository.countByStoreId(store.getId());
+            storeResponseDto.setOrders(countOrders);
 
             storeBySalesStoreList.add(storeResponseDto);
         }
@@ -137,6 +140,9 @@ public class MainPageServiceImpl implements MainPageService{
             storeResponseDto.setName(store.getStoreDetail().getName());
             storeResponseDto.setBasicAddress(store.getStoreDetail().getBasicAddress());
             storeResponseDto.setAverageRating(store.getStoreDetail().getAverageRating());
+            Long countReviews = reviewRepository.countByStoreId(store.getId());
+            System.out.println("=======" + countReviews);
+            storeResponseDto.setCountReviews(countReviews);
 
             storeByReiviewsStoreList.add(storeResponseDto);
         }
