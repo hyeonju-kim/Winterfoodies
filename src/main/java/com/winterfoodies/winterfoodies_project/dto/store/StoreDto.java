@@ -23,6 +23,8 @@ public class StoreDto {
     private String info;
     private String roadCodeNo;
     private Long averageRating; // 평균 별점
+    private double latitude;
+    private double longitude;
 
     public StoreDto() {
 
@@ -49,6 +51,10 @@ public class StoreDto {
         storeResponseDto.setName(this.name);
         storeResponseDto.setBasicAddress(this.basicAddress);
         storeResponseDto.setAverageRating(this.averageRating);
+        storeResponseDto.setLatitude(this.latitude);
+        storeResponseDto.setLongitude(this.longitude);
+
+
         return storeResponseDto;
     }
 }

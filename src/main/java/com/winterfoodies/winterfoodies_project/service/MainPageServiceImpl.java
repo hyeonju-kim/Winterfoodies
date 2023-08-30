@@ -192,6 +192,7 @@ public class MainPageServiceImpl implements MainPageService{
         List<StoreProduct> storeProductList = storeProductRepository.findByStoreId(storeId);
         List<ProductResponseDto> storeProductDtoList = new ArrayList<>();
 
+
         for (StoreProduct storeProduct : storeProductList) {
             ProductResponseDto productResponseDto = new ProductResponseDto();
             productResponseDto.setId(storeProduct.getId());
@@ -204,13 +205,24 @@ public class MainPageServiceImpl implements MainPageService{
 
         // 인기 메뉴 리스트 만들기
         List<StoreProduct> storeProducts = storeProductRepository.findByStoreId(storeId);
+        Store foundStore = storeRepository.getStoreById(storeId);
         List<ProductResponseDto> popularProductsDtoList = new ArrayList<>();
 
         for (StoreProduct storeProduct : storeProducts) {
             ProductResponseDto productResponseDto = new ProductResponseDto();
             productResponseDto.setProductName(storeProduct.getProduct().getName());
+            productResponseDto.setId(storeProduct.getProduct().getId());
 
             popularProductsDtoList.add(productResponseDto);
+        }
+
+        storeMainDto.setStoreName(foundStore.getStoreDetail().getName());
+        storeMainDto.setAverageRating(foundStore.getStoreDetail().getAverageRating());
+        List<FavoriteStore> favoriteStoreList = favoriteStoreRepository.findByUserId(getUserId());
+        for (FavoriteStore favoriteStore : favoriteStoreList) {
+            if (Objects.equals(favoriteStore.getStoreId(), storeId)) {
+                storeMainDto.setLike("Y");
+            }
         }
 
         storeMainDto.setProductResponseDtoList(storeProductDtoList);

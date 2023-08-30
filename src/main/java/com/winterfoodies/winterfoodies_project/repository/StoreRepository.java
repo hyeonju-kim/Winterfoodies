@@ -83,4 +83,8 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
     // 지도로 근처가게 검색 (addressNo가 같은 가게 검색)
     @Query("SELECT s FROM Store s WHERE s.storeDetail.addressNo = :addressNo")
     List<Store> searchStoresByAddressNo(@Param("addressNo") String addressNo);
+
+    ///////////////
+
+    Store getStoreById(Long id);
 }
