@@ -143,6 +143,26 @@ public class MainPageServiceImpl implements MainPageService{
         return storeByReiviewsStoreList;
     }
 
+    // 메뉴별, 별점순 가게목록 - 230830추가
+    @Override
+    public List<StoreResponseDto> getStoreByAverageRating(Long productId) {
+        List<Store> storeByAverageRating = storeRepository.getStoreByAverageRating();
+        List<StoreResponseDto> storeByAverageRatingList = new ArrayList<>();
+
+        for (Store store : storeByAverageRating) {
+            StoreResponseDto storeResponseDto = new StoreResponseDto();
+            storeResponseDto.setId(store.getId());
+            storeResponseDto.setName(store.getStoreDetail().getName());
+            storeResponseDto.setBasicAddress(store.getStoreDetail().getBasicAddress());
+            storeResponseDto.setAverageRating(store.getStoreDetail().getAverageRating());
+
+            storeByAverageRatingList.add(storeResponseDto);
+        }
+        return storeByAverageRatingList;
+    }
+
+
+
     //  가게 상세 조회 (메뉴 및 인기간식)
     @Override
     public StoreMainDto getStoreProducts(Long storeId) {

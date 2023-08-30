@@ -24,6 +24,9 @@ public interface MainPageService {
     // 메뉴별, 리뷰순 가게목록
     public List<StoreResponseDto> getStoresSortedByReiviews(Long productId);
 
+    // 별점 순 가게목록 - 230830 추가
+    public List<StoreResponseDto> getStoreByAverageRating(Long productId);
+
     //  가게 상세 조회 (메뉴 및 인기간식)
     StoreMainDto getStoreProducts(Long storeId);
 

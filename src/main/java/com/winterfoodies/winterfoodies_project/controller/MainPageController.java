@@ -63,6 +63,15 @@ public class MainPageController {
     public List<StoreResponseDto> reviewList(@PathVariable("productId") Long productId) {
         return mainPageService.getStoresSortedByReiviews(productId);
     }
+
+    // 5. 메뉴별, 별점순 가게목록
+    @GetMapping("/{productId}/averageRating")
+    @ApiOperation(value = "메뉴별, 평점별 가게목록")
+    public List<StoreResponseDto> ratingList(@PathVariable("productId") Long productId) {
+        return mainPageService.getStoreByAverageRating(productId);
+    }
+
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 

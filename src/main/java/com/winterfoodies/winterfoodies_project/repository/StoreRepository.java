@@ -35,6 +35,11 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
     @Query("SELECT s FROM Store s JOIN s.reviews r GROUP BY s.id")
     List<Store> getStoreByReviews();
 
+    // 별점순으로 가게목록 가져오기 - 230830 추가
+    @Query("SELECT s FROM Store s JOIN s.storeDetail sd ORDER BY sd.averageRating")
+    List<Store> getStoreByAverageRating();
+
+
 
     // ==================== 검색 ======================
     // 상호명 검색
