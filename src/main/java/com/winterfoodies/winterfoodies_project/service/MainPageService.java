@@ -27,11 +27,11 @@ public interface MainPageService {
     // 별점 순 가게목록 - 230830 추가
     public List<StoreResponseDto> getStoreByAverageRating(Long productId, double latitude, double longitude);
 
-    //  가게 상세 조회 (메뉴 및 인기간식)
+    //  가게 상세 조회 (메뉴 및 인기간식 및 가게정보)
     StoreMainDto getStoreProducts(Long storeId);
 
-    // 가게 상세 조회 (가게정보)
-    StoreResponseDto getStoreDetails(Long storeId);
+//    // 가게 상세 조회 (가게정보)
+//    StoreResponseDto getStoreDetails(Long storeId);
 
     // 가게 상세 조회(리뷰)
     List<ReviewDto> getStoreReviews(Long storeId);

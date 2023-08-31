@@ -91,21 +91,21 @@ public class MainPageController {
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-    // 6. 가게 상세 조회 (메뉴 및 인기메뉴)
+    // 6. 가게 상세 조회 (메뉴 및 인기메뉴, 가게정보 추가)
     @GetMapping("/{storeId}")
-    @ApiOperation(value = "가게 상세 조회(메뉴)")
+    @ApiOperation(value = "가게 상세 조회(메뉴, 인기메뉴, 가게정보)")
     @ApiImplicitParam(name = "storeId", value = "가게 아이디")
     public StoreMainDto storeDetail(@PathVariable Long storeId) {
         return mainPageService.getStoreProducts(storeId);
     }
 
-    // 7. 가게 상세 조회 (가게정보)
-    @GetMapping("/{storeId}/info")
-    @ApiOperation(value = "가게 상세 조회(가게정보)")
-    @ApiImplicitParam(name = "storeId", value = "가게 아이디")
-    public StoreResponseDto storeDetailInfo(@PathVariable Long storeId) {
-        return mainPageService.getStoreDetails(storeId);
-    }
+//    // 7. 가게 상세 조회 (가게정보)
+//    @GetMapping("/{storeId}/info")
+//    @ApiOperation(value = "가게 상세 조회(가게정보)")
+//    @ApiImplicitParam(name = "storeId", value = "가게 아이디")
+//    public StoreResponseDto storeDetailInfo(@PathVariable Long storeId) {
+//        return mainPageService.getStoreDetails(storeId);
+//    }
 
     // 8. 가게 상세 조회(리뷰)
     @GetMapping("/{storeId}/review")

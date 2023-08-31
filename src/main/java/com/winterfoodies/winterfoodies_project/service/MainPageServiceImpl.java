@@ -188,7 +188,7 @@ public class MainPageServiceImpl implements MainPageService{
     public StoreMainDto getStoreProducts(Long storeId) {
         StoreMainDto storeMainDto = new StoreMainDto();
 
-        // 가게 메뉴 담는 리스트 만들기
+        // 1. 가게 메뉴 담는 리스트 만들기
         List<StoreProduct> storeProductList = storeProductRepository.findByStoreId(storeId);
         List<ProductResponseDto> storeProductDtoList = new ArrayList<>();
 
@@ -203,7 +203,7 @@ public class MainPageServiceImpl implements MainPageService{
             storeProductDtoList.add(productResponseDto);
         }
 
-        // 인기 메뉴 리스트 만들기
+        // 2. 인기 메뉴 리스트 만들기
         List<StoreProduct> storeProducts = storeProductRepository.findByStoreId(storeId);
         Store foundStore = storeRepository.getStoreById(storeId);
         List<ProductResponseDto> popularProductsDtoList = new ArrayList<>();
@@ -225,15 +225,7 @@ public class MainPageServiceImpl implements MainPageService{
             }
         }
 
-        storeMainDto.setProductResponseDtoList(storeProductDtoList);
-        storeMainDto.setPopularProductsDtoList(popularProductsDtoList);
-
-        return storeMainDto;
-    }
-
-    // 7. 가게 상세 조회 (가게정보)
-    @Override
-    public StoreResponseDto getStoreDetails(Long storeId) {
+        // 3. 가게정보 만들기 추가 -230831
         Optional<Store> optionalStore = storeRepository.findById(storeId);
         Store store = optionalStore.get();
         StoreResponseDto storeResponseDto = new StoreResponseDto();
@@ -246,8 +238,30 @@ public class MainPageServiceImpl implements MainPageService{
         storeResponseDto.setLongitude(store.getStoreDetail().getLongitude());
         storeResponseDto.setInfo(store.getStoreDetail().getInfo());
 
-        return storeResponseDto;
+        storeMainDto.setProductResponseDtoList(storeProductDtoList);
+        storeMainDto.setPopularProductsDtoList(popularProductsDtoList);
+        storeMainDto.setStoreResponseDtoList(storeResponseDto);
+
+        return storeMainDto;
     }
+
+//    // 7. 가게 상세 조회 (가게정보)
+//    @Override
+//    public StoreResponseDto getStoreDetails(Long storeId) {
+//        Optional<Store> optionalStore = storeRepository.findById(storeId);
+//        Store store = optionalStore.get();
+//        StoreResponseDto storeResponseDto = new StoreResponseDto();
+//        storeResponseDto.setName(store.getStoreDetail().getName());
+//        storeResponseDto.setBasicAddress(store.getStoreDetail().getBasicAddress());
+//        storeResponseDto.setDetailAddress(store.getStoreDetail().getDetailAddress());
+//        storeResponseDto.setOpenTime(store.getStoreDetail().getOpenTime());
+//        storeResponseDto.setCloseTime(store.getStoreDetail().getCloseTime());
+//        storeResponseDto.setLatitude(store.getStoreDetail().getLatitude());
+//        storeResponseDto.setLongitude(store.getStoreDetail().getLongitude());
+//        storeResponseDto.setInfo(store.getStoreDetail().getInfo());
+//
+//        return storeResponseDto;
+//    }
 
     // 8. 가게 상세 조회(리뷰)
     @Override
