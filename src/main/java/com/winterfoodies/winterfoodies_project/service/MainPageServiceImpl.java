@@ -237,10 +237,13 @@ public class MainPageServiceImpl implements MainPageService{
         Optional<Store> optionalStore = storeRepository.findById(storeId);
         Store store = optionalStore.get();
         StoreResponseDto storeResponseDto = new StoreResponseDto();
+        storeResponseDto.setName(store.getStoreDetail().getName());
         storeResponseDto.setBasicAddress(store.getStoreDetail().getBasicAddress());
         storeResponseDto.setDetailAddress(store.getStoreDetail().getDetailAddress());
         storeResponseDto.setOpenTime(store.getStoreDetail().getOpenTime());
         storeResponseDto.setCloseTime(store.getStoreDetail().getCloseTime());
+        storeResponseDto.setLatitude(store.getStoreDetail().getLatitude());
+        storeResponseDto.setLongitude(store.getStoreDetail().getLongitude());
         storeResponseDto.setInfo(store.getStoreDetail().getInfo());
 
         return storeResponseDto;
@@ -256,6 +259,7 @@ public class MainPageServiceImpl implements MainPageService{
         for (Review review : reviewList) {
             ReviewDto reviewDto = new ReviewDto();
             reviewDto.setId(review.getId());
+            reviewDto.setUserId(getUserId());
             reviewDto.setRating(review.getRating());
             reviewDto.setPhoto(review.getPhoto());
             reviewDto.setContent(review.getContent());
