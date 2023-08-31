@@ -24,8 +24,8 @@ public interface CartService {
     // 장바구니 특정 상품 삭제
     CartProductDto removeProductFromCart(@RequestParam Long productId, HttpServletRequest request, HttpServletResponse response);
 
-    // 장바구니 초기화
-    CartProductDto clearCart(HttpServletResponse response);
+//    // 장바구니 초기화
+//    CartProductDto clearCart(HttpServletResponse response);
 
     // 주문하기 페이지 (쿠키에서)
     OrderResponseDto getOrderConfirmPage(OrderRequestDto orderRequestDto, HttpServletRequest request);

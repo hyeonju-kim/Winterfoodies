@@ -104,13 +104,14 @@ public class CartController {
         return cartProductDto.convertToCartProductResponseDto();
     }
 
-    // 장바구니 초기화  -> 실제 앱에는 필요 없을듯.. 일단 빼자!
-    @PutMapping // 230731 Get -> Put 으로 변경
-    @ApiOperation(value = "장바구니 초기화")
-    public CartProductResponseDto clearCart(HttpServletResponse response) {
-        CartProductDto cartProductDto = cartService.clearCart(response);
-        return cartProductDto.convertToCartProductResponseDto();
-    }
+    // 230831 주석처리
+//    // 장바구니 초기화  -> 실제 앱에는 필요 없을듯.. 일단 빼자!
+//    @PutMapping // 230731 Get -> Put 으로 변경
+//    @ApiOperation(value = "장바구니 초기화")
+//    public CartProductResponseDto clearCart(HttpServletResponse response) {
+//        CartProductDto cartProductDto = cartService.clearCart(response);
+//        return cartProductDto.convertToCartProductResponseDto();
+//    }
 
     // 주문완료 페이지
     @PostMapping("/items/confirm")

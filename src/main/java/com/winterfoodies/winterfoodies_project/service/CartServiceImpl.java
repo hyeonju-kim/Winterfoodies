@@ -91,17 +91,20 @@ public class CartServiceImpl implements CartService {
         Cart cart = new Cart();
         Optional<Product> optionalProduct = productRepository.findById(id);
         Product product = optionalProduct.get();
-        CartProduct cartProduct = new CartProduct(cart, product);
-        cartProduct.setQuantity(quantity);
-        cartProduct.setTotalPrice(product.getPrice() * quantity);
-        cartProduct.setStore(storeRepository.findById(storeId).get());
-        cartProduct.setUserId(getUserId());
-        cartProductRepository.save(cartProduct);
 
-        ProductDto outProductDto = new ProductDto(product);
-        outProductDto.setMessage("장바구니에 추가되었습니다."); // [230726] TODO ProductDto하니까 이상한듯? CartDto로 바꾸던지 바꾸자
-
-        return outProductDto;
+        CartProduct byProductId = cartProductRepository.findByProductId(id);
+        if (byProductId == null) {
+            CartProduct cartProduct = new CartProduct(cart, product);
+            cartProduct.setQuantity(quantity);
+            cartProduct.setTotalPrice(product.getPrice() * quantity);
+            cartProduct.setStore(storeRepository.findById(storeId).get());
+            cartProduct.setUserId(getUserId());
+            cartProductRepository.save(cartProduct);
+            ProductDto outProductDto = new ProductDto(product);
+            outProductDto.setMessage("장바구니에 추가되었습니다."); // [230726] TODO ProductDto하니까 이상한듯? CartDto로 바꾸던지 바꾸자
+            return outProductDto;
+        }
+        throw new RequestException(new ErrorBox("이미 장바구니에 있는 음식입니다."));
     }
 
     // 2. 장바구니 상품 목록 조회 (쿠키에서 조회)
@@ -199,20 +202,20 @@ public class CartServiceImpl implements CartService {
         return cartProductDto;
     }
 
-    // 4. 장바구니 초기화 (쿠키와 DB 초기화)
-    @Override
-    public CartProductDto clearCart(HttpServletResponse response) {
-        // 쿠키 초기화
-        Cookie cookie = new Cookie("Cart", "");
-        cookie.setMaxAge(0);
-        response.addCookie(cookie);
-
-        // 디비 초기화
-        cartProductRepository.deleteAll();
-        CartProductDto cartProductDto = new CartProductDto();
-        cartProductDto.setMessage("장바구니가 초기화 되었습니다.");
-        return cartProductDto;
-    }
+//    // 4. 장바구니 초기화 (쿠키와 DB 초기화)
+//    @Override
+//    public CartProductDto clearCart(HttpServletResponse response) {
+//        // 쿠키 초기화
+//        Cookie cookie = new Cookie("Cart", "");
+//        cookie.setMaxAge(0);
+//        response.addCookie(cookie);
+//
+//        // 디비 초기화
+//        cartProductRepository.deleteAll();
+//        CartProductDto cartProductDto = new CartProductDto();
+//        cartProductDto.setMessage("장바구니가 초기화 되었습니다.");
+//        return cartProductDto;
+//    }
 
     // 5. 주문하기 & 주문완료 페이지 조회 (쿠키에서 조회)
     @Override

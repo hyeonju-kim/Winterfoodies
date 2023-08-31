@@ -7,13 +7,15 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 public interface CartProductRepository extends JpaRepository<CartProduct, Long> {
-    public List<CartProduct> findByCartId(Long cartId);
+     List<CartProduct> findByCartId(Long cartId);
 
     @Transactional
-    public void deleteByProductId(Long productId);
+     void deleteByProductId(Long productId);
 
-    public List<CartProduct> findByUserId(Long userId);
-    public List<CartProduct> findByStoreId(Long storeId);
+     List<CartProduct> findByUserId(Long userId);
+     List<CartProduct> findByStoreId(Long storeId);
+
+    CartProduct findByProductId(Long productId);
 
 
 
