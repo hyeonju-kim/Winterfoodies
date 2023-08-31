@@ -91,7 +91,7 @@ public class MainPageController {
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-    // 6. 가게 상세 조회 (메뉴 및 인기메뉴, 가게정보 추가)
+    // 6. 가게 상세 조회 (메뉴 및 인기메뉴, 가게정보)
     @GetMapping("/{storeId}")
     @ApiOperation(value = "가게 상세 조회(메뉴, 인기메뉴, 가게정보)")
     @ApiImplicitParam(name = "storeId", value = "가게 아이디")
