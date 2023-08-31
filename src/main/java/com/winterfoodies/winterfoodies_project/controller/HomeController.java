@@ -15,6 +15,8 @@
     import com.winterfoodies.winterfoodies_project.repository.UserRepository;
     import com.winterfoodies.winterfoodies_project.service.UserDetailsServiceImpl;
     import com.winterfoodies.winterfoodies_project.service.UserServiceImpl;
+    import io.swagger.annotations.ApiImplicitParam;
+    import io.swagger.annotations.ApiOperation;
     import lombok.RequiredArgsConstructor;
     import lombok.extern.slf4j.Slf4j;
     import org.jasypt.encryption.StringEncryptor;
@@ -60,6 +62,7 @@
 
         // 로그인
         @PostMapping("/login")
+        @ApiOperation(value = "로그인")
         public ResponseEntity<LoginSuccessResponseDto> loginTest(@Valid @RequestBody LoginRequestDto loginRequestDto, BindingResult bindingResult) {
             // [230726] 추가
             if (bindingResult.hasErrors()) {
@@ -137,6 +140,7 @@
 
         // 회원가입
         @PostMapping("/signup")
+        @ApiOperation(value = "회원가입")
         public ResponseEntity<UserResponseDto> signUp(@Valid @RequestBody UserRequestDto userRequestDto, BindingResult bindingResult) {
             if (bindingResult.hasErrors()) {
                 List<ObjectError> allErrors = bindingResult.getAllErrors();
@@ -165,6 +169,7 @@
         // 로그아웃
         // 230814 추가 - Redis에서 로그인할때 저장했던 refresh토큰 삭제하고, access토큰을 다시 저장하기 (value값을 logout으로)
         @PostMapping("/logout")
+        @ApiOperation(value = "로그아웃")
         public ResponseEntity<UserResponseDto> logout(@RequestBody TokenRequestDto tokenRequestDto) {
             System.out.println("dto=================" + tokenRequestDto.getAccessToken() + "=========" + tokenRequestDto.getRefreshToken());
             //로그아웃 하고싶은 토큰이 유효한 지 먼저 검증하기
