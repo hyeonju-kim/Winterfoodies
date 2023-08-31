@@ -19,10 +19,10 @@ public class OrderResponseDto {
     @ApiModelProperty(example = "1", value = "주문 id", hidden = true)
     private Long storeId;
 
-    @ApiModelProperty(example = "1", value = "주문 id", hidden = true)
+    @ApiModelProperty(example = "1", value = "주문 id")
     private String storeName;
 
-    @ApiModelProperty(example = "1", value = "주문 id", hidden = true)
+    @ApiModelProperty(example = "1", value = "주문 id")
     private Long orderId;
 
     @ApiModelProperty(example = "1", value = "주문 id", hidden = true)
@@ -49,6 +49,6 @@ public class OrderResponseDto {
     @ApiModelProperty(value = "상품 및 수량 리스트")
     private List<Map<String, Object>> productAndQuantityList;
 
-    @ApiModelProperty(example = "10000", value = "총 주문금액", hidden = true)
+    @ApiModelProperty(example = "10000", value = "총 주문금액")
     private Long totalAmount;
 }

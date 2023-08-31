@@ -17,22 +17,22 @@ public class UserResponseDto{
     @ApiModelProperty(example = "메시지" )
     private String message;
 
-    @ApiModelProperty(example = "리다이렉트?", hidden = true )
+    @ApiModelProperty(hidden = true )
     private String redirect;
 
 //    private String result;
 
-    @ApiModelProperty(example = "유저 아이디", hidden = true )
+    @ApiModelProperty(example = "1", hidden = true )
     private Long id;
 
-    @ApiModelProperty(example = "유저 이메일", hidden = true )
-    private String email;
+//    @ApiModelProperty(example = "유저 이메일", hidden = true )
+//    private String email;
 
-    @ApiModelProperty(example = "유저 네임", hidden = true )
+    @ApiModelProperty(example = "asdf12345@naver.com")
     private String username;
 
     @JsonIgnore
-    @ApiModelProperty(example = "유저 상태", hidden = true )
+    @ApiModelProperty(value = "유저 상태", hidden = true )
     private HttpStatus status;
 
     public UserResponseDto(String message) {

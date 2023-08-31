@@ -61,19 +61,19 @@ public class MyPageController {
 
 
     // 마이페이지 메인 화면(목록 조회)
-    @GetMapping // 테스트용
-    @ApiOperation(value = "메인화면 조회")
-    public ResponseEntity<String> getMyPageList() { // 반환값 List로 바꾸기
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println("authentication == "+authentication);
-        System.out.println("authentication.getName() == "+authentication.getName());
-        System.out.println("authentication.getAuthorities() == "+authentication.getAuthorities());
-        System.out.println("authentication.getCredentials() == "+authentication.getCredentials());
-        System.out.println("authentication.getDetails() == "+authentication.getDetails());
-        System.out.println("getUsernameFromAuthentication() -> 유저네임 반환== "+getUsernameFromAuthentication());
-        System.out.println("getUserId() -> 유저아이디 반환== "+getUserId());
-        return ResponseEntity.ok("굿~~");
-    }
+//    @GetMapping // 테스트용
+//    @ApiOperation(value = "메인화면 조회")
+//    public ResponseEntity<String> getMyPageList() { // 반환값 List로 바꾸기
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        System.out.println("authentication == "+authentication);
+//        System.out.println("authentication.getName() == "+authentication.getName());
+//        System.out.println("authentication.getAuthorities() == "+authentication.getAuthorities());
+//        System.out.println("authentication.getCredentials() == "+authentication.getCredentials());
+//        System.out.println("authentication.getDetails() == "+authentication.getDetails());
+//        System.out.println("getUsernameFromAuthentication() -> 유저네임 반환== "+getUsernameFromAuthentication());
+//        System.out.println("getUserId() -> 유저아이디 반환== "+getUserId());
+//        return ResponseEntity.ok("굿~~");
+//    }
 
     // ***************** 1-1. 내정보 *****************
     // 마이페이지 내정보 조회
