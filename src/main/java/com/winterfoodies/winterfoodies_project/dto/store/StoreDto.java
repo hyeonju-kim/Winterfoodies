@@ -25,6 +25,7 @@ public class StoreDto {
     private Long averageRating; // 평균 별점
     private double latitude;
     private double longitude;
+    private String estimatedCookingTime;
 
     public StoreDto() {
 

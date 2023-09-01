@@ -72,6 +72,7 @@ public class AppRunner implements ApplicationRunner {
         storeDetail.setInfo("존맛탱인 저희가게 많이 놀러와주세요~!");
         storeDetail.setOpenTime(LocalTime.of(8,0));
         storeDetail.setCloseTime(LocalTime.of(20,0));
+        storeDetail.setEstimatedCookingTime("20분~30분");
         storeDetail.setAverageRating(4l);
         storeDetail.setLatitude(37.381798);
         storeDetail.setLongitude(126.800944);
@@ -87,6 +88,7 @@ public class AppRunner implements ApplicationRunner {
         storeDetail2.setInfo("국산 재료만 사용합니다. 많은 관심 부탁드려요~!");
         storeDetail2.setOpenTime(LocalTime.of(11,0));
         storeDetail2.setCloseTime(LocalTime.of(22,0));
+        storeDetail2.setEstimatedCookingTime("10분~15분");
         storeDetail2.setAverageRating(5l);
         storeDetail2.setLatitude(37.375499);
         storeDetail2.setLongitude(126.785488);
@@ -102,6 +104,7 @@ public class AppRunner implements ApplicationRunner {
         storeDetail3.setInfo("신규오픈 했어요 50% 할인 행사 합니다 ^^~!");
         storeDetail3.setOpenTime(LocalTime.of(13,0));
         storeDetail3.setCloseTime(LocalTime.of(20,0));
+        storeDetail3.setEstimatedCookingTime("20분~25분");
         storeDetail3.setAverageRating(5l);
         storeDetail3.setLatitude(37.467441);
         storeDetail3.setLongitude(126.793399);

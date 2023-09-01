@@ -2,6 +2,7 @@ package com.winterfoodies.winterfoodies_project.dto.store;
 
 
 import com.winterfoodies.winterfoodies_project.entity.StoreStatus;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -43,5 +44,6 @@ public class StoreRequestDto {
     private double longitude;
 
     private Long averageRating; // 평균 별점
-
+    
+    private String estimatedCookingTime;
 }

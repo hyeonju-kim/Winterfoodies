@@ -59,6 +59,9 @@ public class StoreResponseDto {
     @ApiModelProperty(example = "126.800944", value = "경도")
     private double longitude;
 
+    @ApiModelProperty(example = "20분~30분" , value = "조리예상시간")
+    private String estimatedCookingTime;
+
 
 //    private String officialCodeNo;
 

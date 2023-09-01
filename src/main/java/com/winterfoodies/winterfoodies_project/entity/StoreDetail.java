@@ -59,6 +59,9 @@ public class StoreDetail {
     @Column(name = "STORE_INFO")
     private String info;
 
+    @Column(name = "ESTIMATED_COOKING_TIME")
+    private String estimatedCookingTime;
+
     @Column(name = "STORE_THUMBNAIL_IMGURL")
     private String thumbnailImgUrl;
 

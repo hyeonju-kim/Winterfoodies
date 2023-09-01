@@ -237,6 +237,7 @@ public class MainPageServiceImpl implements MainPageService{
         storeResponseDto.setLatitude(store.getStoreDetail().getLatitude());
         storeResponseDto.setLongitude(store.getStoreDetail().getLongitude());
         storeResponseDto.setInfo(store.getStoreDetail().getInfo());
+        storeResponseDto.setEstimatedCookingTime(store.getStoreDetail().getEstimatedCookingTime());
 
         storeMainDto.setProductResponseDtoList(storeProductDtoList);
         storeMainDto.setPopularProductsDtoList(popularProductsDtoList);
