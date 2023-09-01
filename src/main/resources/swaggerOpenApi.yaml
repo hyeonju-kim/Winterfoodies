@@ -19,7 +19,9 @@ tags:
     description: Oauth Controller
   - name: search-controller
     description: Search Controller
-
+security:
+  - {}
+  - JWT: []
 paths:
   /api/cart/{productId}:
     delete:
@@ -55,6 +57,8 @@ paths:
                   totalPrice:
                     type: integer
                     format: int64
+      security:
+        - JWT: []
   /api/cart/items:
     post:
       tags:
@@ -92,6 +96,8 @@ paths:
                     type: integer
                   message:
                     type: string
+      security:
+        - JWT: []
   /api/cart/items/confirmByDB:
     post:
       tags:
@@ -138,6 +144,8 @@ paths:
                     type: string
                   totalAmount:
                     type: integer
+      security:
+        - JWT: []
   /api/cart/itemsListByDB:
     get:
       tags:
@@ -163,6 +171,8 @@ paths:
                       type: integer
                     totalPrice:
                       type: integer
+      security:
+        - JWT: []
   /api/check-username:
     get:
       tags:
@@ -300,6 +310,8 @@ paths:
                     type: string
                   username:
                     type: string
+      security:
+        - {}
   /api/main:
     get:
       tags:
@@ -352,6 +364,8 @@ paths:
                       type: string
                     storeId:
                       type: integer
+      security:
+        - JWT: []
   /api/main/{productId}/averageRating:
     get:
       tags:
@@ -411,6 +425,8 @@ paths:
                       type: string
                     storeId:
                       type: integer
+      security:
+        - JWT: []
   /api/main/{productId}/near:
     get:
       tags:
@@ -470,6 +486,8 @@ paths:
                       type: string
                     storeId:
                       type: integer
+      security:
+        - JWT: []
   /api/main/{productId}/popular:
     get:
       tags:
@@ -529,6 +547,8 @@ paths:
                       type: string
                     storeId:
                       type: integer
+      security:
+        - JWT: []
   /api/main/{productId}/reviewstore:
     get:
       tags:
@@ -588,6 +608,8 @@ paths:
                       type: string
                     storeId:
                       type: integer
+      security:
+        - JWT: []
   /api/main/{storeId}:
     get:
       tags:
@@ -673,6 +695,9 @@ paths:
                         type: string
                       storeId:
                         type: integer
+      security:
+        - JWT: []
+  /api/main/{storeId}/:
     put:
       tags:
         - main-page-controller
@@ -703,6 +728,8 @@ paths:
                     type: string
                   username:
                     type: string
+      security:
+        - JWT: []
   /api/main/{storeId}/like:
     post:
       tags:
@@ -735,6 +762,8 @@ paths:
                     type: string
                   username:
                     type: string
+      security:
+        - JWT: []
   /api/main/{storeId}/review:
     get:
       tags:
@@ -783,6 +812,8 @@ paths:
                     timestamp:
                       type: string
                       format: date-time
+      security:
+        - JWT: []
   /api/main/productList:
     get:
       tags:
@@ -864,6 +895,8 @@ paths:
                     type: string
                   username:
                     type: string
+      security:
+        - JWT: []
   /api/mypage/info/pw:
     put:
       tags:
@@ -887,6 +920,8 @@ paths:
                     type: string
                   username:
                     type: string
+      security:
+        - JWT: []
   /api/mypage/likes:
     get:
       tags:
@@ -924,6 +959,8 @@ paths:
                       type: string
                     storeId:
                       type: integer
+      security:
+        - JWT: []
   /api/mypage/orderlist:
     get:
       tags:
@@ -961,6 +998,9 @@ paths:
                       type: string
                     totalAmount:
                       type: integer
+      security:
+        - JWT: []
+
     post:
       tags:
         - my-page-controller
@@ -1020,6 +1060,8 @@ paths:
                     type: string
                   timestamp:
                     type: string
+      security:
+        - JWT: []
   /api/mypage/reviews:
     get:
       tags:
@@ -1060,6 +1102,8 @@ paths:
                     timestamp:
                       type: string
                       format: date-time
+      security:
+        - JWT: []
   /api/mypage/reviews/{reviewId}:
     delete:
       tags:
@@ -1090,6 +1134,8 @@ paths:
                     type: string
                   username:
                     type: string
+      security:
+        - JWT: []
   /api/auth/{socialLoginType}:
     get:
       tags:
@@ -1194,6 +1240,8 @@ paths:
                       type: string
                     storeId:
                       type: integer
+      security:
+        - JWT: []
   /api/search/map:
     get:
       tags:
@@ -1248,3 +1296,11 @@ paths:
                       type: string
                     storeId:
                       type: integer
+      security:
+        - JWT: []
+components:
+  securitySchemes:
+    JWT:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
