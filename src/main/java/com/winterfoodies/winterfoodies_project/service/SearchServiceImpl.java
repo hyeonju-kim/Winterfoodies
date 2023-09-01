@@ -19,8 +19,9 @@ public class SearchServiceImpl implements SearchService{
 
     // 상호명 검색
     @Override
-    public List<StoreDto> searchStores(String keyword) {
-        List<Store> storeList = storeRepository.searchStores(keyword);
+    public List<StoreDto> searchStores(String keyword, double latitude, double longitude) {
+        double radius = 5.0; // 검색 반경 설정 (예: 5.0km)
+        List<Store> storeList = storeRepository.searchStores(keyword, latitude, longitude, radius);
 
         List<StoreDto> storeDtoList = new ArrayList<>();
         for (Store store : storeList) {
@@ -60,10 +61,10 @@ public class SearchServiceImpl implements SearchService{
 
 
 
-    // 근처 가게 불러오기
+    // 지도로 근처 가게 불러오기
     @Override
     public List<StoreResponseDto> getNearbyStores(double latitude, double longitude) {
-        double radius = 2.0; // 검색 반경 설정 (예: 2.0km)
+        double radius = 5.0;
 
         List<Store> nearbyStores = storeRepository.findNearbyStores(latitude, longitude, radius);
         List<StoreResponseDto> nearbyStoreDtoList = new ArrayList<>();

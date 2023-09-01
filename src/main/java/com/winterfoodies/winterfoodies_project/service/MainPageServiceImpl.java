@@ -117,7 +117,7 @@ public class MainPageServiceImpl implements MainPageService{
     // 3. 메뉴별, 인기순(판매순)별 가게목록
     @Override
     public List<StoreResponseDto> getStoresSortedByMenuSales(Long productId, double latitude, double longitude) {
-        double radius = 4.0; // 검색 반경 설정
+        double radius = 5.0; // 검색 반경 설정
 
         List<Store> storesSortedByMenuSales = storeRepository.getStoresSortedByMenuSalesByProductId(productId, latitude, longitude, radius);
         List<StoreResponseDto> storeBySalesStoreList = new ArrayList<>();
@@ -140,7 +140,7 @@ public class MainPageServiceImpl implements MainPageService{
     // 4. 메뉴별, 리뷰순 가게목록
     @Override
     public List<StoreResponseDto> getStoresSortedByReiviews(Long productId, double latitude, double longitude) {
-        double radius = 4.0; // 검색 반경 설정
+        double radius = 5.0; // 검색 반경 설정
         List<Store> storeByReviews = storeRepository.getStoreByReviewsByProductId(productId, latitude, longitude, radius);
         List<StoreResponseDto> storeByReiviewsStoreList = new ArrayList<>();
 
@@ -163,7 +163,7 @@ public class MainPageServiceImpl implements MainPageService{
     // 5. 메뉴별, 별점순 가게목록 - 230830추가
     @Override
     public List<StoreResponseDto> getStoreByAverageRating(Long productId, double latitude, double longitude) {
-        double radius = 4.0; // 검색 반경 설정
+        double radius = 5.0; // 검색 반경 설정
         List<Store> storeByAverageRating = storeRepository.getStoreByAverageRatingByProductId(productId, latitude, longitude, radius);
         List<StoreResponseDto> storeByAverageRatingList = new ArrayList<>();
 

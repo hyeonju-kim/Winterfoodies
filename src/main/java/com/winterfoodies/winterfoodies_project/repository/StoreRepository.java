@@ -77,14 +77,15 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
 
     // ==================== 검색 ======================
     // 상호명 검색
-    @Query("SELECT s FROM Store s WHERE s.storeDetail.name LIKE %:keyword%")
-    List<Store> searchStores(@Param("keyword") String keyword);
+    @Query("SELECT s FROM Store s JOIN s.storeDetail sd " +
+            "WHERE s.storeDetail.name LIKE %:keyword% " +
+            "AND 6371 * acos(cos(radians(:latitude)) * cos(radians(sd.latitude)) * cos(radians(sd.longitude) - radians(:longitude)) + sin(radians(:latitude)) * sin(radians(sd.latitude))) < :radius")
+    List<Store> searchStores(@Param("keyword") String keyword, @Param("latitude") double latitude, @Param("longitude") double longitude, @Param("radius") double radius);
+
 
     // 지도로 근처가게 검색 (addressNo가 같은 가게 검색)
     @Query("SELECT s FROM Store s WHERE s.storeDetail.addressNo = :addressNo")
     List<Store> searchStoresByAddressNo(@Param("addressNo") String addressNo);
-
-    ///////////////
 
     Store getStoreById(Long id);
 }

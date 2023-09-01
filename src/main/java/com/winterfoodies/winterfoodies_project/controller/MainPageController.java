@@ -29,7 +29,7 @@ public class MainPageController {
         return mainPageService.getProductList();
     }
 
-    // 1. 메인페이지 (나와 가장 가까운 가게 - 가게명만) - 로그인 하면 바로 보이는 화면
+    // 1. 메인페이지 (나와 가장 가까운 가게 - 가게명만) - 로그인 하면 바로 보이는 화면 (2km 이내)
     @GetMapping
     @ApiOperation(value = "메인페이지(나와 가장 가까운 가게 - 가게명만) - 로그인 하면 바로 보이는 화면")
     @ApiImplicitParams({
@@ -47,7 +47,7 @@ public class MainPageController {
         }
     }
 
-    // 2. 메뉴별, 가까운순별 가게목록 - 가게명, 위치, 평점
+    // 2. 메뉴별, 가까운순별 가게목록 - 가게명, 위치, 평점 (2km 이내)
     @GetMapping("/{productId}/near")
     @ApiOperation(value = "메뉴별, 가까운순별 가게목록")
     @ApiImplicitParam(name = "productId", value = "상품 아이디")
@@ -57,7 +57,7 @@ public class MainPageController {
         return mainPageService.getNearbyStores2(productId, latitude, longitude);
     }
 
-    // 3. 메뉴별, 인기순(판매순)별 가게목록
+    // 3. 메뉴별, 인기순(판매순)별 가게목록 (5km 이내)
     @GetMapping("/{productId}/popular")
     @ApiOperation(value = "메뉴별, 인기순(판매량순)별 가게목록")
     @ApiImplicitParam(name = "productId", value = "상품 아이디")
@@ -67,7 +67,7 @@ public class MainPageController {
         return mainPageService.getStoresSortedByMenuSales(productId, latitude, longitude);
     }
 
-    // 4. 메뉴별, 리뷰순별 가게목록
+    // 4. 메뉴별, 리뷰순별 가게목록 (5km 이내)
     @GetMapping("/{productId}/reviewstore")
     @ApiOperation(value = "메뉴별, 리뷰순별 가게목록")
     @ApiImplicitParam(name = "productId", value = "상품 아이디")
@@ -77,7 +77,7 @@ public class MainPageController {
         return mainPageService.getStoresSortedByReiviews(productId, latitude, longitude);
     }
 
-    // 5. 메뉴별, 별점순 가게목록
+    // 5. 메뉴별, 별점순 가게목록 (5km 이내)
     @GetMapping("/{productId}/averageRating")
     @ApiOperation(value = "메뉴별, 평점별 가게목록")
     @ApiImplicitParam(name = "productId", value = "상품 아이디")

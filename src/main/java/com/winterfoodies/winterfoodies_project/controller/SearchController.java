@@ -27,14 +27,23 @@ public class SearchController {
     // 상호명 검색
     @GetMapping
     @ApiOperation(value = "상호명 검색")
-    public List<StoreResponseDto> search(@RequestParam("keyword") String keyword) {
-        List<StoreDto> storeDtoList = searchService.searchStores(keyword);
-        ArrayList<StoreResponseDto> storeResponseDtoList = new ArrayList<>();
-        for (StoreDto storeDto : storeDtoList) {
-            StoreResponseDto storeResponseDto = storeDto.convertToStoreResponseDto();
-            storeResponseDtoList.add(storeResponseDto);
+    public List<StoreResponseDto> search(@RequestParam("keyword") String keyword,
+                                         @RequestParam(required = false) Double latitude,
+                                         @RequestParam(required = false) Double longitude) {
+        if (latitude != null && longitude != null) {
+            // 위도와 경도가 전달된 경우
+            List<StoreDto> storeDtoList = searchService.searchStores(keyword, latitude, longitude);
+            ArrayList<StoreResponseDto> storeResponseDtoList = new ArrayList<>();
+            for (StoreDto storeDto : storeDtoList) {
+                StoreResponseDto storeResponseDto = storeDto.convertToStoreResponseDto();
+                storeResponseDtoList.add(storeResponseDto);
+            }
+            return storeResponseDtoList;
+        } else {
+            // 위치 정보가 전달되지 않은 경우에 대한 처리
+            return null;
         }
-        return storeResponseDtoList;
+
     }
 
     // 지도 검색
