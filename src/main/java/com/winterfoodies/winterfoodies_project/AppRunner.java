@@ -47,7 +47,7 @@ public class AppRunner implements ApplicationRunner {
         User ceo = new User();
         ceo.setUsername("ghd123@naver.com");
         ceo.setPassword(encoder.encode("ghd123!@#"));
-        ceo.setName("홍길동");
+        ceo.setNickname("홍길동");
 
         //가게 생성 1 - 신천붕어빵
         Store store = new Store();
@@ -206,19 +206,19 @@ public class AppRunner implements ApplicationRunner {
         User customer = new User();
         customer.setUsername("gpsfl123@naver.com");
         customer.setPassword(encoder.encode("gpsfl123!@#"));
-        customer.setName("헨리");
+        customer.setNickname("헨리");
         userRepository.save(customer);
 
         User customer2 = new User();
         customer2.setPassword(encoder.encode("thfk123!@#"));
         customer2.setUsername("thfk123@naver.com");
-        customer2.setName("김소라");
+        customer2.setNickname("김소라");
         userRepository.save(customer2);
 
         User customer3 = new User();
         customer3.setPassword(encoder.encode("qkd123!@#"));
         customer3.setUsername("qkd123@naver.com");
-        customer3.setName("방성훈");
+        customer3.setNickname("방성훈");
         userRepository.save(customer3);
 
         //헨리에게 가게 인젝션 2

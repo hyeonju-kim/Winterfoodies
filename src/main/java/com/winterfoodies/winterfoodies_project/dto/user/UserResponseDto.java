@@ -31,6 +31,9 @@ public class UserResponseDto{
     @ApiModelProperty(example = "asdf12345@naver.com")
     private String username;
 
+    @ApiModelProperty(example = "붕어빵러버")
+    private String nickname;
+
     @JsonIgnore
     @ApiModelProperty(value = "유저 상태", hidden = true )
     private HttpStatus status;

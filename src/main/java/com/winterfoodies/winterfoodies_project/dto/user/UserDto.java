@@ -27,6 +27,9 @@ public class UserDto {
     @ApiModelProperty(example = "asdf123@naver.com" ,hidden = true)
     private String username;
 
+    @ApiModelProperty(example = "붕어빵러버")
+    private String nickname;
+
     @ApiModelProperty(example = "37.381798" ,hidden = true)
     private double latitude;
 
@@ -52,6 +55,7 @@ public class UserDto {
 //        this.email = user.getEmail();
         this.username = user.getUsername();
         this.password = user.getPassword();
+        this.nickname = user.getNickname();
     }
 
     // UserDto -> UserResponseDto (Dto에서 responseDto로 변환해준다)
@@ -59,6 +63,7 @@ public class UserDto {
         UserResponseDto userResponseDto = new UserResponseDto();
         userResponseDto.setId(this.id);
         userResponseDto.setUsername(this.username);
+        userResponseDto.setNickname(this.nickname);
         userResponseDto.setMessage(this.message);
         return userResponseDto;
     }

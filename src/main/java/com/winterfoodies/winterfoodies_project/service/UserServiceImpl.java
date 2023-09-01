@@ -54,14 +54,13 @@ public class UserServiceImpl implements UserService {
     // ################################################################ 회원가입/로그인 ##############################################################
     // 회원가입
     @Override
-    public UserDto signUp(UserRequestDto userRequestDto) {
+    public UserDto  signUp(UserRequestDto userRequestDto) {
         User foundUser = userRepository.findByUsername(userRequestDto.getUsername());
         if (foundUser != null) {
             throw new UserException("해당 이메일이 이미 존재합니다.", HttpStatus.BAD_REQUEST, null);
         }
         String encodedPassword = encoder.encode(userRequestDto.getPassword()); // 230726 추가
         userRequestDto.setPassword(encodedPassword);
-        userRequestDto.setPassword(userRequestDto.getPassword());
         User user = new User(userRequestDto);
         userRepository.save(user);
         return new UserDto(user);

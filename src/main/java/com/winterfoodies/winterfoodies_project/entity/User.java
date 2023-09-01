@@ -30,7 +30,7 @@ public class User implements Serializable {
     private String username;
 
     @Column(name = "USER_NAME")
-    private String name;
+    private String nickname;
 
     @Column(name = "USER_PASSWORD")
     private String password;
@@ -73,18 +73,19 @@ public class User implements Serializable {
 
     public User(UserRequestDto userRequestDto, UserType type){
         this.username = userRequestDto.getUsername();
-//        this.email = userRequestDto.getEmail();
         this.phoneNumber = userRequestDto.getPhoneNumber();
         this.password = userRequestDto.getPassword();
+        this.nickname = userRequestDto.getNickname();
 //        this.latitude = userRequestDto.getLatitude();
 //        this.longitude = userRequestDto.getLongitude();
     }
 
     public User(UserRequestDto userRequestDto) {
         this.username = userRequestDto.getUsername();
-//        this.email = userRequestDto.getEmail();
         this.phoneNumber = userRequestDto.getPhoneNumber();
         this.password = userRequestDto.getPassword();
+        this.nickname = userRequestDto.getNickname();
+
 //        this.latitude = userRequestDto.getLatitude();
 //        this.longitude = userRequestDto.getLongitude();
     }
