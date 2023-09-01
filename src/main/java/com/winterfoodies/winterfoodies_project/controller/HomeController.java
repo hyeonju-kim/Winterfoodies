@@ -15,8 +15,8 @@
     import com.winterfoodies.winterfoodies_project.repository.UserRepository;
     import com.winterfoodies.winterfoodies_project.service.UserDetailsServiceImpl;
     import com.winterfoodies.winterfoodies_project.service.UserServiceImpl;
-    import io.swagger.annotations.ApiImplicitParam;
-    import io.swagger.annotations.ApiOperation;
+    import io.swagger.annotations.*;
+    import io.swagger.v3.oas.annotations.media.ExampleObject;
     import lombok.RequiredArgsConstructor;
     import lombok.extern.slf4j.Slf4j;
     import org.jasypt.encryption.StringEncryptor;
@@ -41,6 +41,7 @@
     import java.time.format.DateTimeFormatter;
     import java.util.Date;
     import java.util.List;
+    import java.util.Map;
     import java.util.Optional;
     import java.util.concurrent.TimeUnit;
 
@@ -159,6 +160,18 @@
             UserResponseDto userResponseDto = userDto.convertToUserResponseDto();
             userResponseDto.setMessage("회원가입이 완료되었습니다.");
             return ResponseEntity.ok(userResponseDto);
+        }
+
+        // 유저네임(이메일) 중복확인 - 230901 추가
+        @GetMapping("/check-username")
+        @ApiOperation(value = "유저네임(이메일) 중복확인")
+        @ApiImplicitParam(name = "username", value = "유저네임(이메일)")
+        public ResponseEntity<String> checkUsername(@RequestParam String username) {
+            boolean checkUsernameUnique = userService.isUsernameUnique(username);
+            if (checkUsernameUnique) {
+                return ResponseEntity.ok("사용 가능한 계정입니다");
+            }
+            return ResponseEntity.ok("이미 가입된 계정입니다");
         }
 
 //        @ExceptionHandler(RequestException.class)

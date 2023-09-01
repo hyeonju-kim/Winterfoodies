@@ -66,4 +66,13 @@ public class UserServiceImpl implements UserService {
         return new UserDto(user);
     }
 
+    // 중복확인 - 230901 추가
+    @Override
+    public boolean isUsernameUnique(String username) {
+        boolean isUsernameUnique = true;
+        User user = userRepository.findByUsername(username);
+
+        return (user == null) ? isUsernameUnique : false;
+    }
+
 }
