@@ -115,6 +115,7 @@ public class MyPageServiceImpl implements MypageService{
         for (Review review : foundReview) {
             ReviewDto reviewDto2 = new ReviewDto();
             reviewDto2.setId(review.getId());
+            reviewDto2.setUserId(getUserId());
             reviewDto2.setStoreName(review.getStoreName());
             reviewDto2.setRating(review.getRating());
             reviewDto2.setContent(review.getContent());
