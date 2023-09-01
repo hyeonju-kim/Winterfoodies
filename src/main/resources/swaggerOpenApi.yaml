@@ -19,9 +19,7 @@ tags:
     description: Oauth Controller
   - name: search-controller
     description: Search Controller
-security:
-  - {}
-  - JWT: []
+
 paths:
   /api/cart/{productId}:
     delete:
@@ -718,7 +716,7 @@ paths:
           schema:
             type: integer
             format: int64
-      requestBody: null
+
       responses:
         '200':
           description: OK
@@ -1104,10 +1102,10 @@ paths:
           required: true
           schema:
             type: string
-          enum:
-            - GOOGLE
-            - KAKAO
-            - NAVER
+            enum:
+              - GOOGLE
+              - KAKAO
+              - NAVER
       responses:
         '200':
           description: OK
@@ -1123,10 +1121,6 @@ paths:
           required: true
           schema:
             type: string
-          enum:
-            - GOOGLE
-            - KAKAO
-            - NAVER
         - name: code
           in: query
           description: code
@@ -1139,10 +1133,10 @@ paths:
           content:
             application/json:
               example:
-                accessToken: "string"
-                jwtToken: "string"
-                tokenType: "string"
-                user_num: "string"
+                accessToken: string
+                jwtToken: string
+                tokenType: string
+                user_num: string
               schema:
                 type: object
                 properties:
