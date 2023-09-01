@@ -1,0 +1,1256 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Winterfoodies API
+  description: 윈터푸디스 API 명세서
+servers:
+  - url: http://localhost:8080
+    description: Inferred Url
+tags:
+  - name: cart-controller
+    description: Cart Controller
+  - name: home-controller
+    description: Home Controller
+  - name: main-page-controller
+    description: Main Page Controller
+  - name: my-page-controller
+    description: My Page Controller
+  - name: oauth-controller
+    description: Oauth Controller
+  - name: search-controller
+    description: Search Controller
+security:
+  - {}
+  - JWT: []
+paths:
+  /api/cart/{productId}:
+    delete:
+      tags:
+        - cart-controller
+      summary: 장바구니 특정 상품 삭제
+      parameters:
+        - name: productId
+          in: path
+          description: productId
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              example:
+                productId: 1
+                quantity: 5
+                totalPrice: 7500
+              schema:
+                type: object
+                properties:
+                  productId:
+                    type: integer
+                    format: int64
+                  quantity:
+                    type: integer
+                    format: int64
+                  totalPrice:
+                    type: integer
+                    format: int64
+  /api/cart/items:
+    post:
+      tags:
+        - cart-controller
+      summary: 장바구니에 상품 추가
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              id: 2
+              quantity: 5
+              storeId: 1
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                quantity:
+                  type: integer
+                storeId:
+                  type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              example:
+                id: 1
+                message: 장바구니에 추가되었습니다.
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  message:
+                    type: string
+  /api/cart/items/confirmByDB:
+    post:
+      tags:
+        - cart-controller
+      summary: 주문 완료 페이지 - DB에서 조회
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              message: 빨리 만들어 주세용~~!
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              example:
+                customerMessage: 빨리 만들어 주세용~~!
+                orderDate: '2023-09-01T08:31:13.002Z'
+                orderId: 1
+                productAndQuantityList:
+                  - {}
+                storeName: '1'
+                totalAmount: 10000
+              schema:
+                type: object
+                properties:
+                  customerMessage:
+                    type: string
+                  orderDate:
+                    type: string
+                    format: date-time
+                  orderId:
+                    type: integer
+                  productAndQuantityList:
+                    type: array
+                    items: {}
+                  storeName:
+                    type: string
+                  totalAmount:
+                    type: integer
+  /api/cart/itemsListByDB:
+    get:
+      tags:
+        - cart-controller
+      summary: 장바구니 상품 조회 - DB에서 조회
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              example:
+                - productId: 1
+                  quantity: 5
+                  totalPrice: 7500
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    productId:
+                      type: integer
+                    quantity:
+                      type: integer
+                    totalPrice:
+                      type: integer
+  /api/check-username:
+    get:
+      tags:
+        - home-controller
+      summary: 유저네임(이메일) 중복확인
+      parameters:
+        - name: username
+          in: query
+          description: 유저네임(이메일)
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              example: 사용가능한 계정입니다
+              schema:
+                type: string
+  /api/login:
+    post:
+      tags:
+        - home-controller
+      summary: 로그인
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              password: 비밀번호
+              username: 이메일
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                username:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              example:
+                message: 메시지
+                refreshToken: refresh 토큰
+                token: access 토큰
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  refreshToken:
+                    type: string
+                  token:
+                    type: string
+  /api/logout:
+    post:
+      tags:
+        - home-controller
+      summary: 로그아웃
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              accessToken: access 토큰
+              refreshToken: refresh 토큰
+            schema:
+              type: object
+              properties:
+                accessToken:
+                  type: string
+                refreshToken:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              example:
+                message: 메시지
+                nickname: 붕어빵러버
+                username: asdf12345@naver.com
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  nickname:
+                    type: string
+                  username:
+                    type: string
+  /api/signup:
+    post:
+      tags:
+        - home-controller
+      summary: 회원가입
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              nickname: 붕어빵러버
+              password: love123!@#
+              phoneNumber: 010-1234-1234
+              username: love123@naver.com
+            schema:
+              type: object
+              properties:
+                nickname:
+                  type: string
+                password:
+                  type: string
+                phoneNumber:
+                  type: string
+                username:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              example:
+                message: 메시지
+                nickname: 붕어빵러버
+                username: asdf12345@naver.com
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  nickname:
+                    type: string
+                  username:
+                    type: string
+  /api/main:
+    get:
+      tags:
+        - main-page-controller
+      summary: 메인페이지(나와 가장 가까운 가게 - 가게명만) - 로그인 하면 바로 보이는 화면
+      parameters:
+        - name: latitude
+          in: query
+          description: 위도
+          schema:
+            type: number
+            format: double
+        - name: longitude
+          in: query
+          description: 경도
+          schema:
+            type: number
+            format: double
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              example:
+                - averageRating: 4
+                  basicAddress: 신천역 1번 출구
+                  estimatedCookingTime: 20분~30분
+                  latitude: 37.381798
+                  longitude: 126.800944
+                  name: 신천붕어빵
+                  storeId: 1
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    averageRating:
+                      type: integer
+                    basicAddress:
+                      type: string
+                    estimatedCookingTime:
+                      type: string
+                    latitude:
+                      type: number
+                      format: double
+                    longitude:
+                      type: number
+                      format: double
+                    name:
+                      type: string
+                    storeId:
+                      type: integer
+  /api/main/{productId}/averageRating:
+    get:
+      tags:
+        - main-page-controller
+      summary: 메뉴별, 평점별 가게목록
+      parameters:
+        - name: productId
+          in: path
+          description: 상품 아이디
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: latitude
+          in: query
+          description: latitude
+          schema:
+            type: number
+            format: double
+        - name: longitude
+          in: query
+          description: longitude
+          schema:
+            type: number
+            format: double
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              example:
+                - averageRating: 4
+                  basicAddress: 신천역 1번 출구
+                  estimatedCookingTime: 20분~30분
+                  latitude: 37.381798
+                  longitude: 126.800944
+                  name: 신천붕어빵
+                  storeId: 1
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    averageRating:
+                      type: integer
+                    basicAddress:
+                      type: string
+                    estimatedCookingTime:
+                      type: string
+                    latitude:
+                      type: number
+                      format: double
+                    longitude:
+                      type: number
+                      format: double
+                    name:
+                      type: string
+                    storeId:
+                      type: integer
+  /api/main/{productId}/near:
+    get:
+      tags:
+        - main-page-controller
+      summary: 메뉴별, 가까운순별 가게목록
+      parameters:
+        - name: productId
+          in: path
+          description: 상품 아이디
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: latitude
+          in: query
+          description: latitude
+          schema:
+            type: number
+            format: double
+        - name: longitude
+          in: query
+          description: longitude
+          schema:
+            type: number
+            format: double
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              example:
+                - averageRating: 4
+                  basicAddress: 신천역 1번 출구
+                  estimatedCookingTime: 20분~30분
+                  latitude: 37.381798
+                  longitude: 126.800944
+                  name: 신천붕어빵
+                  storeId: 1
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    averageRating:
+                      type: integer
+                    basicAddress:
+                      type: string
+                    estimatedCookingTime:
+                      type: string
+                    latitude:
+                      type: number
+                      format: double
+                    longitude:
+                      type: number
+                      format: double
+                    name:
+                      type: string
+                    storeId:
+                      type: integer
+  /api/main/{productId}/popular:
+    get:
+      tags:
+        - main-page-controller
+      summary: 메뉴별, 인기순(판매량순)별 가게목록
+      parameters:
+        - name: productId
+          in: path
+          description: 상품 아이디
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: latitude
+          in: query
+          description: latitude
+          schema:
+            type: number
+            format: double
+        - name: longitude
+          in: query
+          description: longitude
+          schema:
+            type: number
+            format: double
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              example:
+                - averageRating: 4
+                  basicAddress: 신천역 1번 출구
+                  estimatedCookingTime: 20분~30분
+                  latitude: 37.381798
+                  longitude: 126.800944
+                  name: 신천붕어빵
+                  storeId: 1
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    averageRating:
+                      type: integer
+                    basicAddress:
+                      type: string
+                    estimatedCookingTime:
+                      type: string
+                    latitude:
+                      type: number
+                      format: double
+                    longitude:
+                      type: number
+                      format: double
+                    name:
+                      type: string
+                    storeId:
+                      type: integer
+  /api/main/{productId}/reviewstore:
+    get:
+      tags:
+        - main-page-controller
+      summary: 메뉴별, 리뷰순별 가게목록
+      parameters:
+        - name: productId
+          in: path
+          description: 상품 아이디
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: latitude
+          in: query
+          description: latitude
+          schema:
+            type: number
+            format: double
+        - name: longitude
+          in: query
+          description: longitude
+          schema:
+            type: number
+            format: double
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              example:
+                - averageRating: 4
+                  basicAddress: 신천역 1번 출구
+                  estimatedCookingTime: 20분~30분
+                  latitude: 37.381798
+                  longitude: 126.800944
+                  name: 신천붕어빵
+                  storeId: 1
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    averageRating:
+                      type: integer
+                    basicAddress:
+                      type: string
+                    estimatedCookingTime:
+                      type: string
+                    latitude:
+                      type: number
+                      format: double
+                    longitude:
+                      type: number
+                      format: double
+                    name:
+                      type: string
+                    storeId:
+                      type: integer
+  /api/main/{storeId}:
+    get:
+      tags:
+        - main-page-controller
+      summary: 가게 상세 조회(메뉴, 인기메뉴, 가게정보)
+      parameters:
+        - name: storeId
+          in: path
+          description: 가게 아이디
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              example:
+                averageRating: 0
+                estimatedCookingTime: 20분~30분
+                like: 찜유무
+                popularProductsDtoList:
+                  - id: 1
+                    message: 장바구니에 추가되었습니다.
+                productResponseDtoList:
+                  - id: 1
+                    message: 장바구니에 추가되었습니다.
+                storeName: 가게명
+                storeResponseDtoList:
+                  averageRating: 4
+                  basicAddress: 신천역 1번 출구
+                  estimatedCookingTime: 20분~30분
+                  latitude: 37.381798
+                  longitude: 126.800944
+                  name: 신천붕어빵
+                  storeId: 1
+              schema:
+                type: object
+                properties:
+                  averageRating:
+                    type: integer
+                  estimatedCookingTime:
+                    type: string
+                  like:
+                    type: string
+                  popularProductsDtoList:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        message:
+                          type: string
+                  productResponseDtoList:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        message:
+                          type: string
+                  storeName:
+                    type: string
+                  storeResponseDtoList:
+                    type: object
+                    properties:
+                      averageRating:
+                        type: integer
+                      basicAddress:
+                        type: string
+                      estimatedCookingTime:
+                        type: string
+                      latitude:
+                        type: number
+                        format: double
+                      longitude:
+                        type: number
+                        format: double
+                      name:
+                        type: string
+                      storeId:
+                        type: integer
+    put:
+      tags:
+        - main-page-controller
+      summary: 가게 찜하기 취소
+      parameters:
+        - name: storeId
+          in: path
+          description: 가게 아이디
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              example:
+                message: 메시지
+                nickname: 붕어빵러버
+                username: asdf12345@naver.com
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  nickname:
+                    type: string
+                  username:
+                    type: string
+  /api/main/{storeId}/like:
+    post:
+      tags:
+        - main-page-controller
+      summary: 가게 찜하기
+      parameters:
+        - name: storeId
+          in: path
+          description: 가게 아이디
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody: null
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              example:
+                message: 메시지
+                nickname: 붕어빵러버
+                username: asdf12345@naver.com
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  nickname:
+                    type: string
+                  username:
+                    type: string
+  /api/main/{storeId}/review:
+    get:
+      tags:
+        - main-page-controller
+      summary: 가게 상세 조회(리뷰) - 토큰 XXXXXXXXXXXXXXX
+      parameters:
+        - name: storeId
+          in: path
+          description: 가게 아이디
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              example:
+                - content: 완전 맛있어요ㅜㅜ
+                  createdAt: '2023-09-01T08:50:42.608Z'
+                  id: 1
+                  modifiedAt: '2023-09-01T08:50:42.608Z'
+                  rating: 5
+                  storeName: 신천붕어빵
+                  timestamp: '2023-09-01T08:50:42.608Z'
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    content:
+                      type: string
+                    createdAt:
+                      type: string
+                      format: date-time
+                    id:
+                      type: integer
+                    modifiedAt:
+                      type: string
+                      format: date-time
+                    rating:
+                      type: integer
+                    storeName:
+                      type: string
+                    timestamp:
+                      type: string
+                      format: date-time
+  /api/main/productList:
+    get:
+      tags:
+        - main-page-controller
+      summary: 상품명 모두 보여주기 - 토큰 XXXXXXXXXXXXXXX
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              example:
+                - id: 1
+                  productName: 붕어빵
+                - id: 2
+                  productName: 어묵
+                - id: 3
+                  productName: 군밤
+                - id: 4
+                  productName: 호떡
+                - id: 5
+                  productName: 계란빵
+                - id: 6
+                  productName: 군고구마
+                - id: 7
+                  productName: 다코야키
+                - id: 8
+                  productName: 호두과자
+                - id: 9
+                  productName: 국화빵
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    productName:
+                      type: string
+  /api/mypage/config:
+    get:
+      tags:
+        - my-page-controller
+      summary: 환경설정 및 공지사항 - 토큰 XXXXXXXXXXXXXXX
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              example:
+                - announce: 환경설정 샘플1
+                  config: 공지사항 샘플1
+              schema:
+                type: object
+                properties:
+                  announce:
+                    type: string
+                  config:
+                    type: string
+  /api/mypage/info:
+    get:
+      tags:
+        - my-page-controller
+      summary: 마이페이지 내정보 조회
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              example:
+                message: 메시지
+                nickname: 붕어빵러버
+                username: asdf12345@naver.com
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  nickname:
+                    type: string
+                  username:
+                    type: string
+  /api/mypage/info/pw:
+    put:
+      tags:
+        - my-page-controller
+      summary: 마이페이지 내정보 비밀번호 변경
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              example:
+                message: 비밀번호 변경이 완료되었습니다.
+                nickname: 붕어빵러버
+                username: asdf12345@naver.com
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  nickname:
+                    type: string
+                  username:
+                    type: string
+  /api/mypage/likes:
+    get:
+      tags:
+        - my-page-controller
+      summary: 찜한 가게목록 조회
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              example:
+                - averageRating: 4
+                  basicAddress: 신천역 1번 출구
+                  estimatedCookingTime: 20분~30분
+                  latitude: 37.381798
+                  longitude: 126.800944
+                  name: 신천붕어빵
+                  storeId: 1
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    averageRating:
+                      type: integer
+                    basicAddress:
+                      type: string
+                    estimatedCookingTime:
+                      type: string
+                    latitude:
+                      type: number
+                    longitude:
+                      type: number
+                    name:
+                      type: string
+                    storeId:
+                      type: integer
+  /api/mypage/orderlist:
+    get:
+      tags:
+        - my-page-controller
+      summary: 주문내역 조회
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              example:
+                - customerMessage: 빨리 만들어 주세용~~!
+                  orderDate: '2023-09-01T08:58:16.325Z'
+                  orderId: 1
+                  productAndQuantityList:
+                    - 붕어빵: 5
+                    - 어묵: 10
+                  storeName: '1'
+                  totalAmount: 10000
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    customerMessage:
+                      type: string
+                    orderDate:
+                      type: string
+                    orderId:
+                      type: integer
+                    productAndQuantityList:
+                      type: array
+                      items: {}
+                    storeName:
+                      type: string
+                    totalAmount:
+                      type: integer
+    post:
+      tags:
+        - my-page-controller
+      summary: 리뷰 작성
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              rating: 5
+              storeName: 신천붕어빵
+              content: 완전 맛있어요ㅜㅜ
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                createdAt:
+                  type: string
+                id:
+                  type: integer
+                modifiedAt:
+                  type: string
+                rating:
+                  type: integer
+                storeName:
+                  type: string
+                timestamp:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              example:
+                content: 완전 맛있어요ㅜㅜ
+                createdAt: '2023-09-01T08:58:16.328Z'
+                id: 1
+                modifiedAt: '2023-09-01T08:58:16.328Z'
+                rating: 5
+                storeName: 신천붕어빵
+                timestamp: '2023-09-01T08:58:16.328Z'
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: string
+                  createdAt:
+                    type: string
+                  id:
+                    type: integer
+                  modifiedAt:
+                    type: string
+                  rating:
+                    type: integer
+                  storeName:
+                    type: string
+                  timestamp:
+                    type: string
+  /api/mypage/reviews:
+    get:
+      tags:
+        - my-page-controller
+      summary: 작성한 리뷰 조회
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                - content: 완전 맛있어요ㅜㅜ
+                  createdAt: '2023-09-01T08:58:16.330Z'
+                  id: 1
+                  modifiedAt: '2023-09-01T08:58:16.330Z'
+                  rating: 5
+                  storeName: 신천붕어빵
+                  timestamp: '2023-09-01T08:58:16.330Z'
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    content:
+                      type: string
+                    createdAt:
+                      type: string
+                      format: date-time
+                    id:
+                      type: integer
+                    modifiedAt:
+                      type: string
+                      format: date-time
+                    rating:
+                      type: integer
+                    storeName:
+                      type: string
+                    timestamp:
+                      type: string
+                      format: date-time
+  /api/mypage/reviews/{reviewId}:
+    delete:
+      tags:
+        - my-page-controller
+      summary: 리뷰 삭제
+      parameters:
+        - name: reviewId
+          in: path
+          description: reviewId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                message: 삭제완료!!
+                nickname: 붕어빵러버
+                username: asdf12345@naver.com
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  nickname:
+                    type: string
+                  username:
+                    type: string
+  /api/auth/{socialLoginType}:
+    get:
+      tags:
+        - oauth-controller
+      summary: 소셜로그인
+      parameters:
+        - name: socialLoginType
+          in: path
+          description: socialLoginType
+          required: true
+          schema:
+            type: string
+          enum:
+            - GOOGLE
+            - KAKAO
+            - NAVER
+      responses:
+        '200':
+          description: OK
+  /api/auth/{socialLoginType}/callback:
+    get:
+      tags:
+        - oauth-controller
+      summary: 소셜로그인 콜백
+      parameters:
+        - name: socialLoginType
+          in: path
+          description: socialLoginType
+          required: true
+          schema:
+            type: string
+          enum:
+            - GOOGLE
+            - KAKAO
+            - NAVER
+        - name: code
+          in: query
+          description: code
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                accessToken: "string"
+                jwtToken: "string"
+                tokenType: "string"
+                user_num: "string"
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                  jwtToken:
+                    type: string
+                  tokenType:
+                    type: string
+                  user_num:
+                    type: string
+  /api/search:
+    get:
+      tags:
+        - search-controller
+      summary: 상호명 검색
+      parameters:
+        - name: keyword
+          in: query
+          description: keyword
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                - averageRating: 4
+                  basicAddress: 신천역 1번 출구
+                  estimatedCookingTime: 20분~30분
+                  latitude: 37.381798
+                  longitude: 126.800944
+                  name: 신천붕어빵
+                  storeId: 1
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    averageRating:
+                      type: integer
+                    basicAddress:
+                      type: string
+                    estimatedCookingTime:
+                      type: string
+                    latitude:
+                      type: number
+                      format: double
+                    longitude:
+                      type: number
+                      format: double
+                    name:
+                      type: string
+                    storeId:
+                      type: integer
+  /api/search/map:
+    get:
+      tags:
+        - search-controller
+      summary: 지도로 검색 - 주변 가게 찾기
+      parameters:
+        - name: latitude
+          in: query
+          description: 위도
+          required: false
+          schema:
+            type: number
+            format: double
+        - name: longitude
+          in: query
+          description: 경도
+          required: false
+          schema:
+            type: number
+            format: double
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                - averageRating: 4
+                  basicAddress: 신천역 1번 출구
+                  estimatedCookingTime: 20분~30분
+                  latitude: 37.381798
+                  longitude: 126.800944
+                  name: 신천붕어빵
+                  storeId: 1
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    averageRating:
+                      type: integer
+                    basicAddress:
+                      type: string
+                    estimatedCookingTime:
+                      type: string
+                    latitude:
+                      type: number
+                      format: double
+                    longitude:
+                      type: number
+                      format: double
+                    name:
+                      type: string
+                    storeId:
+                      type: integer
