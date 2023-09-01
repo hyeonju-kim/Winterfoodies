@@ -33,6 +33,8 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder encoder;
 
+
+
     // jwt 토큰으로 현재 인증된 사용자의 Authentication 객체에서 이름 가져오기
     public String getUsernameFromAuthentication() {
         String username = null;
@@ -59,6 +61,8 @@ public class UserServiceImpl implements UserService {
         if (foundUser != null) {
             throw new UserException("해당 이메일이 이미 존재합니다.", HttpStatus.BAD_REQUEST, null);
         }
+
+
         String encodedPassword = encoder.encode(userRequestDto.getPassword()); // 230726 추가
         userRequestDto.setPassword(encodedPassword);
         User user = new User(userRequestDto);
@@ -66,13 +70,15 @@ public class UserServiceImpl implements UserService {
         return new UserDto(user);
     }
 
-    // 중복확인 - 230901 추가
+    // 계정 중복확인 - 230901 추가
     @Override
     public boolean isUsernameUnique(String username) {
-        boolean isUsernameUnique = true;
-        User user = userRepository.findByUsername(username);
-
-        return (user == null) ? isUsernameUnique : false;
+        return userRepository.existsByUsername(username);
     }
 
+    // 닉네임 중복확인 - 230901 추가
+    @Override
+    public boolean isNicknameUnique(String nickname) {
+        return userRepository.existsByNickname(nickname);
+    }
 }

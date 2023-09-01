@@ -163,15 +163,19 @@
         }
 
         // 유저네임(이메일) 중복확인 - 230901 추가
-        @GetMapping("/check-username")
+        @GetMapping("/check-username/{username}")
         @ApiOperation(value = "유저네임(이메일) 중복확인")
         @ApiImplicitParam(name = "username", value = "유저네임(이메일)")
-        public ResponseEntity<String> checkUsername(@RequestParam String username) {
-            boolean checkUsernameUnique = userService.isUsernameUnique(username);
-            if (checkUsernameUnique) {
-                return ResponseEntity.ok("사용 가능한 계정입니다");
-            }
-            return ResponseEntity.ok("이미 가입된 계정입니다");
+        public ResponseEntity<Boolean> checkUsername(@PathVariable String username) {
+            return ResponseEntity.ok(userService.isUsernameUnique(username));
+        }
+
+        // 닉네임 중복확인 - 230901 추가
+        @GetMapping("/check-nickname/{nickname}")
+        @ApiOperation(value = "닉네임 중복확인")
+        @ApiImplicitParam(name = "nickname", value = "닉네임")
+        public ResponseEntity<Boolean> checkNickname(@PathVariable String nickname) {
+            return ResponseEntity.ok(userService.isNicknameUnique(nickname));
         }
 
 //        @ExceptionHandler(RequestException.class)
