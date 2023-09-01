@@ -48,7 +48,7 @@ public class StoreDto {
     // UserDto -> UserResponseDto (Dto에서 responseDto로 변환해준다)
     public StoreResponseDto convertToStoreResponseDto() {
         StoreResponseDto storeResponseDto = new StoreResponseDto();
-        storeResponseDto.setId(this.id);
+        storeResponseDto.setStoreId(this.id);
         storeResponseDto.setName(this.name);
         storeResponseDto.setBasicAddress(this.basicAddress);
         storeResponseDto.setAverageRating(this.averageRating);

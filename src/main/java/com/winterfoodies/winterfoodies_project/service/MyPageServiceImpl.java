@@ -5,6 +5,8 @@ import com.winterfoodies.winterfoodies_project.dto.review.ReviewDto;
 import com.winterfoodies.winterfoodies_project.dto.store.StoreResponseDto;
 import com.winterfoodies.winterfoodies_project.dto.user.UserDto;
 import com.winterfoodies.winterfoodies_project.entity.*;
+import com.winterfoodies.winterfoodies_project.exception.RequestException;
+import com.winterfoodies.winterfoodies_project.exception.UserException;
 import com.winterfoodies.winterfoodies_project.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -93,7 +95,7 @@ public class MyPageServiceImpl implements MypageService{
             Optional<Store> foundStore = storeRepository.findById(foundStoreId);
 
             StoreResponseDto storeResponseDto = new StoreResponseDto();
-            storeResponseDto.setId(id);
+            storeResponseDto.setStoreId(foundStoreId);
             storeResponseDto.setName(foundStore.get().getStoreDetail().getName());
             storeResponseDto.setBasicAddress(foundStore.get().getStoreDetail().getBasicAddress());
             storeResponseDto.setAverageRating(foundStore.get().getStoreDetail().getAverageRating());
@@ -166,7 +168,7 @@ public class MyPageServiceImpl implements MypageService{
     // 리뷰 삭제
     @Override
     public UserDto delReviewByUserId(Long reviewId) {
-        reviewRepository.deleteById(reviewId);
+        Optional<Review> review = reviewRepository.findById(reviewId);
         UserDto userDto = new UserDto();
         userDto.setMessage("삭제완료!!");
         return userDto;

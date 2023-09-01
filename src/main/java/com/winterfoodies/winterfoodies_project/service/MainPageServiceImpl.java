@@ -76,7 +76,7 @@ public class MainPageServiceImpl implements MainPageService{
 
         for (Store store : nearbyStores) {
             StoreResponseDto storeResponseDto = new StoreResponseDto();
-            storeResponseDto.setId(store.getId());
+            storeResponseDto.setStoreId(store.getId());
             storeResponseDto.setName(store.getStoreDetail().getName());
             nearbyStoreDtoList.add(storeResponseDto);
             storeResponseDto.setLatitude(store.getStoreDetail().getLatitude());
@@ -99,7 +99,7 @@ public class MainPageServiceImpl implements MainPageService{
             for (StoreProduct storeProduct : storeProducts) {
                 if (Objects.equals(storeProduct.getProduct().getId(), productId)) {
                     StoreResponseDto storeResponseDto = new StoreResponseDto();
-                    storeResponseDto.setId(store.getId());
+                    storeResponseDto.setStoreId(store.getId());
                     storeResponseDto.setName(store.getStoreDetail().getName());
                     storeResponseDto.setBasicAddress(store.getStoreDetail().getBasicAddress());
                     storeResponseDto.setAverageRating(store.getStoreDetail().getAverageRating());
@@ -123,7 +123,7 @@ public class MainPageServiceImpl implements MainPageService{
         List<StoreResponseDto> storeBySalesStoreList = new ArrayList<>();
         for (Store store : storesSortedByMenuSales) {
             StoreResponseDto storeResponseDto = new StoreResponseDto();
-            storeResponseDto.setId(store.getId());
+            storeResponseDto.setStoreId(store.getId());
             storeResponseDto.setName(store.getStoreDetail().getName());
             storeResponseDto.setBasicAddress(store.getStoreDetail().getBasicAddress());
             storeResponseDto.setAverageRating(store.getStoreDetail().getAverageRating());
@@ -146,7 +146,7 @@ public class MainPageServiceImpl implements MainPageService{
 
         for (Store store : storeByReviews) {
             StoreResponseDto storeResponseDto = new StoreResponseDto();
-            storeResponseDto.setId(store.getId());
+            storeResponseDto.setStoreId(store.getId());
             storeResponseDto.setName(store.getStoreDetail().getName());
             storeResponseDto.setBasicAddress(store.getStoreDetail().getBasicAddress());
             storeResponseDto.setAverageRating(store.getStoreDetail().getAverageRating());
@@ -169,7 +169,7 @@ public class MainPageServiceImpl implements MainPageService{
 
         for (Store store : storeByAverageRating) {
             StoreResponseDto storeResponseDto = new StoreResponseDto();
-            storeResponseDto.setId(store.getId());
+            storeResponseDto.setStoreId(store.getId());
             storeResponseDto.setName(store.getStoreDetail().getName());
             storeResponseDto.setBasicAddress(store.getStoreDetail().getBasicAddress());
             storeResponseDto.setAverageRating(store.getStoreDetail().getAverageRating());

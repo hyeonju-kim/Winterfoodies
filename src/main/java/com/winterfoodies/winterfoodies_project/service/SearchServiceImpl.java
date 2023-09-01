@@ -70,7 +70,7 @@ public class SearchServiceImpl implements SearchService{
 
         for (Store store : nearbyStores) {
             StoreResponseDto storeResponseDto = new StoreResponseDto();
-            storeResponseDto.setId(store.getId());
+            storeResponseDto.setStoreId(store.getId());
             storeResponseDto.setName(store.getStoreDetail().getName());
             nearbyStoreDtoList.add(storeResponseDto);
             storeResponseDto.setLatitude(store.getStoreDetail().getLatitude());
