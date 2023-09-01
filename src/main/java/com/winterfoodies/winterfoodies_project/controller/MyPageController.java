@@ -161,7 +161,7 @@ public class MyPageController {
 
     // ***************** 1-5. 환경설정 및 공지사항 *****************
     @GetMapping("/config")
-    @ApiOperation(value = "환경설정 및 공지사항")
+    @ApiOperation(value = "환경설정 및 공지사항  -  토큰 XXXXXXXXXXXXXXX")
     public Configuration config() {
         return mypageService.getConfig();
     }

@@ -10,5 +10,9 @@ public interface SearchService {
     List<StoreDto> searchStores(String keyword);
 
     // 지도로 근처 가게 검색
-    List<StoreDto> searchStoresByAddressNo(String addressNo);
+//    List<StoreDto> searchStoresByAddressNo(String addressNo);
+
+    public List<StoreResponseDto> getNearbyStores(double latitude, double longitude);
+
 }
+
