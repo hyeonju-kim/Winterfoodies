@@ -1,5 +1,6 @@
 package com.winterfoodies.winterfoodies_project.service;
 
+import com.winterfoodies.winterfoodies_project.ErrorBox;
 import com.winterfoodies.winterfoodies_project.dto.product.ProductDto;
 import com.winterfoodies.winterfoodies_project.dto.product.ProductResponseDto;
 import com.winterfoodies.winterfoodies_project.dto.review.ReviewDto;
@@ -7,6 +8,7 @@ import com.winterfoodies.winterfoodies_project.dto.store.StoreMainDto;
 import com.winterfoodies.winterfoodies_project.dto.store.StoreResponseDto;
 import com.winterfoodies.winterfoodies_project.dto.user.UserResponseDto;
 import com.winterfoodies.winterfoodies_project.entity.*;
+import com.winterfoodies.winterfoodies_project.exception.RequestException;
 import com.winterfoodies.winterfoodies_project.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -301,11 +303,20 @@ public class MainPageServiceImpl implements MainPageService{
     // 10. 가게 찜하기 취소
     @Override
     public UserResponseDto revokeFavoriteStore(Long storeId) {
-        favoriteStoreRepository.deleteById(storeId);
 
-        UserResponseDto userDto = new UserResponseDto();
-        userDto.setMessage("찜하기 취소");
-        return userDto;
+        // 사용자가 찜한 가게인지 확인
+        Optional<FavoriteStore> favoriteStoreOptional = favoriteStoreRepository.findByUserIdAndStoreId(getUserId(), storeId);
+
+        if (favoriteStoreOptional.isPresent()) {
+            // 사용자가 찜한 가게인 경우 삭제
+            favoriteStoreRepository.delete(favoriteStoreOptional.get());
+
+            UserResponseDto userDto = new UserResponseDto();
+            userDto.setMessage("찜하기 취소");
+            return userDto;
+        } else {
+            throw new RequestException(new ErrorBox("자신이 찜한 가게만 취소할 수 있습니다."));
+        }
     }
 
 }
