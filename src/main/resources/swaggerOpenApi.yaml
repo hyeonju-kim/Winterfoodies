@@ -124,8 +124,8 @@ paths:
                 orderDate: '2023-09-01T08:31:13.002Z'
                 orderId: 1
                 productAndQuantityList:
-                  - {}
-                storeName: '1'
+                  - {} # item 스펙도 명시 부탁드립니다.
+                storeName: '1' # 신천붕어빵
                 totalAmount: 10000
               schema:
                 type: object
@@ -157,9 +157,16 @@ paths:
           content:
             '*/*':
               example:
-                - productId: 1
-                  quantity: 5
-                  totalPrice: 7500
+              # 스토어 정보가 필요합니다.
+                # storeId: 1
+                # storeName: 신천붕어빵
+                # cart:
+                # - productId: 1
+                #   # 상품이름 추가
+                #   quantity: 5
+                #   # 상품개당가격 추가
+                #   # 상품고를수있는 최대수량(일단은 static으로 10개?)
+                #   totalPrice: 7500 # 삭제
               schema:
                 type: array
                 items:
@@ -173,6 +180,10 @@ paths:
                       type: integer
       security:
         - JWT: []
+  # 주문하기 API 필요
+  # post
+  # 요청: 상품 아이디, 상품 갯수, 주문 시간
+  # 응답: 조리 예상 시간
   /api/check-username:
     get:
       tags:
@@ -191,6 +202,7 @@ paths:
           content:
             '*/*':
               example: 사용가능한 계정입니다
+              # 응답이 조금 애매한것 같습니다. 중복인 아이디 일때는 500 에러가 나오는건가요?
               schema:
                 type: string
   /api/login:
@@ -221,6 +233,9 @@ paths:
                 message: 메시지
                 refreshToken: refresh 토큰
                 token: access 토큰
+                # 유저 nickname
+                # 유저 phone number
+                # 유저 이메일
               schema:
                 type: object
                 properties:
@@ -631,12 +646,15 @@ paths:
               example:
                 averageRating: 0
                 estimatedCookingTime: 20분~30분
-                like: 찜유무
+                like: 찜유무 # true
                 popularProductsDtoList:
                   - id: 1
+                    # 상품명
                     message: 장바구니에 추가되었습니다.
                 productResponseDtoList:
                   - id: 1
+                    # 상품명
+                    # 가격
                     message: 장바구니에 추가되었습니다.
                 storeName: 가게명
                 storeResponseDtoList:
@@ -646,6 +664,8 @@ paths:
                   latitude: 37.381798
                   longitude: 126.800944
                   name: 신천붕어빵
+                  # 영업 시간
+                  # 안내 사항
                   storeId: 1
               schema:
                 type: object
@@ -790,6 +810,8 @@ paths:
                   rating: 5
                   storeName: 신천붕어빵
                   timestamp: '2023-09-01T08:50:42.608Z'
+                  # 유저 이름
+                  # 유저 아이디
               schema:
                 type: array
                 items:
@@ -902,6 +924,7 @@ paths:
       tags:
         - my-page-controller
       summary: 마이페이지 내정보 비밀번호 변경
+      # 새 비밀번호 요청 필요
       responses:
         '200':
           description: OK
@@ -940,6 +963,7 @@ paths:
                   longitude: 126.800944
                   name: 신천붕어빵
                   storeId: 1
+                  # 찜한 시간 (정렬 위해)
               schema:
                 type: array
                 items:
@@ -976,10 +1000,12 @@ paths:
                   orderDate: '2023-09-01T08:58:16.325Z'
                   orderId: 1
                   productAndQuantityList:
+                    # 각각의 아이템 - id, name, quantity, price
                     - 붕어빵: 5
                     - 어묵: 10
-                  storeName: '1'
+                  storeName: '1' #가게명
                   totalAmount: 10000
+                  # 리뷰 작성 여부
               schema:
                 type: array
                 items:
@@ -1012,6 +1038,7 @@ paths:
             example:
               rating: 5
               storeName: 신천붕어빵
+              # 스토어 아이디
               content: 완전 맛있어요ㅜㅜ
             schema:
               type: object
@@ -1167,6 +1194,10 @@ paths:
           required: true
           schema:
             type: string
+            # enum:
+            #   - GOOGLE
+            #   - KAKAO
+            #   - NAVER
         - name: code
           in: query
           description: code
@@ -1194,6 +1225,10 @@ paths:
                     type: string
                   user_num:
                     type: string
+                  # 유저 닉네임
+                  # 유저 연락처
+                  # 유저 이메일
+                  # 유저 로그인 타입 (GOOGLE, KAKAO, NAVER)
   /api/search:
     get:
       tags:
