@@ -51,4 +51,7 @@ public class OrderResponseDto {
 
     @ApiModelProperty(example = "10000", value = "총 주문금액")
     private Long totalAmount;
+
+    @ApiModelProperty(example = "3000", value = "각 메뉴별 총 주문금액")
+    private Long subTotalAmount;
 }

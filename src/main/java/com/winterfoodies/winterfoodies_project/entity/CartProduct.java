@@ -38,6 +38,8 @@ public class CartProduct {
 
     private Long totalPrice;
 
+    private Long subTotalPrice; // 장바구니의 각 상품별 합계
+
     private Long userId;
 
     public CartProduct(Cart cart, Product product) {

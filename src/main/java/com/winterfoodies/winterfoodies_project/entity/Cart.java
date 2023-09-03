@@ -18,9 +18,19 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Long userId;
+
     @JsonIgnore // 순환참조 발생하지 않도록
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartProduct> cartProducts = new ArrayList<>();
+
+    public Cart(Long userId) {
+        this.userId = userId;
+    }
+
+    public Cart() {
+
+    }
 
     // 상품 목록 조회 메서드
     @JsonIgnore
