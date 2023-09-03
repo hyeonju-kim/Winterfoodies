@@ -37,12 +37,17 @@ public class UserResponseDto{
     @ApiModelProperty(example = "010-8711-7702")
     private String phoneNumber;
 
-    @JsonIgnore
+//    @JsonIgnore
     @ApiModelProperty(value = "유저 상태", hidden = true )
-    private HttpStatus status;
+    private String status;
 
     public UserResponseDto(String message) {
         this.message = message;
+    }
+
+    public UserResponseDto(String message, String status) {
+        this.message = message;
+        this.status = status;
     }
 
 

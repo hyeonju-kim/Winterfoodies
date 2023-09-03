@@ -172,8 +172,13 @@
         @GetMapping("/check-username/{username}")
         @ApiOperation(value = "유저네임(이메일) 중복확인")
         @ApiImplicitParam(name = "username", value = "유저네임(이메일)")
-        public ResponseEntity<Boolean> checkUsername(@PathVariable String username) {
-            return ResponseEntity.ok(userService.isUsernameUnique(username));
+        public ResponseEntity<UserResponseDto> checkUsername(@PathVariable String username) {
+            boolean isUsernameUnique = userService.isUsernameUnique(username);
+            if (isUsernameUnique) {
+                return ResponseEntity.ok(new UserResponseDto("이미 사용 중인 이메일 주소입니다.", "error"));
+            }else {
+                return ResponseEntity.ok(new UserResponseDto("사용 가능한 이메일 주소 입니다.", "success"));
+            }
         }
 
         // 닉네임 중복확인 - 230901 추가
