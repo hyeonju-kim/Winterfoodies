@@ -10,6 +10,8 @@ import lombok.Setter;
 public class CartProductRequestDto {
     private Long id;
     private Long productId;
+    private String productName;
     private Long quantity;
+    private Long subTotalPrice; // 장바구니의 각 상품별 합계
     private Long totalPrice;
 }

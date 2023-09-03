@@ -1,6 +1,7 @@
 package com.winterfoodies.winterfoodies_project.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,8 @@ public class CartProduct {
     private Product product;
 
     private Long quantity;
+
+//    private Long pricePerProduct;
 
     private Long totalPrice;
 

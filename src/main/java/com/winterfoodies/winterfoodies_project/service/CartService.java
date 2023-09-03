@@ -13,7 +13,7 @@ import java.util.List;
 
 public interface CartService {
     // 장바구니에 상품 추가
-    ProductDto addProductToCart(ProductDto inProductDto, HttpServletRequest request, HttpServletResponse response);
+    CartProductDto addProductToCart(CartProductDto inProductDto, HttpServletRequest request, HttpServletResponse response);
 
 //    // 장바구니 상품 목록 조회 (쿠키에서)
 //    List<CartProductDto> getCartProduct(HttpServletRequest request);

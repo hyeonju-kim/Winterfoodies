@@ -42,7 +42,7 @@ public class CartController {
 
     @PostMapping("/items") // [230726] Get -> Post로 변경
     @ApiOperation(value = "장바구니에 상품 추가")
-    public ProductResponseDto addProductToCart(@Valid @RequestBody ProductRequestDto productRequestDto, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response) throws Exception{
+    public CartProductResponseDto addProductToCart(@Valid @RequestBody ProductRequestDto productRequestDto, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response) throws Exception{
         if (bindingResult.hasErrors()) {
             ObjectError err = bindingResult.getAllErrors().get(0);
             String message = err.getDefaultMessage();
@@ -56,15 +56,16 @@ public class CartController {
             log.error(errorBox.getMessage());
             throw new RequestException(errorBox);
         }
-        log.info("id={}" , productRequestDto.getId().toString());
+
+        log.info("id={}" , productRequestDto.getProductId().toString());
         log.info("quantity={}" , productRequestDto.getQuantity().toString());
         log.info("request={}" , request);
         log.info("response={}" , response);
 
-        ProductDto productDto = new ProductDto(productRequestDto);
+        CartProductDto cartProductDto = new CartProductDto(productRequestDto);
 
-        ProductDto productDto1 = cartService.addProductToCart(productDto, request, response);
-        return productDto1.convertToProductResponseDto();
+        CartProductDto cartProductDto1 = cartService.addProductToCart(cartProductDto, request, response);
+        return cartProductDto1.convertToCartProductResponseDto();
     }
 
 //    @ExceptionHandler(RequestException.class)
@@ -73,16 +74,16 @@ public class CartController {
 //    }
 
     // 장바구니에 상품 조회 API
-    @GetMapping("/itemsList")
-    @ApiOperation(value = "장바구니 상품 조회 - 쿠키에서 조회")
-    public List<CartProductResponseDto> getCartProducts(HttpServletRequest request) {
-        List<CartProductDto> cartProductDtoList = cartService.getCartProduct(request);
-        ArrayList<CartProductResponseDto> cartProductResponseDtoList = new ArrayList<>();
-        for (CartProductDto cartProductDto : cartProductDtoList) {
-            cartProductResponseDtoList.add(cartProductDto.convertToCartProductResponseDto());
-        }
-        return cartProductResponseDtoList;
-    }
+//    @GetMapping("/itemsList")
+//    @ApiOperation(value = "장바구니 상품 조회 - 쿠키에서 조회")
+//    public List<CartProductResponseDto> getCartProducts(HttpServletRequest request) {
+//        List<CartProductDto> cartProductDtoList = cartService.getCartProduct(request);
+//        ArrayList<CartProductResponseDto> cartProductResponseDtoList = new ArrayList<>();
+//        for (CartProductDto cartProductDto : cartProductDtoList) {
+//            cartProductResponseDtoList.add(cartProductDto.convertToCartProductResponseDto());
+//        }
+//        return cartProductResponseDtoList;
+//    }
 
     // 장바구니 상품 목록 조회 (DB에서)
     @GetMapping("/itemsListByDB")
@@ -113,12 +114,12 @@ public class CartController {
 //        return cartProductDto.convertToCartProductResponseDto();
 //    }
 
-    // 주문완료 페이지
-    @PostMapping("/items/confirm")
-    @ApiOperation(value = "주문 완료 페이지 - 쿠키에서 조회")
-    public OrderResponseDto getOrderConfirmPage(@RequestBody OrderRequestDto orderRequestDto, HttpServletRequest request){
-        return cartService.getOrderConfirmPage(orderRequestDto, request);
-    }
+//    // 주문완료 페이지
+//    @PostMapping("/items/confirm")
+//    @ApiOperation(value = "주문 완료 페이지 - 쿠키에서 조회")
+//    public OrderResponseDto getOrderConfirmPage(@RequestBody OrderRequestDto orderRequestDto, HttpServletRequest request){
+//        return cartService.getOrderConfirmPage(orderRequestDto, request);
+//    }
 
     // 주문완료 페이지 (DB에서 조회)
     @PostMapping("/items/confirmByDB")

@@ -17,7 +17,7 @@ public class ProductRequestDto {
     @NotNull
     @Min(0)
     @ApiModelProperty(example = "2", value = "상품 아이디")
-    private Long id;
+    private Long productId;
 
     @NotNull
     @Min(0)

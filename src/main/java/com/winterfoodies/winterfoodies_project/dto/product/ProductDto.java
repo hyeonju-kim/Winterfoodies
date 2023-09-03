@@ -12,7 +12,7 @@ import lombok.ToString;
 public class ProductDto {
 
     @ApiModelProperty(example = "상품 id" )
-    private Long id;
+    private Long productId;
 
     @ApiModelProperty(example = "상품 수량" )
     private Long quantity;
@@ -23,24 +23,28 @@ public class ProductDto {
     @ApiModelProperty(example = "가게명" )
     private Long storeId;
 
+    @ApiModelProperty(example = "500", value = "각 상품당 가격")
+    private Long pricePerProduct;
+
     public ProductDto() {
     }
 
     public ProductDto(ProductRequestDto requestDto) {
-        this.id= requestDto.getId();
+        this.productId= requestDto.getProductId();
         this.quantity = requestDto.getQuantity();
         this.storeId = requestDto.getStoreId();
     }
 
     public ProductDto(Product product) {
-        this.id = product.getId();
+        this.productId = product.getId();
     }
 
     public ProductResponseDto convertToProductResponseDto() {
         ProductResponseDto productResponseDto = new ProductResponseDto();
-        productResponseDto.setId(this.id);
+        productResponseDto.setId(this.productId);
         productResponseDto.setQuantity(this.quantity);
         productResponseDto.setMessage(this.message);
+
         return productResponseDto;
     }
 }

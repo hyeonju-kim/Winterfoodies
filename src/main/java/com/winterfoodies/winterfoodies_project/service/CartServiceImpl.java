@@ -2,6 +2,7 @@ package com.winterfoodies.winterfoodies_project.service;
 
 import com.winterfoodies.winterfoodies_project.ErrorBox;
 import com.winterfoodies.winterfoodies_project.dto.cartProduct.CartProductDto;
+import com.winterfoodies.winterfoodies_project.dto.cartProduct.CartProductResponseDto;
 import com.winterfoodies.winterfoodies_project.dto.order.OrderRequestDto;
 import com.winterfoodies.winterfoodies_project.dto.order.OrderResponseDto;
 import com.winterfoodies.winterfoodies_project.dto.product.ProductDto;
@@ -51,10 +52,10 @@ public class CartServiceImpl implements CartService {
 
     // ❤ 1. 장바구니에 상품 추가 (쿠키와 DB에 장바구니 담기)
     @Override
-    public ProductDto addProductToCart(ProductDto inProductDto, HttpServletRequest request, HttpServletResponse response) {
-        Long productId = inProductDto.getId();
-        Long quantity = inProductDto.getQuantity();
-        Long storeId = inProductDto.getStoreId();
+    public CartProductDto addProductToCart(CartProductDto inCartProductDto, HttpServletRequest request, HttpServletResponse response) {
+        Long productId = inCartProductDto.getProductId();
+        Long quantity = inCartProductDto.getQuantity();
+        Long storeId = inCartProductDto.getStoreId();
 
 //        // 쿠키에 담기
 //        Cookie[] cookies = request.getCookies();
@@ -85,42 +86,46 @@ public class CartServiceImpl implements CartService {
 
 
         // 디비에 담기
-        Optional<Store> optionalStore = storeRepository.findById(storeId);
-        Store selectedStore = optionalStore.get();
+//        Optional<Store> optionalStore = storeRepository.findById(storeId);
+//        Store selectedStore = optionalStore.get();
+        //장바구니에 한 가게가 있으면
         if (!cartProductRepository.findByUserId(getUserId()).isEmpty() && !cartProductRepository.findByUserId(getUserId()).get(0).getStore().getId().equals(storeId)) {
             throw new RequestException(new ErrorBox("장바구니에는 한 가게의 음식만 담을 수 있습니다."));
         }
+
         Optional<Product> optionalProduct = productRepository.findById(productId);
+        Optional<Cart> cartByUserId = cartRepository.findByUserId(getUserId());
         Product product = optionalProduct.get();
 
-        Cart cartByUserId = cartRepository.findByUserId(getUserId());
-
         // 유저가 가지고 있는 장바구니와 장바구니상품이 없을 때 (한 유저는 한 개의 장바구니만 가진다)
-        if (cartByUserId == null) {
+        if (cartByUserId.isEmpty()) {
             Cart cart = new Cart(getUserId());
+            cart.setStoreId(storeId);
+            cartRepository.save(cart);
             CartProduct cartProduct = new CartProduct(cart, product);
             cartProduct.setQuantity(quantity);
-            cartProduct.setTotalPrice(product.getPrice() * quantity);
+            cartProduct.setSubTotalPrice(product.getPrice() * quantity);
             cartProduct.setStore(storeRepository.findById(storeId).get());
             cartProduct.setUserId(getUserId());
             cartProductRepository.save(cartProduct);
-            ProductDto outProductDto = new ProductDto(product);
-            outProductDto.setMessage("장바구니에 추가되었습니다."); // [230726] TODO ProductDto하니까 이상한듯? CartDto로 바꾸던지 바꾸자
-            return outProductDto;
+            CartProductDto cartProductDto = new CartProductDto(cartProduct,getUserId());
+            cartProductDto.setMessage("장바구니에 추가되었습니다.");
+            return cartProductDto;
 
         }else { // 유저가 이미 장바구니와 장바구니상품을 생성한 상태일 때
 
             // CartProduct는 생성했는데 그 안에 해당 상품이 없을 때
             CartProduct cartProductByProductId = cartProductRepository.findByProductId(productId);
+
             if (cartProductByProductId == null) {
-                CartProduct newCartProduct = new CartProduct(cartByUserId, product);
+                CartProduct newCartProduct = new CartProduct(cartByUserId.get(), product);
                 newCartProduct.setQuantity(quantity);
-                newCartProduct.setTotalPrice(product.getPrice() * quantity);
+                newCartProduct.setSubTotalPrice(product.getPrice() * quantity);
                 newCartProduct.setStore(storeRepository.findById(storeId).get());
                 newCartProduct.setUserId(getUserId());
                 cartProductRepository.save(newCartProduct);
-                ProductDto outProductDto = new ProductDto(product);
-                outProductDto.setMessage("장바구니에 추가되었습니다."); // [230726] TODO ProductDto하니까 이상한듯? CartDto로 바꾸던지 바꾸자
+                CartProductDto outProductDto = new CartProductDto(newCartProduct, getUserId());
+                outProductDto.setMessage("장바구니에 추가되었습니다.");
                 return outProductDto;
             }
             throw new RequestException(new ErrorBox("이미 장바구니에 있는 음식입니다."));
@@ -169,12 +174,12 @@ public class CartServiceImpl implements CartService {
         List<CartProduct> cartProductList = cartProductRepository.findByUserId(userId);
 
         if (cartProductList.isEmpty()) {
-            throw new RequestException(new ErrorBox("널이래"));
+            throw new RequestException(new ErrorBox("장바구니에 상품이 없습니다."));
         }
         ArrayList<CartProductDto> cartProductDtoList = new ArrayList<>();
 
         for (CartProduct cartProduct : cartProductList) {
-            CartProductDto cartProductDto = new CartProductDto(cartProduct);
+            CartProductDto cartProductDto = new CartProductDto(cartProduct, getUserId());
             cartProductDtoList.add(cartProductDto);
         }
         return cartProductDtoList;
