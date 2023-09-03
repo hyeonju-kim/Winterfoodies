@@ -34,11 +34,21 @@ public class UserResponseDto{
     @ApiModelProperty(example = "붕어빵러버")
     private String nickname;
 
+    @ApiModelProperty(example = "010-8711-7702")
+    private String phoneNumber;
+
     @JsonIgnore
     @ApiModelProperty(value = "유저 상태", hidden = true )
     private HttpStatus status;
 
     public UserResponseDto(String message) {
         this.message = message;
+    }
+
+
+    public UserResponseDto(String username, String nickname, String phoneNumber) {
+        this.username = username;
+        this.nickname = nickname;
+        this.phoneNumber = phoneNumber;
     }
 }

@@ -83,6 +83,9 @@
             String password = loginRequestDto.getPassword();
             String username = loginRequestDto.getUsername();
             User retrievedUser = userRepository.findByUsername(username);
+            String nickname = retrievedUser.getNickname();
+            String phoneNumber = retrievedUser.getPhoneNumber();
+
             log.info("retrievedUser = {}", retrievedUser);
 
             if (retrievedUser == null) {
@@ -130,7 +133,10 @@
 
 
             // 4. 생성된 토큰을 응답
-            return ResponseEntity.ok(new LoginSuccessResponseDto(token, refreshToken));
+            LoginSuccessResponseDto loginSuccessResponseDto = new LoginSuccessResponseDto(token);
+            UserResponseDto userResponseDto = new UserResponseDto(username, nickname, phoneNumber);
+            loginSuccessResponseDto.setUserResponseDto(userResponseDto);
+            return ResponseEntity.ok(loginSuccessResponseDto);
         }
 
 //        @ExceptionHandler(BadCredentialsException.class)
@@ -158,7 +164,7 @@
             }
             UserDto userDto = userService.signUp(userRequestDto);
             UserResponseDto userResponseDto = userDto.convertToUserResponseDto();
-            userResponseDto.setMessage("회원가입이 완료되었습니다.");
+//            userResponseDto.setMessage("회원가입이 완료되었습니다.");
             return ResponseEntity.ok(userResponseDto);
         }
 
