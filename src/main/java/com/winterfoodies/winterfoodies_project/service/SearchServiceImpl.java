@@ -1,6 +1,7 @@
 package com.winterfoodies.winterfoodies_project.service;
 
 import com.winterfoodies.winterfoodies_project.dto.store.StoreDto;
+import com.winterfoodies.winterfoodies_project.dto.store.StoreMainDto;
 import com.winterfoodies.winterfoodies_project.dto.store.StoreResponseDto;
 import com.winterfoodies.winterfoodies_project.entity.Store;
 import com.winterfoodies.winterfoodies_project.repository.StoreRepository;
@@ -19,23 +20,27 @@ public class SearchServiceImpl implements SearchService{
 
     // 상호명 검색
     @Override
-    public List<StoreDto> searchStores(String keyword, double latitude, double longitude) {
+    public StoreMainDto searchStores(String keyword, double latitude, double longitude) {
         double radius = 5.0; // 검색 반경 설정 (예: 5.0km)
+        StoreMainDto storeMainDto = new StoreMainDto();
         List<Store> storeList = storeRepository.searchStores(keyword, latitude, longitude, radius);
+        storeMainDto.setSearchCnt((long) storeList.size());
 
-        List<StoreDto> storeDtoList = new ArrayList<>();
+        List<StoreResponseDto> storeDtoList = new ArrayList<>();
         for (Store store : storeList) {
-            StoreDto storeDto = new StoreDto();
-            storeDto.setId(store.getId());
+            StoreResponseDto storeResponseDto = new StoreResponseDto();
+            storeResponseDto.setStoreId(store.getId());
             System.out.println("storeId======" + store.getId());
-            storeDto.setName(store.getStoreDetail().getName());
-            storeDto.setBasicAddress(store.getStoreDetail().getBasicAddress());
-            storeDto.setAverageRating(store.getStoreDetail().getAverageRating());
-            storeDto.setLatitude(store.getStoreDetail().getLatitude());
-            storeDto.setLongitude(store.getStoreDetail().getLongitude());
-            storeDtoList.add(storeDto);
+            storeResponseDto.setName(store.getStoreDetail().getName());
+            storeResponseDto.setBasicAddress(store.getStoreDetail().getBasicAddress());
+            storeResponseDto.setAverageRating(store.getStoreDetail().getAverageRating());
+            storeResponseDto.setLatitude(store.getStoreDetail().getLatitude());
+            storeResponseDto.setLongitude(store.getStoreDetail().getLongitude());
+            storeResponseDto.setThumbNailImgUrl(store.getStoreDetail().getThumbnailImgUrl());
+            storeDtoList.add(storeResponseDto);
         }
-        return storeDtoList;
+        storeMainDto.setStoreResponseDtoList(storeDtoList);
+        return storeMainDto;
     }
 
 

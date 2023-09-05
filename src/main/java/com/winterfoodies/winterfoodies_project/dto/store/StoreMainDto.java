@@ -28,6 +28,9 @@ public class StoreMainDto { // 가게 상세 조회
     @ApiModelProperty(example = "23" )
     private Long reviewCnt;
 
+    @ApiModelProperty(example = "6" )
+    private Long searchCnt;
+
     @ApiModelProperty(value = "가게썸네일사진", hidden = true)
     private String thumbNailImgUrl;
 
