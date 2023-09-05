@@ -187,6 +187,7 @@ public class AppRunner implements ApplicationRunner {
         StoreProduct storeProduct = new StoreProduct();
         storeProduct.setStore(store); // 신천붕어빵
         storeProduct.setProduct(product); // 붕어빵
+        storeProduct.setProduct(product2); // 델리만쥬
         storeProductRepository.save(storeProduct);
 
         StoreProduct storeProduct2 = new StoreProduct();
@@ -254,61 +255,6 @@ public class AppRunner implements ApplicationRunner {
         favoriteStoreRepository.save(favoriteStore2);
 
 
-        // 사용자 리뷰작성 1
-        Review review = new Review();
-        review.setUserId(customer.getId());
-        review.setRating(5L);
-        review.setStore(store);
-        review.setStoreName("신천붕어빵");
-        review.setContent("붕어빵 너무 맛있어요!!");
-//        review.setTimestamp(LocalDateTime.now());
-        reviewRepository.save(review);
-
-        // 사용자 리뷰작성 2
-        Review review2 = new Review();
-        review2.setUserId(customer.getId());
-        review2.setRating(4L);
-        review.setStore(store2);
-        review2.setStoreName("대야붕어빵");
-        review2.setContent("매일 먹어요 최고!!");
-//        review2.setTimestamp(LocalDateTime.now());
-        reviewRepository.save(review2);
-
-        // 사용자 리뷰작성 3
-        Review review3 = new Review();
-        review3.setUserId(customer.getId());
-        review3.setRating(5L);
-        review3.setStore(store);
-        review3.setStoreName("신천붕어빵");
-        review3.setContent("붕어빵 너무 맛있어요!!");
-        reviewRepository.save(review3);
-
-        // 사용자 리뷰작성 4
-        Review review4 = new Review();
-        review4.setUserId(customer.getId());
-        review4.setRating(5L);
-        review4.setStore(store);
-        review4.setStoreName("신천붕어빵");
-        review4.setContent("맛있어요!!");
-        reviewRepository.save(review4);
-
-        // 사용자 리뷰작성 5
-        Review review5 = new Review();
-        review5.setUserId(customer.getId());
-        review5.setRating(5L);
-        review5.setStore(store3);
-        review5.setStoreName("소새울호떡집");
-        review5.setContent("넘맛있어요!!");
-        reviewRepository.save(review5);
-
-        // 사용자 리뷰작성 6
-        Review review6 = new Review();
-        review6.setUserId(customer.getId());
-        review6.setRating(5L);
-        review6.setStore(store3);
-        review6.setStoreName("소새울호떡집");
-        review6.setContent("완전맛있어요!!");
-        reviewRepository.save(review6);
 
         //주문 - 신천붕어빵 3회주문 ,  소새울호떡 2회주문,  대야붕어빵 1회주문
         Order order = new Order();
@@ -383,9 +329,11 @@ public class AppRunner implements ApplicationRunner {
         order6.setOrderProducts(orderProductList6);
         orderRepository.save(order6);
 
+
+
         //주문상품
         OrderProduct orderProduct = new OrderProduct();
-        orderProduct.setOrder(order4); // 신천붕어빵
+        orderProduct.setOrder(order); // 신천붕어빵
         orderProduct.setProduct(product); // 붕어빵
         orderProduct.setClientMessage("빨리 만들어주세요");
         orderProduct.setQuantity(3L);
@@ -394,7 +342,7 @@ public class AppRunner implements ApplicationRunner {
 
 
         OrderProduct orderProduct2 = new OrderProduct();
-        orderProduct2.setOrder(order5); // 소새울호떡집
+        orderProduct2.setOrder(order2); // 소새울호떡집
         orderProduct2.setProduct(product2); // 델리만쥬
         orderProduct2.setClientMessage("덜 익혀주세요");
         orderProduct2.setQuantity(2L);
@@ -402,7 +350,7 @@ public class AppRunner implements ApplicationRunner {
         orderProductRepository.save(orderProduct2);
 
         OrderProduct orderProduct3 = new OrderProduct();
-        orderProduct3.setOrder(order6); // 소새울호떡집
+        orderProduct3.setOrder(order3); // 소새울호떡집
         orderProduct3.setProduct(product); // 붕어빵
         orderProduct3.setClientMessage("리뷰이벤트 감자튀김이요");
         orderProduct3.setQuantity(10L);
@@ -410,7 +358,7 @@ public class AppRunner implements ApplicationRunner {
         orderProductRepository.save(orderProduct3);
 
         OrderProduct orderProduct4 = new OrderProduct();
-        orderProduct4.setOrder(order); // 신천붕어빵
+        orderProduct4.setOrder(order4); // 신천붕어빵
         orderProduct4.setProduct(product); // 붕어빵
         orderProduct4.setClientMessage("빨리 만들어주세요");
         orderProduct4.setQuantity(3L);
@@ -419,7 +367,7 @@ public class AppRunner implements ApplicationRunner {
 
 
         OrderProduct orderProduct5 = new OrderProduct();
-        orderProduct5.setOrder(order); // 신천붕어빵
+        orderProduct5.setOrder(order5); // 신천붕어빵
         orderProduct5.setProduct(product2); // 델리만쥬
         orderProduct5.setClientMessage("덜 익혀주세요");
         orderProduct5.setQuantity(2L);
@@ -427,7 +375,7 @@ public class AppRunner implements ApplicationRunner {
         orderProductRepository.save(orderProduct5);
 
         OrderProduct orderProduct6 = new OrderProduct();
-        orderProduct6.setOrder(order2); // 대야붕어빵
+        orderProduct6.setOrder(order6); // 대야붕어빵
         orderProduct6.setProduct(product); // 붕어빵
         orderProduct6.setClientMessage("리뷰이벤트 감자튀김이요");
         orderProduct6.setQuantity(10L);
@@ -440,6 +388,75 @@ public class AppRunner implements ApplicationRunner {
         cartRepository.save(cart);
         cartRepository.save(cart2);
 
+
+
+        // 사용자 리뷰작성 1
+        Review review = new Review();
+        review.setUserId(customer.getId());
+        review.setRating(5L);
+        review.setStore(store);
+        review.setStoreName("신천붕어빵");
+        review.setContent("붕어빵 너무 맛있어요!!");
+        review.setOrder(order);
+        review.setImages("리뷰사진1_붕어빵");
+//        review.setTimestamp(LocalDateTime.now());
+        reviewRepository.save(review);
+
+        // 사용자 리뷰작성 2
+        Review review2 = new Review();
+        review2.setUserId(customer.getId());
+        review2.setRating(4L);
+        review.setStore(store2);
+        review2.setStoreName("대야붕어빵");
+        review2.setContent("매일 먹어요 최고!!");
+        review2.setOrder(order2);
+        review2.setImages("리뷰사진2_붕어빵");
+//        review2.setTimestamp(LocalDateTime.now());
+        reviewRepository.save(review2);
+
+        // 사용자 리뷰작성 3
+        Review review3 = new Review();
+        review3.setUserId(customer.getId());
+        review3.setRating(5L);
+        review3.setStore(store);
+        review3.setStoreName("신천붕어빵");
+        review3.setContent("붕어빵 너무 맛있어요!!");
+        review3.setOrder(order3);
+        review3.setImages("리뷰사진3_붕어빵");
+        reviewRepository.save(review3);
+
+        // 사용자 리뷰작성 4
+        Review review4 = new Review();
+        review4.setUserId(customer.getId());
+        review4.setRating(5L);
+        review4.setStore(store);
+        review4.setStoreName("신천붕어빵");
+        review4.setContent("맛있어요!!");
+        review4.setOrder(order4);
+        review4.setImages("리뷰사진4_붕어빵");
+        reviewRepository.save(review4);
+
+        // 사용자 리뷰작성 5
+        Review review5 = new Review();
+        review5.setUserId(customer.getId());
+        review5.setRating(5L);
+        review5.setStore(store3);
+        review5.setStoreName("소새울호떡집");
+        review5.setContent("넘맛있어요!!");
+        review5.setOrder(order5);
+        review5.setImages("리뷰사진5_호떡");
+        reviewRepository.save(review5);
+
+        // 사용자 리뷰작성 6
+        Review review6 = new Review();
+        review6.setUserId(customer.getId());
+        review6.setRating(5L);
+        review6.setStore(store3);
+        review6.setStoreName("소새울호떡집");
+        review6.setContent("완전맛있어요!!");
+        review6.setOrder(order6);
+        review6.setImages("리뷰사진6_호떡");
+        reviewRepository.save(review6);
 
 
     }

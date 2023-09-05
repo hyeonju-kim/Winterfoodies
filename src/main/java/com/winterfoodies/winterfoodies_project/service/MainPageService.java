@@ -35,7 +35,7 @@ public interface MainPageService {
 //    StoreResponseDto getStoreDetails(Long storeId);
 
     // 가게 상세 조회(리뷰)
-    List<ReviewDto> getStoreReviews(Long storeId);
+    StoreMainDto getStoreReviews(Long storeId);
 
     // 가게 찜하기
     UserResponseDto addFavoriteStore(Long storeId);

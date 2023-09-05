@@ -26,6 +26,9 @@ public class ReviewDto extends Timestamped {
     @ApiModelProperty(value = "사용자 id" , hidden = true)
     private Long userId;
 
+    @ApiModelProperty(value = "사용자 닉네임" , example = "붕어조아")
+    private String nickname;
+
     private Long orderId;
 
     @ApiModelProperty(example = "신천붕어빵", value = "가게명" )
@@ -40,6 +43,8 @@ public class ReviewDto extends Timestamped {
     @ApiModelProperty(value = "음식 사진" )
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private String images;
+
+    private List<String> orderedProducts; // 주문한 음식 리스트
 
 
     @ApiModelProperty(example = "완전 맛있어요ㅜㅜ", value = "리뷰 내용" )

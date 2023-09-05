@@ -109,7 +109,7 @@ public class MainPageController {
     @GetMapping("/{storeId}/review")
     @ApiOperation(value = "가게 상세 조회(리뷰)  -  토큰 XXXXXXXXXXXXXXX")
     @ApiImplicitParam(name = "storeId", value = "가게 아이디")
-    public List<ReviewDto> storeDetailReview(@PathVariable Long storeId) {
+    public StoreMainDto storeDetailReview(@PathVariable Long storeId) {
         return mainPageService.getStoreReviews(storeId);
     }
 

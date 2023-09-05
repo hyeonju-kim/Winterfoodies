@@ -295,22 +295,50 @@ public class MainPageServiceImpl implements MainPageService{
 
     // 8. 가게 상세 조회(리뷰)
     @Override
-    public List<ReviewDto> getStoreReviews(Long storeId) {
+    public StoreMainDto getStoreReviews(Long storeId) {
+        StoreMainDto storeMainDto = new StoreMainDto();
 
         List<Review> reviewList = reviewRepository.findByStoreId(storeId);
+        Optional<Store> optionalStore = storeRepository.findById(storeId);
+        Store store = optionalStore.get();
+        storeMainDto.setStoreName(store.getStoreDetail().getName());
+        storeMainDto.setThumbNailImgUrl(store.getStoreDetail().getThumbnailImgUrl());
+
+        Long reviewCnt = reviewRepository.countByStoreId(storeId);
+        storeMainDto.setReviewCnt(reviewCnt);
+
         List<ReviewDto> reviewDtoList = new ArrayList<>();
 
         for (Review review : reviewList) {
             ReviewDto reviewDto = new ReviewDto();
             reviewDto.setId(review.getId());
-            reviewDto.setUserId(review.getUserId());
+            Long userId = review.getUserId();
+            reviewDto.setUserId(userId);
+            Optional<User> userOptional = userRepository.findById(userId);
+            User user = userOptional.get();
+
+            // 주문한 음식 리스트로 나타내기
+            List<OrderProduct> orderProducts = review.getOrder().getOrderProducts();
+            ArrayList<String> orderedProducts = new ArrayList<>();
+
+            for (OrderProduct orderProduct : orderProducts) {
+                Long productId = orderProduct.getProduct().getId();
+                Optional<Product> optionalProduct = productRepository.findById(productId);
+                Product product = optionalProduct.get();
+                orderedProducts.add(product.getName());
+            }
+            reviewDto.setNickname(user.getNickname());
             reviewDto.setRating(review.getRating());
 //            reviewDto.setPhoto(review.getPhoto());
+            reviewDto.setImages(review.getImages());
             reviewDto.setContent(review.getContent());
             reviewDto.setTimestamp(review.getCreatedAt()); // getTimeStamp라고 해서 안나왔었음
+            reviewDto.setOrderedProducts(orderedProducts);
+
             reviewDtoList.add(reviewDto);
         }
-        return reviewDtoList;
+        storeMainDto.setReviewDtoList(reviewDtoList);
+        return storeMainDto;
 
     }
 

@@ -2,6 +2,7 @@ package com.winterfoodies.winterfoodies_project.dto.store;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.winterfoodies.winterfoodies_project.dto.product.ProductResponseDto;
+import com.winterfoodies.winterfoodies_project.dto.review.ReviewDto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -36,6 +37,7 @@ public class StoreMainDto { // 가게 상세 조회
     private List<ProductResponseDto> productResponseDtoList;
     private List<ProductResponseDto> popularProductsDtoList;
     private List<StoreResponseDto> storeResponseDtoList;
+    private List<ReviewDto> reviewDtoList;
 
     private StoreResponseDto storeResponseDto;
 
