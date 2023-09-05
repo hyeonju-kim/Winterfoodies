@@ -49,7 +49,7 @@ public class MainPageController {
     @GetMapping("/{productId}/near")
     @ApiOperation(value = "메뉴별, 가까운순별 가게목록")
     @ApiImplicitParam(name = "productId", value = "상품 아이디")
-    public List<StoreResponseDto> nearbyStoreList(@PathVariable("productId") Long productId,
+    public StoreMainDto nearbyStoreList(@PathVariable("productId") Long productId,
                                                   @RequestParam(required = false) Double latitude,
                                                   @RequestParam(required = false) Double longitude) {
         return mainPageService.getNearbyStores2(productId, latitude, longitude);

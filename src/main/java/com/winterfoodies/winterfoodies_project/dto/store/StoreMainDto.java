@@ -15,6 +15,9 @@ public class StoreMainDto { // 가게 상세 조회
     @ApiModelProperty(example = "가게명" )
     private String storeName;
 
+    @ApiModelProperty(example = "상품명" )
+    private String productName;
+
     @ApiModelProperty(example = "평균별점" )
     private Long averageRating;
 

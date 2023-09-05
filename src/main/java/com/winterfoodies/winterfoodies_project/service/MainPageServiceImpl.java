@@ -105,11 +105,16 @@ public class MainPageServiceImpl implements MainPageService{
 
     // 2. 메뉴별, 가까운순별 가게목록 - 가게명, 위치, 평점
     @Override
-    public List<StoreResponseDto> getNearbyStores2(Long productId, double latitude, double longitude) {
-        double radius = 2.0; // 검색 반경 설정 (2.0km)
+    public StoreMainDto getNearbyStores2(Long productId, double latitude, double longitude) {
 
+        StoreMainDto storeMainDto = new StoreMainDto();
+        Optional<Product> optionalProduct = productRepository.findById(productId);
+        Product product = optionalProduct.get();
+        storeMainDto.setProductName(product.getName());
+
+        double radius = 2.0; // 검색 반경 설정 (2.0km)
         List<Store> nearbyStores = storeRepository.findNearbyStoresByProductId(productId, latitude, longitude, radius);
-        List<StoreResponseDto> nearbyStoreDtoList = new ArrayList<>();
+        ArrayList<StoreResponseDto> storeResponseDtoList = new ArrayList<>();
 
         for (Store store : nearbyStores) {
             List<StoreProduct> storeProducts = store.getStoreProducts();
@@ -124,11 +129,12 @@ public class MainPageServiceImpl implements MainPageService{
                     storeResponseDto.setLongitude(store.getStoreDetail().getLongitude());
 
 
-                    nearbyStoreDtoList.add(storeResponseDto);
+                    storeResponseDtoList.add(storeResponseDto);
                 }
             }
         }
-        return nearbyStoreDtoList;
+        storeMainDto.setStoreResponseDtoList(storeResponseDtoList);
+        return storeMainDto;
     }
 
     // 3. 메뉴별, 인기순(판매순)별 가게목록
