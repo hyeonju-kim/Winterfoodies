@@ -25,4 +25,12 @@ public class ProductResponseDto {
 
     @ApiModelProperty(example = "장바구니에 추가되었습니다." )
     private String message;
+
+    public ProductResponseDto(Long productId){
+        this.id = productId;
+    }
+
+    public ProductResponseDto() {
+
+    }
 }

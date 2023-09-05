@@ -27,6 +27,7 @@ public class MainPageServiceImpl implements MainPageService{
     private final StoreProductRepository storeProductRepository;
     private final ProductRepository productRepository;
     private final OrderRepository orderRepository;
+    private final OrderProductRepository orderProductRepository;
 
 
     // 0. 가게명 다 가져오기
@@ -70,8 +71,15 @@ public class MainPageServiceImpl implements MainPageService{
     public StoreMainDto getNearbyStores(double latitude, double longitude) {
         StoreMainDto storeMainDto = new StoreMainDto();
 
-        // 1) 인기상품 (전체상품 중에 인기상품 랭킹)
+        // 1) 인기상품 (지금까지 판매된 상품중에 가장 많이 팔린 인기상품 랭킹) - 나중에 일주일 간격, 하루 간격으로 수정 예정
+        ArrayList<ProductResponseDto> productList = new ArrayList<>();
 
+        List<Product> top5PopularProducts = orderProductRepository.findTop5PopularProducts();
+        for (Product top5PopularProduct : top5PopularProducts) {
+            ProductResponseDto productResponseDto = new ProductResponseDto();
+            productResponseDto.setProductName(top5PopularProduct.getName());
+            productList.add(productResponseDto);
+        }
 
         // 2) 상단의 상품목록 보이기
         List<Product> foundProduct = productRepository.findAll();
@@ -99,6 +107,8 @@ public class MainPageServiceImpl implements MainPageService{
             storeResponseDto.setThumbNailImgUrl(store.getStoreDetail().getThumbnailImgUrl());
             nearbyStoreDtoList.add(storeResponseDto);
         }
+
+        storeMainDto.setPopularProductsDtoList(productList);
         storeMainDto.setProductResponseDtoList(productResponseDtoList);
         storeMainDto.setStoreResponseDtoList(nearbyStoreDtoList);
         return storeMainDto;
