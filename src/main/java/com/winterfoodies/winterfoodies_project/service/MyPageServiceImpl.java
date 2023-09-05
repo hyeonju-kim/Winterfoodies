@@ -84,10 +84,9 @@ public class MyPageServiceImpl implements MypageService{
 
     // 찜한 가게 목록 조회
     @Override
-    public List<List<StoreResponseDto>> getFavoriteStoresByUserId() {
+    public List<StoreResponseDto> getFavoriteStoresByUserId() {
         List<FavoriteStore> foundFavoriteStore = favoriteStoreRepository.findByUserId(getUserId());
         List<StoreResponseDto> storeResponseDtoList = new ArrayList<>();
-        List<List<StoreResponseDto>> outerStoreResponseDtoList = new ArrayList<>();
 
         for (FavoriteStore favoriteStore : foundFavoriteStore) {
             Long foundStoreId = favoriteStore.getStoreId();
@@ -104,8 +103,7 @@ public class MyPageServiceImpl implements MypageService{
 
             storeResponseDtoList.add(storeResponseDto);
         }
-        outerStoreResponseDtoList.add(storeResponseDtoList);
-        return outerStoreResponseDtoList;
+        return storeResponseDtoList;
     }
 
     // 리뷰 쓴 가게 목록 조회
@@ -177,12 +175,16 @@ public class MyPageServiceImpl implements MypageService{
     // 리뷰 등록
     @Override
     public ReviewDto postReview(ReviewDto inReviewDto) {
+        Store store = storeRepository.getStoreById(inReviewDto.getStoreId());
+        Optional<Order> optionalOrder = orderRepository.findById(inReviewDto.getOrderId());
+        Order order = optionalOrder.get();
         Review review = new Review(inReviewDto);
+        review.setStore(store);
+        review.setOrder(order);
         review.setUserId(getUserId());
         reviewRepository.save(review);
 
         ReviewDto reviewDto = new ReviewDto(review);
-        reviewDto.setMessage("리뷰가 등록되었습니다");
         return reviewDto;
     }
 

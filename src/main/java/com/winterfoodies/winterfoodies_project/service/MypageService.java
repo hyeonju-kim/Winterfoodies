@@ -16,7 +16,7 @@ public interface MypageService {
     public UserDto changePw(UserDto userDto);
 
     // 찜 한 가게 목록 조회
-    public List<List<StoreResponseDto>> getFavoriteStoresByUserId();
+    public List<StoreResponseDto> getFavoriteStoresByUserId();
 
     // 주문한 가게 목록 조회
 //    List<OrderProduct> getOrderProductByUserId(Long userId);

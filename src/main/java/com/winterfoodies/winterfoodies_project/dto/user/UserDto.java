@@ -27,7 +27,7 @@ public class UserDto {
     @ApiModelProperty(example = "asdf123@naver.com" ,hidden = true)
     private String username;
 
-    @ApiModelProperty(example = "붕어빵러버")
+    @ApiModelProperty(example = "붕어빵러버",hidden = true)
     private String nickname;
 
     @ApiModelProperty(example = "37.381798" ,hidden = true)

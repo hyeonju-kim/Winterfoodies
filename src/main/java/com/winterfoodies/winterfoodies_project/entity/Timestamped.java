@@ -1,5 +1,6 @@
 package com.winterfoodies.winterfoodies_project.entity;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -16,9 +17,11 @@ import java.time.LocalDateTime;
 public class Timestamped {
     @CreatedDate
     @Column(updatable = false)
-    private LocalDateTime createdAt;
+    @ApiModelProperty(value = "작성 시간" , hidden = true)
+    protected LocalDateTime createdAt;
 
     @LastModifiedDate
     @Column
-    private LocalDateTime modifiedAt;
+    @ApiModelProperty(value = "수정 시간" , hidden = true)
+    protected LocalDateTime modifiedAt;
 }

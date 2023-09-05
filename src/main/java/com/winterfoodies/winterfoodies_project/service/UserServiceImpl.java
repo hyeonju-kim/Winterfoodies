@@ -78,10 +78,10 @@ public class UserServiceImpl implements UserService {
     public boolean isUsernameUnique(String username) {
         return userRepository.existsByUsername(username);// 존재하면 true
     }
-
-    // 닉네임 중복확인 - 230901 추가
-    @Override
-    public boolean isNicknameUnique(String nickname) {
-        return userRepository.existsByNickname(nickname); // 존재하면 true
-    }
+//
+//    // 닉네임 중복확인 - 230901 추가
+//    @Override
+//    public boolean isNicknameUnique(String nickname) {
+//        return userRepository.existsByNickname(nickname); // 존재하면 true
+//    }
 }

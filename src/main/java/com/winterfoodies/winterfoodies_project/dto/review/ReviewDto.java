@@ -2,13 +2,19 @@ package com.winterfoodies.winterfoodies_project.dto.review;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.winterfoodies.winterfoodies_project.entity.Order;
 import com.winterfoodies.winterfoodies_project.entity.Review;
+import com.winterfoodies.winterfoodies_project.entity.Store;
 import com.winterfoodies.winterfoodies_project.entity.Timestamped;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 @Getter
 @Setter
@@ -20,15 +26,21 @@ public class ReviewDto extends Timestamped {
     @ApiModelProperty(value = "사용자 id" , hidden = true)
     private Long userId;
 
+    private Long orderId;
+
     @ApiModelProperty(example = "신천붕어빵", value = "가게명" )
     private String storeName;
+
+    @ApiModelProperty(example = "1", value = "가게 id" )
+    private Long storeId;
 
     @ApiModelProperty(example = "5", value = "별점" )
     private Long rating;
 
-    @ApiModelProperty(value = "가게명" , hidden = true )
+    @ApiModelProperty(value = "음식 사진" )
     @JsonFormat(shape = JsonFormat.Shape.STRING)
-    private byte[] photo;
+    private String images;
+
 
     @ApiModelProperty(example = "완전 맛있어요ㅜㅜ", value = "리뷰 내용" )
     private String content;
@@ -39,23 +51,48 @@ public class ReviewDto extends Timestamped {
     @ApiModelProperty(value = "메시지" , hidden = true)
     private String message; // 리뷰가 등록되었습니다.
 
+    private Order order;
+
+    private Store store;
+
     public ReviewDto(ReviewRequestDto requestDto) {
         this.rating = requestDto.getRating();
-        this.photo = requestDto.getPhoto();
+        this.images = requestDto.getImages();
         this.content = requestDto.getContent();
+        this.createdAt = LocalDateTime.now(); // 현재 시간을 설정
+        this.modifiedAt = LocalDateTime.now(); // 현재 시간을 설정
     }
 
     public ReviewDto(Review review) {
         this.rating = review.getRating();
-        this.photo = review.getPhoto();
+        this.id = review.getId();
+//        // 사진이 첨부되어 있지 않으면 빈 리스트 저장하고, 사진이 첨부되어 있으면 리스트로 저장하기
+//        if (review.getImages().isEmpty() || review.getImages()==null) {
+//            this.images = Collections.emptyList();
+//        }else {
+//            // 이미지 URL들을 쉼표(,)로 분할하여 List에 추가
+//            String[] split = review.getImages().split(",");
+//            for (String s : split) {
+//                this.images.add(new UrlDto(s));
+//            }
+//        }
+        this.images = review.getImages();
         this.content = review.getContent();
+        this.userId = review.getUserId();
+        this.storeId = review.getStore().getId();
+        this.createdAt = LocalDateTime.now(); // 현재 시간을 설정
+        this.modifiedAt = LocalDateTime.now(); // 현재 시간을 설정
+        this.order = review.getOrder();
+        this.store = review.getStore();
+
     }
 
     public ReviewResponseDto convertToReviewResponseDto() {
         ReviewResponseDto reviewResponseDto = new ReviewResponseDto();
-        reviewResponseDto.setPhoto(this.photo);
+//        reviewResponseDto.setImages(this.images);
         reviewResponseDto.setContent(this.content);
         reviewResponseDto.setRating(this.rating);
+
         return reviewResponseDto;
     }
 

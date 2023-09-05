@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -16,7 +17,7 @@ public class ReviewRequestDto {
     private Long rating;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)
-    private byte[] photo;
+    private String images;
 
     private String content;
 

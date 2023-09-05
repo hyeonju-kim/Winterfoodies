@@ -83,14 +83,14 @@
             String password = loginRequestDto.getPassword();
             String username = loginRequestDto.getUsername();
             User retrievedUser = userRepository.findByUsername(username);
-            String nickname = retrievedUser.getNickname();
-            String phoneNumber = retrievedUser.getPhoneNumber();
 
             log.info("retrievedUser = {}", retrievedUser);
 
             if (retrievedUser == null) {
                 throw new UserException("가입되지 않은 이메일입니다.", HttpStatus.BAD_REQUEST, null);
             }
+            String nickname = retrievedUser.getNickname();
+            String phoneNumber = retrievedUser.getPhoneNumber();
 
 
             // 조회한 비밀번호
@@ -180,14 +180,14 @@
                 return ResponseEntity.ok(new UserResponseDto("사용 가능한 이메일 주소 입니다.", "success"));
             }
         }
-
-        // 닉네임 중복확인 - 230901 추가
-        @GetMapping("/check-nickname/{nickname}")
-        @ApiOperation(value = "닉네임 중복확인")
-        @ApiImplicitParam(name = "nickname", value = "닉네임")
-        public ResponseEntity<Boolean> checkNickname(@PathVariable String nickname) {
-            return ResponseEntity.ok(userService.isNicknameUnique(nickname));
-        }
+//
+//        // 닉네임 중복확인 - 230901 추가
+//        @GetMapping("/check-nickname/{nickname}")
+//        @ApiOperation(value = "닉네임 중복확인")
+//        @ApiImplicitParam(name = "nickname", value = "닉네임")
+//        public ResponseEntity<Boolean> checkNickname(@PathVariable String nickname) {
+//            return ResponseEntity.ok(userService.isNicknameUnique(nickname));
+//        }
 
 //        @ExceptionHandler(RequestException.class)
 //        public ErrorBox requestException(RequestException requestException) {

@@ -5,6 +5,7 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,6 +16,7 @@ import java.util.List;
 @Entity
 @Table(name = "ORDERS")
 @SequenceGenerator(name = "orderSeq", sequenceName = "order_seq", allocationSize = 1, initialValue = 1)
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 @Getter
 @Setter
 //@JsonIgnoreProperties("user")  // 순환참조 오류나서 잠시 넣음!!
@@ -53,6 +55,9 @@ public class Order {
 
     @Column(name = "MESSAGE")
     private String message;
+
+    @OneToOne
+    private Review review;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
     private List<OrderProduct> orderProducts = new ArrayList<>();

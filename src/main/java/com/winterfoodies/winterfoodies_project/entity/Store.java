@@ -1,6 +1,7 @@
 package com.winterfoodies.winterfoodies_project.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.winterfoodies.winterfoodies_project.dto.store.StoreRequestDto;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,6 +16,7 @@ import java.util.List;
 @Table(name = "STORE")
 @Getter
 @Setter
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 @SequenceGenerator(name = "storeSeq", sequenceName = "STORE_SEQ", initialValue = 1, allocationSize = 1)
 public class Store implements Serializable {
 

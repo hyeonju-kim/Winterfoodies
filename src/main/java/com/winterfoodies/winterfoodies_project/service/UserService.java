@@ -27,8 +27,8 @@ public interface UserService { // 인터페이스 메소드 명세를 만들고 
     // 계정 중복확인
     boolean isUsernameUnique(String username);
 
-    // 닉네임 중복확인
-    boolean isNicknameUnique(String nickname);
+//    // 닉네임 중복확인
+//    boolean isNicknameUnique(String nickname);
 }
 
 

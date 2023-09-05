@@ -7,13 +7,14 @@ import com.winterfoodies.winterfoodies_project.dto.store.StoreResponseDto;
 import com.winterfoodies.winterfoodies_project.dto.user.UserResponseDto;
 
 import java.util.List;
+import java.util.Map;
 
 public interface MainPageService {
     // 상품명 목록만 제공하는 API
     public List<ProductResponseDto> getProductList();
 
     // 메인 페이지 - 위치 정보 가져오기
-    public List<StoreResponseDto> getNearbyStores(double latitude, double longitude);
+    public StoreMainDto getNearbyStores(double latitude, double longitude);
 
     // 메뉴별, 가까운순별 가게목록 - 가게명, 위치, 평점
     public List<StoreResponseDto> getNearbyStores2(Long productId, double latitude, double longitude);

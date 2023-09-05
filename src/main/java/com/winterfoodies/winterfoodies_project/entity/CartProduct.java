@@ -37,7 +37,7 @@ public class CartProduct {
 
     private Long quantity;
 
-//    private Long pricePerProduct;
+    private Long pricePerProduct;
 
     private Long totalPrice;
 

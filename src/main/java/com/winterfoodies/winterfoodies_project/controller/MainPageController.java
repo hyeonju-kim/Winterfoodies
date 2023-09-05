@@ -5,6 +5,7 @@ import com.winterfoodies.winterfoodies_project.dto.store.StoreMainDto;
 import com.winterfoodies.winterfoodies_project.dto.store.StoreResponseDto;
 import com.winterfoodies.winterfoodies_project.dto.review.ReviewDto;
 import com.winterfoodies.winterfoodies_project.dto.user.UserResponseDto;
+import com.winterfoodies.winterfoodies_project.entity.Store;
 import com.winterfoodies.winterfoodies_project.service.MainPageService;
 import com.winterfoodies.winterfoodies_project.service.UserService;
 import io.swagger.annotations.ApiImplicitParam;
@@ -13,7 +14,9 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin
 @RequiredArgsConstructor
@@ -36,15 +39,10 @@ public class MainPageController {
             @ApiImplicitParam(name = "latitude", value = "위도"),
             @ApiImplicitParam(name = "longitude", value = "경도"),
     })
-    public List<StoreResponseDto> mainPage(@RequestParam(required = false) Double latitude,
-                                           @RequestParam(required = false) Double longitude) {
-        if (latitude != null && longitude != null) {
-            // 위도와 경도가 전달된 경우
-            return mainPageService.getNearbyStores(latitude, longitude);
-        } else {
-            // 위치 정보가 전달되지 않은 경우에 대한 처리
-            return null;
-        }
+    public StoreMainDto mainPage(@RequestParam(required = false) Double latitude,
+                                                                          @RequestParam(required = false) Double longitude) {
+
+       return mainPageService.getNearbyStores(latitude, longitude);
     }
 
     // 2. 메뉴별, 가까운순별 가게목록 - 가게명, 위치, 평점 (2km 이내)

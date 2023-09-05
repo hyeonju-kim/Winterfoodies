@@ -15,10 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +29,7 @@ public class MainPageServiceImpl implements MainPageService{
     private final OrderRepository orderRepository;
 
 
-    // 가게명 다 가져오기
+    // 0. 가게명 다 가져오기
     @Override
     public List<ProductResponseDto> getProductList() {
         List<Product> foundProduct = productRepository.findAll();
@@ -70,7 +67,24 @@ public class MainPageServiceImpl implements MainPageService{
 
     // 1. 메인페이지 - 나와 가까운 가게 목록 보이기
     @Override
-    public List<StoreResponseDto> getNearbyStores(double latitude, double longitude) {
+    public StoreMainDto getNearbyStores(double latitude, double longitude) {
+        StoreMainDto storeMainDto = new StoreMainDto();
+
+        // 1) 인기상품 (전체상품 중에 인기상품 랭킹)
+
+
+        // 2) 상단의 상품목록 보이기
+        List<Product> foundProduct = productRepository.findAll();
+        List<ProductResponseDto> productResponseDtoList = new ArrayList<>();
+
+        for (Product product : foundProduct) {
+            ProductResponseDto productResponseDto = new ProductResponseDto();
+            productResponseDto.setId(product.getId());
+            productResponseDto.setProductName(product.getName());
+            productResponseDtoList.add(productResponseDto);
+        }
+
+        // 3) 나와 가장 가까운 간식 top5
         double radius = 2.0; // 검색 반경 설정 (예: 2.0km)
 
         List<Store> nearbyStores = storeRepository.findNearbyStores(latitude, longitude, radius);
@@ -80,12 +94,13 @@ public class MainPageServiceImpl implements MainPageService{
             StoreResponseDto storeResponseDto = new StoreResponseDto();
             storeResponseDto.setStoreId(store.getId());
             storeResponseDto.setName(store.getStoreDetail().getName());
-            nearbyStoreDtoList.add(storeResponseDto);
             storeResponseDto.setLatitude(store.getStoreDetail().getLatitude());
             storeResponseDto.setLongitude(store.getStoreDetail().getLongitude());
+            nearbyStoreDtoList.add(storeResponseDto);
         }
-
-        return nearbyStoreDtoList;
+        storeMainDto.setProductResponseDtoList(productResponseDtoList);
+        storeMainDto.setStoreResponseDtoList(nearbyStoreDtoList);
+        return storeMainDto;
     }
 
     // 2. 메뉴별, 가까운순별 가게목록 - 가게명, 위치, 평점
@@ -243,7 +258,7 @@ public class MainPageServiceImpl implements MainPageService{
 
         storeMainDto.setProductResponseDtoList(storeProductDtoList);
         storeMainDto.setPopularProductsDtoList(popularProductsDtoList);
-        storeMainDto.setStoreResponseDtoList(storeResponseDto);
+        storeMainDto.setStoreResponseDto(storeResponseDto);
 
         return storeMainDto;
     }
@@ -278,7 +293,7 @@ public class MainPageServiceImpl implements MainPageService{
             reviewDto.setId(review.getId());
             reviewDto.setUserId(review.getUserId());
             reviewDto.setRating(review.getRating());
-            reviewDto.setPhoto(review.getPhoto());
+//            reviewDto.setPhoto(review.getPhoto());
             reviewDto.setContent(review.getContent());
             reviewDto.setTimestamp(review.getCreatedAt()); // getTimeStamp라고 해서 안나왔었음
             reviewDtoList.add(reviewDto);

@@ -124,7 +124,7 @@ public class MyPageController {
     // 찜한 가게 목록 조회
     @GetMapping("/likes")
     @ApiOperation(value = "찜한 가게목록 조회")
-    public List<List<StoreResponseDto>> getFavoriteStoresByUserId() {
+    public List<StoreResponseDto> getFavoriteStoresByUserId() {
         return mypageService.getFavoriteStoresByUserId();
     }
 
@@ -155,7 +155,7 @@ public class MyPageController {
     // 리뷰 작성
     @PostMapping("/orderlist/reviews")
     @ApiOperation(value = "리뷰 작성")
-    public ReviewDto reviewPost(@RequestBody ReviewDto reviewDto) { // 반환값 orderDto
+    public ReviewDto reviewPost(@RequestBody ReviewDto reviewDto) {
         return mypageService.postReview(reviewDto);
     }
 

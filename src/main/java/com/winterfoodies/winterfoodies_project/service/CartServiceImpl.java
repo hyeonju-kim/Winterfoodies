@@ -328,7 +328,7 @@ public class CartServiceImpl implements CartService {
             Map<String, Object> map = new HashMap<>();
             map.put(prdName, prdQnt);
             prdAndQntMapList.add(map);
-            totalAmt += cartProduct.getTotalPrice();
+            totalAmt += cartProduct.getSubTotalPrice();
 
             order.setStore(cartProduct.getStore());
             order.setUser(userRepository.findById(getUserId()).get());

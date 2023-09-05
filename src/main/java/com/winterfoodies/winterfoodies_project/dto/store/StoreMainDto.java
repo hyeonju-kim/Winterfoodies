@@ -26,7 +26,8 @@ public class StoreMainDto { // 가게 상세 조회
 
     private List<ProductResponseDto> productResponseDtoList;
     private List<ProductResponseDto> popularProductsDtoList;
+    private List<StoreResponseDto> storeResponseDtoList;
 
-    private StoreResponseDto storeResponseDtoList;
+    private StoreResponseDto storeResponseDto;
 
 }
