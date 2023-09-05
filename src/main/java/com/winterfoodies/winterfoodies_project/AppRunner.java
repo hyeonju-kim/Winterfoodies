@@ -76,6 +76,9 @@ public class AppRunner implements ApplicationRunner {
         storeDetail.setAverageRating(4l);
         storeDetail.setLatitude(37.381798);
         storeDetail.setLongitude(126.800944);
+        storeDetail.setStatus("영업중");
+        storeDetail.setOpenDate("매일");
+        storeDetail.setThumbnailImgUrl("photo1");
 
         //가게 디테일 생성 2 - 대야붕어빵 (붕어빵, 다코야끼)
         StoreDetail storeDetail2 = new StoreDetail();
@@ -92,6 +95,9 @@ public class AppRunner implements ApplicationRunner {
         storeDetail2.setAverageRating(5l);
         storeDetail2.setLatitude(37.375499);
         storeDetail2.setLongitude(126.785488);
+        storeDetail2.setStatus("영업중");
+        storeDetail2.setOpenDate("주 5일");
+        storeDetail2.setThumbnailImgUrl("photo2");
 
         //가게 디테일 생성 3 - 소새울호떡집 (호떡)
         StoreDetail storeDetail3 = new StoreDetail();
@@ -108,6 +114,9 @@ public class AppRunner implements ApplicationRunner {
         storeDetail3.setAverageRating(5l);
         storeDetail3.setLatitude(37.467441);
         storeDetail3.setLongitude(126.793399);
+        storeDetail3.setStatus("영업종료");
+        storeDetail3.setOpenDate("주말");
+        storeDetail3.setThumbnailImgUrl("photo3");
 
         //가게에게 가게 디테일 인젝션 1
         store.setStoreDetail(storeDetail);

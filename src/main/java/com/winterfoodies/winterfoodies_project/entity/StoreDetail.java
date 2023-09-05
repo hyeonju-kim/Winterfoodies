@@ -2,6 +2,7 @@ package com.winterfoodies.winterfoodies_project.entity;
 
 
 import com.winterfoodies.winterfoodies_project.dto.store.StoreRequestDto;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.util.StringUtils;
@@ -67,6 +68,10 @@ public class StoreDetail {
 
     @OneToOne(mappedBy = "storeDetail")
     private Store store;
+
+    private String status; //현재 영업 상태 -> TODO enum으로 바꾸기 -> 영업중, 영업종료
+
+    private String openDate; //영업 요일  -> TODO enum으로 바꾸기 -> 매일, 주5일, 주말
 
 
     public void fillValue(StoreRequestDto storeRequestDto){

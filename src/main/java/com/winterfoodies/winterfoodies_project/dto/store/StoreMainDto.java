@@ -21,8 +21,14 @@ public class StoreMainDto { // 가게 상세 조회
     @ApiModelProperty(example = "평균별점" )
     private Long averageRating;
 
-    @ApiModelProperty(example = "찜유무" )
+    @ApiModelProperty(example = "Y" )
     private String like = "N";
+
+    @ApiModelProperty(example = "23" )
+    private Long reviewCnt;
+
+    @ApiModelProperty(value = "가게썸네일사진", hidden = true)
+    private String thumbNailImgUrl;
 
     @ApiModelProperty(example = "20분~30분" , value = "조리예상시간")
     private String estimatedCookingTime;

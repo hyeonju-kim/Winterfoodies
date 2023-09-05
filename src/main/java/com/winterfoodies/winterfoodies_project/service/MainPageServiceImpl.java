@@ -96,6 +96,7 @@ public class MainPageServiceImpl implements MainPageService{
             storeResponseDto.setName(store.getStoreDetail().getName());
             storeResponseDto.setLatitude(store.getStoreDetail().getLatitude());
             storeResponseDto.setLongitude(store.getStoreDetail().getLongitude());
+            storeResponseDto.setThumbNailImgUrl(store.getStoreDetail().getThumbnailImgUrl());
             nearbyStoreDtoList.add(storeResponseDto);
         }
         storeMainDto.setProductResponseDtoList(productResponseDtoList);
@@ -127,6 +128,7 @@ public class MainPageServiceImpl implements MainPageService{
                     storeResponseDto.setAverageRating(store.getStoreDetail().getAverageRating());
                     storeResponseDto.setLatitude(store.getStoreDetail().getLatitude());
                     storeResponseDto.setLongitude(store.getStoreDetail().getLongitude());
+                    storeResponseDto.setThumbNailImgUrl(store.getStoreDetail().getThumbnailImgUrl());
 
 
                     storeResponseDtoList.add(storeResponseDto);
@@ -210,8 +212,11 @@ public class MainPageServiceImpl implements MainPageService{
     @Override
     public StoreMainDto getStoreProducts(Long storeId) {
         StoreMainDto storeMainDto = new StoreMainDto();
+        List<StoreProduct> storeProducts = storeProductRepository.findByStoreId(storeId);
+        Store foundStore = storeRepository.getStoreById(storeId);
+        storeMainDto.setThumbNailImgUrl(foundStore.getStoreDetail().getThumbnailImgUrl());
 
-        // 1. 가게 메뉴 담는 리스트 만들기
+        // 1) 가게 메뉴 담는 리스트 만들기
         List<StoreProduct> storeProductList = storeProductRepository.findByStoreId(storeId);
         List<ProductResponseDto> storeProductDtoList = new ArrayList<>();
 
@@ -226,9 +231,8 @@ public class MainPageServiceImpl implements MainPageService{
             storeProductDtoList.add(productResponseDto);
         }
 
-        // 2. 인기 메뉴 리스트 만들기
-        List<StoreProduct> storeProducts = storeProductRepository.findByStoreId(storeId);
-        Store foundStore = storeRepository.getStoreById(storeId);
+        // 2) 인기 메뉴 리스트 만들기
+
         List<ProductResponseDto> popularProductsDtoList = new ArrayList<>();
 
         for (StoreProduct storeProduct : storeProducts) {
@@ -239,6 +243,7 @@ public class MainPageServiceImpl implements MainPageService{
             popularProductsDtoList.add(productResponseDto);
         }
 
+        storeMainDto.setReviewCnt(reviewRepository.countByStoreId(storeId));
         storeMainDto.setStoreName(foundStore.getStoreDetail().getName());
         storeMainDto.setAverageRating(foundStore.getStoreDetail().getAverageRating());
         List<FavoriteStore> favoriteStoreList = favoriteStoreRepository.findByUserId(getUserId());
@@ -248,7 +253,7 @@ public class MainPageServiceImpl implements MainPageService{
             }
         }
 
-        // 3. 가게정보 만들기 추가 -230831
+        // 3) 가게정보 만들기 추가 -230831
         Optional<Store> optionalStore = storeRepository.findById(storeId);
         Store store = optionalStore.get();
         StoreResponseDto storeResponseDto = new StoreResponseDto();
@@ -261,7 +266,8 @@ public class MainPageServiceImpl implements MainPageService{
         storeResponseDto.setLongitude(store.getStoreDetail().getLongitude());
         storeResponseDto.setInfo(store.getStoreDetail().getInfo());
         storeResponseDto.setEstimatedCookingTime(store.getStoreDetail().getEstimatedCookingTime());
-
+        storeResponseDto.setStatus(store.getStoreDetail().getStatus());
+        storeResponseDto.setOpenDate(store.getStoreDetail().getOpenDate());
         storeMainDto.setProductResponseDtoList(storeProductDtoList);
         storeMainDto.setPopularProductsDtoList(popularProductsDtoList);
         storeMainDto.setStoreResponseDto(storeResponseDto);

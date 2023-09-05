@@ -77,6 +77,12 @@ public class StoreResponseDto {
     @ApiModelProperty(value = "가게썸네일사진", hidden = true)
     private String thumbNailImgUrl;
 
+    @ApiModelProperty(value = "현재 영업 상태", example = "영업중") // TODO enum으로 바꾸기 -> 영업중, 영업종료
+    private String status;
+
+    @ApiModelProperty(value = "영업 요일", example = "매일") // TODO enum 으로 바꾸기 -> 매일, 주5일, 주말
+    private String openDate;
+
     public void fllWithStoreDetail(StoreDetail storeDetail){
         this.name = storeDetail.getName();
         this.addressNo = storeDetail.getAddressNo();
