@@ -6,6 +6,7 @@ import com.winterfoodies.winterfoodies_project.entity.OrderProduct;
 import com.winterfoodies.winterfoodies_project.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -19,6 +20,10 @@ public interface OrderProductRepository extends JpaRepository<OrderProduct, Long
     // 지금까지 판매된 상품 중에 가장 많이 팔린 인기 상품 5개 노출
     @Query("SELECT op.product FROM OrderProduct op GROUP BY op.product.id ORDER BY SUM(op.quantity) DESC")
     List<Product> findTop5PopularProducts();
+
+    // 특정가게에서 지금까지 판매된 상품 중에 가장 많이 팔린 상품 5개 노출
+    @Query("SELECT op.product FROM OrderProduct op WHERE op.product.storeDetail.id = :storeId GROUP BY op.product.id ORDER BY SUM(op.quantity) DESC")
+    List<Product> findTop5PopularProductsByStoreId(@Param("storeId") Long storeId);
 
 
 }

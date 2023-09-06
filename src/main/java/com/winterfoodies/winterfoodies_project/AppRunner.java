@@ -44,11 +44,11 @@ public class AppRunner implements ApplicationRunner {
     }
 
     public void testScenario(){
-        //사장 - 홍길동
-        User ceo = new User();
-        ceo.setUsername("ghd123@naver.com");
-        ceo.setPassword(encoder.encode("ghd123!@#"));
-        ceo.setNickname("홍길동");
+//        //사장 - 홍길동
+//        User ceo = new User();
+//        ceo.setUsername("ghd123@naver.com");
+//        ceo.setPassword(encoder.encode("ghd123!@#"));
+//        ceo.setNickname("홍길동");
 
         //가게 생성 1 - 신천붕어빵
         Store store = new Store();
@@ -227,9 +227,9 @@ public class AppRunner implements ApplicationRunner {
         store3.setStoreDetail(storeDetail3);
         storeRepository.save(store3);
 
-        //홍길동사장님에게 가게 인젝션 1
-        ceo.setStore(store);
-        userRepository.save(ceo);
+//        //홍길동사장님에게 가게 인젝션 1
+//        ceo.setStore(store);
+//        userRepository.save(ceo);
 
 
 
@@ -287,11 +287,11 @@ public class AppRunner implements ApplicationRunner {
 
         //헨리에게 가게 인젝션 2
         customer.setStore(store2);
-        userRepository.save(ceo);
+        userRepository.save(customer);
 
         //김소라에게 가게 인젝션 3
         customer2.setStore(store3);
-        userRepository.save(ceo);
+        userRepository.save(customer2);
 
         // 사용자 찜하기 1
         FavoriteStore favoriteStore = new FavoriteStore();
@@ -455,7 +455,7 @@ public class AppRunner implements ApplicationRunner {
         orderRepository.save(order5);
 
 
-        // 주문 6 - 헨리가 신천붕어빵에서 어묵10개, 군밤10개 주문
+        // 주문 6 - 헨리가 신천붕어빵에서 어묵10개 주문
         Order order6 = new Order();
         order6.setUser(customer); // 헨리
         order6.setStore(store);  // 신천붕어빵
@@ -470,16 +470,8 @@ public class AppRunner implements ApplicationRunner {
         orderProduct11.setQuantity(10L);
         orderProductRepository.save(orderProduct11);
 
-        OrderProduct orderProduct12 = new OrderProduct();
-        orderProduct12.setOrder(order6);
-        orderProduct12.setProduct(product3); // 군밤
-        orderProduct12.setQuantity(10L);
-        orderProductRepository.save(orderProduct12);
-
         List<OrderProduct> orderProductList6 = new ArrayList<>();
-
         orderProductList6.add(orderProduct11);
-        orderProductList6.add(orderProduct12);
 
         order6.setOrderProducts(orderProductList6);
         orderRepository.save(order6);

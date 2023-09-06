@@ -244,15 +244,16 @@ public class MainPageServiceImpl implements MainPageService{
             storeProductDtoList.add(productResponseDto);
         }
 
-        // 2) 인기 메뉴 리스트 만들기
+        // 2) 인기 메뉴 리스트 만들기  (판매량 순으로 내림차순)
 
-        List<StoreProduct> storeProducts = storeProductRepository.findByStoreId(storeId);
+        List<Product> popularProductsByStoreIdList = orderProductRepository.findTop5PopularProductsByStoreId(storeId);
+
         List<ProductResponseDto> popularProductsDtoList = new ArrayList<>();
 
-        for (StoreProduct storeProduct : storeProducts) {
+        for (Product product : popularProductsByStoreIdList) {
             ProductResponseDto productResponseDto = new ProductResponseDto();
-            productResponseDto.setProductName(storeProduct.getProduct().getName());
-            productResponseDto.setId(storeProduct.getProduct().getId());
+            productResponseDto.setProductName(product.getName());
+            productResponseDto.setId(product.getId());
 
             popularProductsDtoList.add(productResponseDto);
         }
