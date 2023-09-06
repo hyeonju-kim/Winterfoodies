@@ -88,13 +88,22 @@ public class CartController {
     // 장바구니 상품 목록 조회 (DB에서)
     @GetMapping("/itemsListByDB")
     @ApiOperation(value = "장바구니 상품 조회 - DB에서 조회")
-    public List<CartProductResponseDto> getCartProductByDB() {
-        List<CartProductDto> cartProductDtoList = cartService.getCartProductByDB();
-        ArrayList<CartProductResponseDto> cartProductResponseDtoList = new ArrayList<>();
-        for (CartProductDto cartProductDto : cartProductDtoList) {
-            cartProductResponseDtoList.add(cartProductDto.convertToCartProductResponseDto());
-        }
-        return cartProductResponseDtoList;
+    public CartDto getCartProductByDB() {
+        return cartService.getCartProductByDB();
+    }
+
+    // 장바구니에서 상품 수량 증가
+    @PostMapping("/incQnt/{productId}")
+    public CartDto increaseQuantity(@PathVariable Long productId) {
+        return cartService.increaseQuantity(productId);
+
+    }
+
+    // 장바구니에서 상품 수량 감소
+    @PostMapping("/decQnt/{productId}")
+    public CartDto decreaseQuantity(@PathVariable Long productId) {
+        return cartService.decreaseQuantity(productId);
+
     }
 
     // 장바구니 특정 상품 삭제

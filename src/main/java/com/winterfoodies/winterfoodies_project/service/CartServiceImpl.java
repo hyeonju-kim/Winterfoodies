@@ -1,6 +1,7 @@
 package com.winterfoodies.winterfoodies_project.service;
 
 import com.winterfoodies.winterfoodies_project.ErrorBox;
+import com.winterfoodies.winterfoodies_project.dto.cart.CartDto;
 import com.winterfoodies.winterfoodies_project.dto.cartProduct.CartProductDto;
 import com.winterfoodies.winterfoodies_project.dto.cartProduct.CartProductResponseDto;
 import com.winterfoodies.winterfoodies_project.dto.order.OrderRequestDto;
@@ -169,8 +170,10 @@ public class CartServiceImpl implements CartService {
 
     // ❤ 2-2. 장바구니 상품 목록 조회 (DB에서)
     @Override
-    public List<CartProductDto> getCartProductByDB() {
+    public CartDto getCartProductByDB() {
+        CartDto cartDto = new CartDto();
         Long userId = getUserId();
+        Long totalAmt = 0L;
         List<CartProduct> cartProductList = cartProductRepository.findByUserId(userId);
 
         if (cartProductList.isEmpty()) {
@@ -181,8 +184,80 @@ public class CartServiceImpl implements CartService {
         for (CartProduct cartProduct : cartProductList) {
             CartProductDto cartProductDto = new CartProductDto(cartProduct, getUserId());
             cartProductDtoList.add(cartProductDto);
+            cartDto.setStoreName(cartProduct.getStore().getStoreDetail().getName());
+            cartDto.setEstimatedCookingTime(cartProduct.getStore().getStoreDetail().getEstimatedCookingTime());
+            cartDto.setThumbnailImgUrl(cartProduct.getStore().getStoreDetail().getThumbnailImgUrl());
+
+            totalAmt += cartProduct.getSubTotalPrice();
         }
-        return cartProductDtoList;
+        cartDto.setTotalPrice(totalAmt);
+        cartDto.setCartProductDtoList(cartProductDtoList);
+
+        return cartDto;
+    }
+
+    // 장바구니 상품 수량 증가
+    @Override
+    public CartDto increaseQuantity(Long productId) {
+        CartDto cartDto = new CartDto();
+        Long userId = getUserId();
+        Long totalAmt = 0L;
+
+        ArrayList<CartProductDto> cartProductDtoList = new ArrayList<>();
+
+        // 상품 수량 증가 로직 구현
+        List<CartProduct> cartProductList = cartProductRepository.findByUserId(userId);
+
+        for (CartProduct cartProduct : cartProductList) {
+            if (cartProduct.getProduct().getId().equals(productId)) {
+                cartProduct.setQuantity(cartProduct.getQuantity() + 1);
+                cartProductRepository.save(cartProduct);
+            }
+            CartProductDto cartProductDto = new CartProductDto(cartProduct, getUserId());
+            cartProductDtoList.add(cartProductDto);
+            cartDto.setStoreName(cartProduct.getStore().getStoreDetail().getName());
+            cartDto.setEstimatedCookingTime(cartProduct.getStore().getStoreDetail().getEstimatedCookingTime());
+            cartDto.setThumbnailImgUrl(cartProduct.getStore().getStoreDetail().getThumbnailImgUrl());
+
+            totalAmt += cartProduct.getSubTotalPrice();
+        }
+
+        cartDto.setTotalPrice(totalAmt);
+        cartDto.setCartProductDtoList(cartProductDtoList);
+
+        return cartDto;
+    }
+
+    // 장바구니 상품 수량 감소
+    @Override
+    public CartDto decreaseQuantity(Long productId) {
+        CartDto cartDto = new CartDto();
+        Long userId = getUserId();
+        Long totalAmt = 0L;
+
+        ArrayList<CartProductDto> cartProductDtoList = new ArrayList<>();
+
+        // 상품 수량 감소 로직 구현
+        List<CartProduct> cartProductList = cartProductRepository.findByUserId(userId);
+
+        for (CartProduct cartProduct : cartProductList) {
+            if (cartProduct.getProduct().getId().equals(productId)) {
+                cartProduct.setQuantity(cartProduct.getQuantity() - 1);
+                cartProductRepository.save(cartProduct);
+            }
+            CartProductDto cartProductDto = new CartProductDto(cartProduct, getUserId());
+            cartProductDtoList.add(cartProductDto);
+            cartDto.setStoreName(cartProduct.getStore().getStoreDetail().getName());
+            cartDto.setEstimatedCookingTime(cartProduct.getStore().getStoreDetail().getEstimatedCookingTime());
+            cartDto.setThumbnailImgUrl(cartProduct.getStore().getStoreDetail().getThumbnailImgUrl());
+
+            totalAmt += cartProduct.getSubTotalPrice();
+        }
+
+        cartDto.setTotalPrice(totalAmt);
+        cartDto.setCartProductDtoList(cartProductDtoList);
+
+        return cartDto;
     }
 
 

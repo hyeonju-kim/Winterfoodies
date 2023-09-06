@@ -5,6 +5,7 @@ import com.winterfoodies.winterfoodies_project.dto.cartProduct.CartProductDto;
 import com.winterfoodies.winterfoodies_project.dto.order.OrderRequestDto;
 import com.winterfoodies.winterfoodies_project.dto.order.OrderResponseDto;
 import com.winterfoodies.winterfoodies_project.dto.product.ProductDto;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,7 +20,13 @@ public interface CartService {
 //    List<CartProductDto> getCartProduct(HttpServletRequest request);
 
     // 장바구니 상품 목록 조회 (DB에서)
-    List<CartProductDto> getCartProductByDB();
+    CartDto getCartProductByDB();
+
+    // 장바구니 상품 수량 증가
+    CartDto increaseQuantity(@PathVariable Long productId);
+
+    // 장바구니 상품 수량 감소
+    CartDto decreaseQuantity(@PathVariable Long productId);
 
     // 장바구니 특정 상품 삭제
     CartProductDto removeProductFromCart(@RequestParam Long productId, HttpServletRequest request, HttpServletResponse response);
