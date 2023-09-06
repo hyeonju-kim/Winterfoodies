@@ -1,6 +1,7 @@
 package com.winterfoodies.winterfoodies_project.service;
 
 import com.winterfoodies.winterfoodies_project.dto.order.OrderResponseDto;
+import com.winterfoodies.winterfoodies_project.dto.product.ProductDto;
 import com.winterfoodies.winterfoodies_project.dto.review.ReviewDto;
 import com.winterfoodies.winterfoodies_project.dto.store.StoreResponseDto;
 import com.winterfoodies.winterfoodies_project.dto.user.UserDto;
@@ -142,20 +143,20 @@ public class MyPageServiceImpl implements MypageService{
             orderResponseDto.setTotalAmount(order.getTotalAmount());
 
             List<OrderProduct> foundOrderProductsList = order.getOrderProducts();
-            List<Map<String, Object>> tempProductsList = new ArrayList<>();
+            List<ProductDto> prdAndQntMapList = new ArrayList<>();
 
 
             for (OrderProduct foundOrderProduct : foundOrderProductsList) {
-                Map<String, Object> productInfoMap = new HashMap<>(); // 가격 정보를 포함하는 Map으로 변경
                 Product product = productRepository.findById(foundOrderProduct.getProduct().getId()).get();
-                productInfoMap.put("name", foundOrderProduct.getProduct().getName());
-                productInfoMap.put("quantity", foundOrderProduct.getQuantity());
-                productInfoMap.put("price", foundOrderProduct.getQuantity() * product.getPrice()); // 가격 정보 추가
+                ProductDto productDto = new ProductDto();
+                productDto.setProductName(product.getName());
+                productDto.setQuantity(foundOrderProduct.getQuantity());
+                productDto.setSubTotalAmount(foundOrderProduct.getSubTotalAmount());
 
-                tempProductsList.add(productInfoMap);
+                prdAndQntMapList.add(productDto);
             }
 
-            orderResponseDto.setProductAndQuantityList(tempProductsList);
+            orderResponseDto.setProductAndQuantityList(prdAndQntMapList);
 
             orderResponseDtoList.add(orderResponseDto);
         }

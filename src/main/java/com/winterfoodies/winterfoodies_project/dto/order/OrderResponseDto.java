@@ -2,6 +2,7 @@ package com.winterfoodies.winterfoodies_project.dto.order;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.winterfoodies.winterfoodies_project.dto.product.ProductDto;
 import com.winterfoodies.winterfoodies_project.entity.OrderProduct;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -47,11 +48,14 @@ public class OrderResponseDto {
     private String customerMessage;
 
     @ApiModelProperty(value = "상품 및 수량 리스트")
-    private List<Map<String, Object>> productAndQuantityList;
+    private List<ProductDto> productAndQuantityList;
 
     @ApiModelProperty(example = "10000", value = "총 주문금액")
     private Long totalAmount;
 
     @ApiModelProperty(example = "3000", value = "각 메뉴별 총 주문금액")
     private Long subTotalAmount;
+
+    @ApiModelProperty(example = "20분~30분" , value = "조리예상시간")
+    private String estimatedCookingTime;
 }

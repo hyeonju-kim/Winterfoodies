@@ -316,7 +316,7 @@ public class CartServiceImpl implements CartService {
     public OrderResponseDto getOrderConfirmPageByDB(OrderRequestDto orderRequestDto) {
         List<CartProduct> cartProductList = cartProductRepository.findByUserId(getUserId());
         OrderResponseDto orderResponseDto = new OrderResponseDto();
-        List<Map<String, Object>> prdAndQntMapList = new ArrayList<>();
+        List<ProductDto> prdAndQntMapList = new ArrayList<>();
         Order order = new Order();
         orderRepository.save(order);
 
@@ -325,9 +325,15 @@ public class CartServiceImpl implements CartService {
         for (CartProduct cartProduct : cartProductList) {
             String prdName = cartProduct.getProduct().getName();
             Long prdQnt = cartProduct.getQuantity();
-            Map<String, Object> map = new HashMap<>();
-            map.put(prdName, prdQnt);
-            prdAndQntMapList.add(map);
+            Long subTotalPrice = cartProduct.getSubTotalPrice();
+
+            ProductDto productDto = new ProductDto();
+            productDto.setProductName(prdName);
+            productDto.setQuantity(prdQnt);
+            productDto.setSubTotalAmount(subTotalPrice);
+
+            prdAndQntMapList.add(productDto);
+
             totalAmt += cartProduct.getSubTotalPrice();
 
             order.setStore(cartProduct.getStore());
@@ -341,6 +347,11 @@ public class CartServiceImpl implements CartService {
             orderProduct.setProduct(cartProduct.getProduct());
             orderProduct.setClientMessage(orderRequestDto.getMessage());
             orderProductRepository.save(orderProduct);
+
+            Store store = cartProduct.getStore();
+            orderResponseDto.setStoreName(store.getStoreDetail().getName());
+            orderResponseDto.setEstimatedCookingTime(store.getStoreDetail().getEstimatedCookingTime());
+
         }
         order.setCreateAt(LocalDateTime.now());
         order.setMessage(orderRequestDto.getMessage());
@@ -348,6 +359,7 @@ public class CartServiceImpl implements CartService {
         orderResponseDto.setProductAndQuantityList(prdAndQntMapList);
         orderResponseDto.setCustomerMessage(orderRequestDto.getMessage());
         orderResponseDto.setTotalAmount(totalAmt);
+        orderResponseDto.setOrderDate(LocalDateTime.now());
 
         return orderResponseDto;
     }

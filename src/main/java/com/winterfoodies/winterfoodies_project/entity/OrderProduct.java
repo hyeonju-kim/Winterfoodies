@@ -39,8 +39,8 @@ public class OrderProduct {
     @Column(name = "VISIT_TIME")
     private LocalDateTime visitTime;
 
-//    @Column(name = "SUB_TOTAL_AMOUNT")
-//    private Long subTotalAmount;
+    @Column(name = "SUB_TOTAL_AMOUNT")
+    private Long subTotalAmount;
 
     public OrderProduct() {
 
