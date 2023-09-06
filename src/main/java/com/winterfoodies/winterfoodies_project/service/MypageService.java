@@ -22,7 +22,7 @@ public interface MypageService {
 //    List<OrderProduct> getOrderProductByUserId(Long userId);
 
     // 리뷰 쓴 가게 목록 조회
-    List<List<ReviewDto>> getReview();
+    List<ReviewDto> getReview();
 
     // 주문한 가게 목록 조회
     List<List<OrderResponseDto>> getOrderByUserId();

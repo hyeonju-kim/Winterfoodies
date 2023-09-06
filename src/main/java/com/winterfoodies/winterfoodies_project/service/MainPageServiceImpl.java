@@ -348,7 +348,7 @@ public class MainPageServiceImpl implements MainPageService{
 //            reviewDto.setPhoto(review.getPhoto());
             reviewDto.setImages(review.getImages());
             reviewDto.setContent(review.getContent());
-            reviewDto.setTimestamp(review.getCreatedAt()); // getTimeStamp라고 해서 안나왔었음
+            reviewDto.setReviewTime(review.getCreatedAt()); // getTimeStamp라고 해서 안나왔었음
             reviewDto.setOrderedProducts(orderedProducts);
 
             reviewDtoList.add(reviewDto);

@@ -110,21 +110,34 @@ public class MyPageServiceImpl implements MypageService{
 
     // 리뷰 쓴 가게 목록 조회
     @Override
-    public List<List<ReviewDto>> getReview() {
+    public List<ReviewDto> getReview() {
         List<Review> foundReview = reviewRepository.findByUserId(getUserId());
         List<ReviewDto> reviewDtoList = new ArrayList<>();
-        List<List<ReviewDto>> outerReviewDtoList = new ArrayList<>();
         for (Review review : foundReview) {
-            ReviewDto reviewDto2 = new ReviewDto();
-            reviewDto2.setId(review.getId());
-            reviewDto2.setUserId(getUserId());
-            reviewDto2.setStoreName(review.getStoreName());
-            reviewDto2.setRating(review.getRating());
-            reviewDto2.setContent(review.getContent());
-            reviewDtoList.add(reviewDto2);
+            ReviewDto reviewDto = new ReviewDto();
+            reviewDto.setId(review.getId());
+            reviewDto.setUserId(getUserId());
+            reviewDto.setStoreName(review.getStore().getStoreDetail().getName());
+            reviewDto.setRating(review.getRating());
+            reviewDto.setContent(review.getContent());
+            reviewDto.setReviewTime(review.getCreatedAt());
+            reviewDto.setImages(review.getImages());
+            reviewDto.setOrderTime(review.getOrder().getCreateAt());
+
+            List<OrderProduct> orderProducts = review.getOrder().getOrderProducts();
+
+            List<String> orderedProducts = new ArrayList<>(); // 주문한 음식 리스트
+
+            for (OrderProduct orderProduct : orderProducts) {
+                Optional<Product> optionalProduct = productRepository.findById(orderProduct.getProduct().getId());
+                Product product = optionalProduct.get();
+                orderedProducts.add(product.getName());
+
+            }
+            reviewDto.setOrderedProducts(orderedProducts);
+            reviewDtoList.add(reviewDto);
         }
-        outerReviewDtoList.add(reviewDtoList);
-        return outerReviewDtoList;
+        return reviewDtoList;
     }
 
 

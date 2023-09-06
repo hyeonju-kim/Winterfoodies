@@ -132,7 +132,7 @@ public class MyPageController {
     // 내가 쓴 리뷰 목록 조회
     @GetMapping("/reviews")
     @ApiOperation(value = "작성한 리뷰 조회")
-    public List<List<ReviewDto>> getMyReviews(){
+    public List<ReviewDto> getMyReviews(){
         return mypageService.getReview();
     }
 

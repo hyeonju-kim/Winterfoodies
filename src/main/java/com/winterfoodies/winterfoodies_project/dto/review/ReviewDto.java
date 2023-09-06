@@ -2,19 +2,13 @@ package com.winterfoodies.winterfoodies_project.dto.review;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.winterfoodies.winterfoodies_project.entity.Order;
-import com.winterfoodies.winterfoodies_project.entity.Review;
-import com.winterfoodies.winterfoodies_project.entity.Store;
-import com.winterfoodies.winterfoodies_project.entity.Timestamped;
+import com.winterfoodies.winterfoodies_project.entity.*;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Getter
 @Setter
@@ -51,7 +45,10 @@ public class ReviewDto extends Timestamped {
     private String content;
 
     @ApiModelProperty(value = "작성 시간" )
-    private LocalDateTime timestamp;
+    private LocalDateTime reviewTime;
+
+    @ApiModelProperty(value = "주문 시간" )
+    private LocalDateTime orderTime;
 
     @ApiModelProperty(value = "메시지" , hidden = true)
     private String message; // 리뷰가 등록되었습니다.
@@ -59,6 +56,8 @@ public class ReviewDto extends Timestamped {
     private Order order;
 
     private Store store;
+
+    private List<OrderProduct> orderProducts = new ArrayList<>();
 
     public ReviewDto(ReviewRequestDto requestDto) {
         this.rating = requestDto.getRating();
