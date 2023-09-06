@@ -58,4 +58,6 @@ public class OrderResponseDto {
 
     @ApiModelProperty(example = "20분~30분" , value = "조리예상시간")
     private String estimatedCookingTime;
+
+    private Long averageRating;
 }

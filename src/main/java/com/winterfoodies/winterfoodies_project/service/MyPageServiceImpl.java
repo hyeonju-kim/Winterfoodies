@@ -154,6 +154,7 @@ public class MyPageServiceImpl implements MypageService{
             orderResponseDto.setOrderId(order.getId());
             orderResponseDto.setOrderDate(order.getCreateAt());
             orderResponseDto.setStoreName(order.getStore().getStoreDetail().getName());
+            orderResponseDto.setAverageRating(order.getStore().getStoreDetail().getAverageRating());
             orderResponseDto.setTotalAmount(order.getTotalAmount());
 
             List<OrderProduct> foundOrderProductsList = order.getOrderProducts();
