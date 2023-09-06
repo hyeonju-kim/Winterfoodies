@@ -322,6 +322,7 @@ public class AppRunner implements ApplicationRunner {
         // 주문 1 - 주문상품
         OrderProduct orderProduct = new OrderProduct();
         orderProduct.setOrder(order); // 신천붕어빵
+        orderProduct.setProduct(product);//붕어빵
         orderProduct.setQuantity(3L);
 //        orderProduct.setVisitTime(LocalDateTime.now().plus(Duration.ofHours(1)));
 

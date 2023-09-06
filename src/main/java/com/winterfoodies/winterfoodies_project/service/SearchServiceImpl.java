@@ -20,10 +20,10 @@ public class SearchServiceImpl implements SearchService{
     private final StoreRepository storeRepository;
     private final ReviewRepository reviewRepository;
 
-    // 상호명 검색
+    // 상호명 or 음식명 검색 - 특정 가게의 음식들 중에 검색이 되면 그 가게가 노출된다.
     @Override
     public StoreMainDto searchStores(String keyword, double latitude, double longitude) {
-        double radius = 5.0; // 검색 반경 설정 (예: 5.0km)
+        double radius = 10.0; // 검색 반경 설정
         StoreMainDto storeMainDto = new StoreMainDto();
         List<Store> storeList = storeRepository.searchStores(keyword, latitude, longitude, radius);
         storeMainDto.setSearchCnt((long) storeList.size());
@@ -71,7 +71,7 @@ public class SearchServiceImpl implements SearchService{
     // 지도로 근처 가게 불러오기
     @Override
     public List<StoreResponseDto> getNearbyStores(double latitude, double longitude) {
-        double radius = 5.0;
+        double radius = 7.0;
 
         List<Store> nearbyStores = storeRepository.findNearbyStores(latitude, longitude, radius);
         List<StoreResponseDto> nearbyStoreDtoList = new ArrayList<>();
