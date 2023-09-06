@@ -10,6 +10,8 @@ import org.springframework.util.StringUtils;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -68,8 +70,12 @@ public class StoreDetail {
 
     private String mapIcon;
 
-    @OneToOne(mappedBy = "storeDetail")
+    @OneToOne
     private Store store;
+
+    @OneToMany(mappedBy = "storeDetail")
+    private List<Product> productsList = new ArrayList<>();
+
 
     private String status; //현재 영업 상태 -> TODO enum으로 바꾸기 -> 영업중, 영업종료
 

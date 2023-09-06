@@ -18,6 +18,8 @@ public class Product {
     @Column(name = "PRODUCT_ID")
     private Long id;
 
+    private Long storeId;
+
     @Column(name = "PRODUCT_NAME")
     private String name;
 
@@ -26,6 +28,10 @@ public class Product {
 //
 //    @Column(name = "QUANTITY")
 //    private Long quantity;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "STORE_DETAIL_ID")
+    private StoreDetail storeDetail;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
     List<OrderProduct> orderProducts = new ArrayList<>();
