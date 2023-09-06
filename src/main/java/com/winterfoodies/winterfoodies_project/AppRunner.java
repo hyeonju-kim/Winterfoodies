@@ -79,6 +79,7 @@ public class AppRunner implements ApplicationRunner {
         storeDetail.setStatus("영업중");
         storeDetail.setOpenDate("매일");
         storeDetail.setThumbnailImgUrl("photo1");
+        storeDetail.setMapIcon("붕어빵");
 
         //가게 디테일 생성 2 - 대야붕어빵 (붕어빵, 다코야끼)
         StoreDetail storeDetail2 = new StoreDetail();
@@ -98,6 +99,7 @@ public class AppRunner implements ApplicationRunner {
         storeDetail2.setStatus("영업중");
         storeDetail2.setOpenDate("주 5일");
         storeDetail2.setThumbnailImgUrl("photo2");
+        storeDetail2.setMapIcon("붕어빵");
 
         //가게 디테일 생성 3 - 소새울호떡집 (호떡)
         StoreDetail storeDetail3 = new StoreDetail();
@@ -117,6 +119,7 @@ public class AppRunner implements ApplicationRunner {
         storeDetail3.setStatus("영업종료");
         storeDetail3.setOpenDate("주말");
         storeDetail3.setThumbnailImgUrl("photo3");
+        storeDetail3.setMapIcon("호떡");
 
         //가게에게 가게 디테일 인젝션 1
         store.setStoreDetail(storeDetail);

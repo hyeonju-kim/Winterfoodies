@@ -66,6 +66,8 @@ public class StoreDetail {
     @Column(name = "STORE_THUMBNAIL_IMGURL")
     private String thumbnailImgUrl;
 
+    private String mapIcon;
+
     @OneToOne(mappedBy = "storeDetail")
     private Store store;
 

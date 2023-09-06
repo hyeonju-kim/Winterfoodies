@@ -83,6 +83,8 @@ public class StoreResponseDto {
     @ApiModelProperty(value = "영업 요일", example = "매일") // TODO enum 으로 바꾸기 -> 매일, 주5일, 주말
     private String openDate;
 
+    private String mapIcon;
+
     public void fllWithStoreDetail(StoreDetail storeDetail){
         this.name = storeDetail.getName();
         this.addressNo = storeDetail.getAddressNo();

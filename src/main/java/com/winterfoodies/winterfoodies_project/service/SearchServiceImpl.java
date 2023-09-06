@@ -4,6 +4,7 @@ import com.winterfoodies.winterfoodies_project.dto.store.StoreDto;
 import com.winterfoodies.winterfoodies_project.dto.store.StoreMainDto;
 import com.winterfoodies.winterfoodies_project.dto.store.StoreResponseDto;
 import com.winterfoodies.winterfoodies_project.entity.Store;
+import com.winterfoodies.winterfoodies_project.repository.ReviewRepository;
 import com.winterfoodies.winterfoodies_project.repository.StoreRepository;
 import com.winterfoodies.winterfoodies_project.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SearchServiceImpl implements SearchService{
     private final StoreRepository storeRepository;
+    private final ReviewRepository reviewRepository;
 
     // 상호명 검색
     @Override
@@ -78,6 +80,10 @@ public class SearchServiceImpl implements SearchService{
             StoreResponseDto storeResponseDto = new StoreResponseDto();
             storeResponseDto.setStoreId(store.getId());
             storeResponseDto.setName(store.getStoreDetail().getName());
+            storeResponseDto.setMapIcon(store.getStoreDetail().getMapIcon());
+            storeResponseDto.setAverageRating(store.getStoreDetail().getAverageRating());
+            Long reviewCnt = reviewRepository.countByStoreId(store.getId());
+            storeResponseDto.setCountReviews(reviewCnt);
             nearbyStoreDtoList.add(storeResponseDto);
             storeResponseDto.setLatitude(store.getStoreDetail().getLatitude());
             storeResponseDto.setLongitude(store.getStoreDetail().getLongitude());
