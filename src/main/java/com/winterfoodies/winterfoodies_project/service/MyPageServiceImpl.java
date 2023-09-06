@@ -101,6 +101,7 @@ public class MyPageServiceImpl implements MypageService{
             storeResponseDto.setAverageRating(foundStore.get().getStoreDetail().getAverageRating());
             storeResponseDto.setLatitude(foundStore.get().getStoreDetail().getLatitude());
             storeResponseDto.setLongitude(foundStore.get().getStoreDetail().getLongitude());
+            storeResponseDto.setThumbNailImgUrl(foundStore.get().getStoreDetail().getThumbnailImgUrl());
 
             storeResponseDtoList.add(storeResponseDto);
         }
