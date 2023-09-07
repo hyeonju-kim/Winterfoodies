@@ -61,13 +61,18 @@ public class UserServiceImpl implements UserService {
         if (foundUserByUsername != null) {
             throw new UserException("해당 이메일이 이미 존재합니다.", HttpStatus.BAD_REQUEST, null);
         }
-        User foundUserByNickname = userRepository.findByNickname(userRequestDto.getNickname());
-        if (foundUserByNickname != null) {
-            throw new UserException("해당 닉네임이 이미 존재합니다.", HttpStatus.BAD_REQUEST, null);
+//        User foundUserByNickname = userRepository.findByNickname(userRequestDto.getNickname());
+//        if (foundUserByNickname != null) {
+//            throw new UserException("해당 닉네임이 이미 존재합니다.", HttpStatus.BAD_REQUEST, null);
+//        }
+
+        if (!userRequestDto.getPassword().equals(userRequestDto.getConfirmPassword())) {
+            throw new UserException("비밀번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST, null);
         }
 
         String encodedPassword = encoder.encode(userRequestDto.getPassword()); // 230726 추가
         userRequestDto.setPassword(encodedPassword);
+
         User user = new User(userRequestDto);
         userRepository.save(user);
         return new UserDto(user);
