@@ -18,6 +18,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
@@ -89,4 +90,7 @@ public class UserServiceImpl implements UserService {
 //    public boolean isNicknameUnique(String nickname) {
 //        return userRepository.existsByNickname(nickname); // 존재하면 true
 //    }
+
+
+
 }

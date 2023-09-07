@@ -56,4 +56,9 @@ public class UserResponseDto{
         this.nickname = nickname;
         this.phoneNumber = phoneNumber;
     }
+
+    public static UserResponseDto createEmpty() {
+        return new UserResponseDto(); // 빈 객체 반환
+    }
+
 }

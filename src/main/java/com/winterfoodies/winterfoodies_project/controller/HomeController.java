@@ -13,6 +13,7 @@
     import com.winterfoodies.winterfoodies_project.exception.RequestException;
     import com.winterfoodies.winterfoodies_project.exception.UserException;
     import com.winterfoodies.winterfoodies_project.repository.UserRepository;
+    import com.winterfoodies.winterfoodies_project.service.AuthService;
     import com.winterfoodies.winterfoodies_project.service.UserDetailsServiceImpl;
     import com.winterfoodies.winterfoodies_project.service.UserServiceImpl;
     import io.swagger.annotations.*;
@@ -58,6 +59,7 @@
         private final BCryptPasswordEncoder encoder;
         private final UserRepository userRepository;
         private final RedisTemplate redisTemplate;
+        private final AuthService authService;
 
 
 
@@ -180,6 +182,15 @@
                 return ResponseEntity.ok(new UserResponseDto("사용 가능한 이메일 주소 입니다.", "success"));
             }
         }
+
+        // 비밀번호 찾기 - 230907 추가
+        @PostMapping("/forgot-password")
+        public ResponseEntity<UserResponseDto> sendForgotPasswordEmail(@RequestBody UserRequestDto userRequestDto){
+            // 임시 유저 정보 생성하고 메일 발송
+            boolean authInfo = authService.saveTempAuthInfo(userRequestDto.getUsername());
+            return ResponseEntity.ok(new UserResponseDto("메일을 발송 했습니다.", "success"));
+        }
+
 //
 //        // 닉네임 중복확인 - 230901 추가
 //        @GetMapping("/check-nickname/{nickname}")
