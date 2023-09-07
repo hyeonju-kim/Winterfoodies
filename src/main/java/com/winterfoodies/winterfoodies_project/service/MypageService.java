@@ -31,7 +31,7 @@ public interface MypageService {
     public UserDto delReviewByUserId(Long reviewId);
 
     // 리뷰 작성
-    ReviewDto postReview(ReviewDto reviewDto);
+    List<ReviewDto> postReview(ReviewDto reviewDto);
 
     // 환경설정
     Configuration getConfig();

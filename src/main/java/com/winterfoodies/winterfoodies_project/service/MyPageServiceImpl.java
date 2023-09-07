@@ -190,19 +190,46 @@ public class MyPageServiceImpl implements MypageService{
 
     // 리뷰 등록
     @Override
-    public ReviewDto postReview(ReviewDto inReviewDto) {
+    public List<ReviewDto> postReview(ReviewDto inReviewDto) {
         Store store = storeRepository.getStoreById(inReviewDto.getStoreId());
         Optional<Order> optionalOrder = orderRepository.findById(inReviewDto.getOrderId());
         Order order = optionalOrder.get();
+
         Review review = new Review(inReviewDto);
-        review.setStore(store);
-        review.setOrder(order);
         review.setUserId(getUserId());
+        review.setOrder(order);
+        review.setStore(store);
+
         reviewRepository.save(review);
 
-        ReviewDto reviewDto = new ReviewDto(review);
-        return reviewDto;
+        List<Review> foundReview = reviewRepository.findByUserId(getUserId());
+        List<ReviewDto> reviewDtoList = new ArrayList<>();
+        for (Review rv : foundReview) {
+            ReviewDto reviewDto = new ReviewDto();
+            reviewDto.setId(rv.getId());
+            reviewDto.setUserId(getUserId());
+            reviewDto.setStoreName(rv.getStore().getStoreDetail().getName());
+            reviewDto.setRating(rv.getRating());
+            reviewDto.setContent(rv.getContent());
+            reviewDto.setReviewTime(rv.getCreatedAt());
+            reviewDto.setImages(rv.getImages());
+            reviewDto.setOrderTime(rv.getOrder().getCreateAt());
+
+            List<OrderProduct> orderProducts = rv.getOrder().getOrderProducts();
+
+            List<String> orderedProducts = new ArrayList<>(); // 주문한 음식 리스트
+
+            for (OrderProduct orderProduct : orderProducts) {
+                Optional<Product> optionalProduct = productRepository.findById(orderProduct.getProduct().getId());
+                Product product = optionalProduct.get();
+                orderedProducts.add(product.getName());
+            }
+            reviewDto.setOrderedProducts(orderedProducts);
+            reviewDtoList.add(reviewDto);
+        }
+        return reviewDtoList;
     }
+
 
     // 환경설정
     @Override

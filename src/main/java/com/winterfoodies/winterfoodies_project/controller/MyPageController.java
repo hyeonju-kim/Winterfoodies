@@ -155,7 +155,7 @@ public class MyPageController {
     // 리뷰 작성
     @PostMapping("/orderlist/reviews")
     @ApiOperation(value = "리뷰 작성")
-    public ReviewDto reviewPost(@RequestBody ReviewDto reviewDto) {
+    public List<ReviewDto> reviewPost(@RequestBody ReviewDto reviewDto) {
         return mypageService.postReview(reviewDto);
     }
 

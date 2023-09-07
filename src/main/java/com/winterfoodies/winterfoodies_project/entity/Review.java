@@ -61,7 +61,7 @@ public class Review extends Timestamped{
 
 //        this.storeId = reviewDto.getStoreId();
         this.storeName = reviewDto.getStoreName();
-        this.userId = reviewDto.getUserId();
+        this.userId = getUserId();
         this.createdAt = LocalDateTime.now(); // 현재 시간을 설정
         this.modifiedAt = LocalDateTime.now(); // 현재 시간을 설정
     }
