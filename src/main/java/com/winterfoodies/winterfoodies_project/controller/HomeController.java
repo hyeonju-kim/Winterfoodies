@@ -119,7 +119,7 @@
             UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequestDto.getUsername());
 
             // 3. subject, claim 모두 UserDetails를 사용하므로 객체를 그대로 전달
-            String token = jwtUtil.generateAccessToken(userDetails);
+            String accessToken = jwtUtil.generateAccessToken(userDetails);
             String refreshToken = jwtUtil.generateRefreshToken(userDetails); // 230814 추가
 
 
@@ -135,7 +135,7 @@
 
 
             // 4. 생성된 토큰을 응답
-            LoginSuccessResponseDto loginSuccessResponseDto = new LoginSuccessResponseDto(token);
+            LoginSuccessResponseDto loginSuccessResponseDto = new LoginSuccessResponseDto(accessToken, refreshToken);
             UserResponseDto userResponseDto = new UserResponseDto(username, nickname, phoneNumber);
             loginSuccessResponseDto.setUserResponseDto(userResponseDto);
             return ResponseEntity.ok(loginSuccessResponseDto);

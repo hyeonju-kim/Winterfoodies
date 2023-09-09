@@ -16,6 +16,9 @@ public class LoginSuccessResponseDto {
     @ApiModelProperty(example = "access 토큰" )
     private String accessToken;
 
+    @ApiModelProperty(example = "refresh 토큰" )
+    private String refreshToken;
+
     private UserResponseDto userResponseDto;
 
 //    @ApiModelProperty(example = "refresh 토큰" )
@@ -23,8 +26,9 @@ public class LoginSuccessResponseDto {
 
 
 
-    public LoginSuccessResponseDto(String accessToken) {
+    public LoginSuccessResponseDto(String accessToken, String refreshToken) {
         this.accessToken = accessToken;
+        this.refreshToken = refreshToken;
     }
 
 
