@@ -136,8 +136,8 @@
 
             // 4. 생성된 토큰을 응답
             LoginSuccessResponseDto loginSuccessResponseDto = new LoginSuccessResponseDto(accessToken, refreshToken);
-            UserResponseDto userResponseDto = new UserResponseDto(username, nickname, phoneNumber);
-            loginSuccessResponseDto.setUserResponseDto(userResponseDto);
+//            UserResponseDto userResponseDto = new UserResponseDto(username, nickname, phoneNumber);
+//            loginSuccessResponseDto.setUserResponseDto(userResponseDto);
             return ResponseEntity.ok(loginSuccessResponseDto);
         }
 
@@ -145,6 +145,15 @@
 //        public String requestException(BadCredentialsException badCredentialsException) {
 //            return badCredentialsException.getMessage();
 //        }
+
+
+
+        // 로그인 후, 유저네임/닉네임/휴대폰번호 조회
+        @GetMapping("/me")
+        @ApiOperation(value = "로그인 후 개인정보 조회")
+        public UserResponseDto personalInfo() {
+            return userService.personalInfo();
+        }
 
 
         // 회원가입

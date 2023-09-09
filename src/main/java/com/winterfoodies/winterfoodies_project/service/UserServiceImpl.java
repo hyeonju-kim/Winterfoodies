@@ -1,13 +1,5 @@
 package com.winterfoodies.winterfoodies_project.service;
 
-import com.winterfoodies.winterfoodies_project.dto.cart.CartDto;
-import com.winterfoodies.winterfoodies_project.dto.order.OrderRequestDto;
-import com.winterfoodies.winterfoodies_project.dto.order.OrderResponseDto;
-import com.winterfoodies.winterfoodies_project.dto.product.ProductDto;
-import com.winterfoodies.winterfoodies_project.dto.product.ProductResponseDto;
-import com.winterfoodies.winterfoodies_project.dto.review.ReviewDto;
-import com.winterfoodies.winterfoodies_project.dto.store.StoreMainDto;
-import com.winterfoodies.winterfoodies_project.dto.store.StoreResponseDto;
 import com.winterfoodies.winterfoodies_project.dto.user.*;
 import com.winterfoodies.winterfoodies_project.entity.*;
 import com.winterfoodies.winterfoodies_project.exception.UserException;
@@ -18,14 +10,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.time.LocalDateTime;
-import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -78,6 +62,19 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
         return new UserDto(user);
     }
+
+
+
+    // 로그인 후, 유저네임/닉네임/휴대폰번호 조회
+    @Override
+    public UserResponseDto personalInfo() {
+        User foundUser = userRepository.findByUsername(getUsernameFromAuthentication());
+        String username = foundUser.getUsername();
+        String nickname = foundUser.getNickname();
+        String phoneNumber = foundUser.getPhoneNumber();
+        return new UserResponseDto(username, nickname, phoneNumber);
+    }
+
 
     // 계정 중복확인 - 230901 추가
     @Override
