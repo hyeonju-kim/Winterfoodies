@@ -16,6 +16,10 @@
     import com.winterfoodies.winterfoodies_project.service.AuthService;
     import com.winterfoodies.winterfoodies_project.service.UserDetailsServiceImpl;
     import com.winterfoodies.winterfoodies_project.service.UserServiceImpl;
+    import io.netty.buffer.ByteBuf;
+    import io.netty.buffer.Unpooled;
+    import io.netty.handler.codec.base64.Base64;
+    import io.netty.util.CharsetUtil;
     import io.swagger.annotations.*;
     import io.swagger.v3.oas.annotations.media.ExampleObject;
     import lombok.RequiredArgsConstructor;
@@ -38,6 +42,7 @@
     import javax.naming.Binding;
     import javax.servlet.http.HttpServletRequest;
     import javax.validation.Valid;
+    import java.nio.charset.StandardCharsets;
     import java.time.LocalDateTime;
     import java.time.format.DateTimeFormatter;
     import java.util.Date;
@@ -45,6 +50,10 @@
     import java.util.Map;
     import java.util.Optional;
     import java.util.concurrent.TimeUnit;
+
+    import static io.netty.handler.codec.base64.Base64.*;
+    import static java.util.Base64.getDecoder;
+
 
     @CrossOrigin
     @RequiredArgsConstructor
@@ -63,8 +72,8 @@
 
 
 
-        // 로그인
-        @PostMapping("/login")
+        // 로그인 - 기존방식
+        @PostMapping("/loginTest")
         @ApiOperation(value = "로그인")
         public ResponseEntity<LoginSuccessResponseDto> loginTest(@Valid @RequestBody LoginRequestDto loginRequestDto, BindingResult bindingResult) {
             // [230726] 추가
@@ -135,16 +144,80 @@
 
 
             // 4. 생성된 토큰을 응답
-            LoginSuccessResponseDto loginSuccessResponseDto = new LoginSuccessResponseDto(accessToken, refreshToken);
+            LoginSuccessResponseDto loginSuccessResponseDto = new LoginSuccessResponseDto(accessToken);
 //            UserResponseDto userResponseDto = new UserResponseDto(username, nickname, phoneNumber);
 //            loginSuccessResponseDto.setUserResponseDto(userResponseDto);
             return ResponseEntity.ok(loginSuccessResponseDto);
         }
 
-//        @ExceptionHandler(BadCredentialsException.class)
-//        public String requestException(BadCredentialsException badCredentialsException) {
-//            return badCredentialsException.getMessage();
-//        }
+        // 클라에서 인코딩 후 백에서 디코딩하는 방식의 로그인 (보안 강화) - 230910 추가
+        @PostMapping("/login")
+        public ResponseEntity<LoginSuccessResponseDto> loginBasic(HttpServletRequest request) {
+            // "Authorization" 헤더 값을 가져옵니다.
+            String authorizationHeader = request.getHeader("Authorization");
+
+            String username = null;
+            String password;
+
+            if (authorizationHeader != null && authorizationHeader.startsWith("Basic ")) {
+                // "Basic " 이후의 문자열을 추출합니다.
+                String base64Credentials = authorizationHeader.substring(6);
+
+                // Base64로 인코딩된 문자열을 디코딩합니다.
+                byte[] decodedBytes = getDecoder().decode(base64Credentials);
+
+
+                // 디코딩된 바이트 배열을 문자열로 변환합니다.
+                String decodedString = new String(decodedBytes, StandardCharsets.UTF_8);
+
+                // 사용자 이름과 비밀번호를 ":"로 분리하여 배열에 담아 반환합니다.
+                String[] credentials = decodedString.split(":");
+                username = credentials[0];
+                password = credentials[1];
+
+                System.out.println("Username: " + username);
+                System.out.println("Password: " + password);
+                User retrievedUser = userRepository.findByUsername(username);
+
+                log.info("retrievedUser = {}", retrievedUser);
+
+                if (retrievedUser == null) {
+                    throw new UserException("가입되지 않은 이메일입니다.", HttpStatus.BAD_REQUEST, null);
+                }
+
+                // 조회한 비밀번호
+                String foundPw = retrievedUser.getPassword();
+                log.info("foundPw = {}", foundPw);
+
+                //비밀번호 같은지 여부 파악
+                if (!encoder.matches(password, foundPw)) {
+                    throw new UserException("비밀번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST, null);
+                }
+
+
+            }
+            // 2. 인증 성공(회원저장소에 해당 이름이 있으면) 후 인증된 user의 정보를 갖고옴
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+
+            // 3. subject, claim 모두 UserDetails를 사용하므로 객체를 그대로 전달
+            String accessToken = jwtUtil.generateAccessToken(userDetails);
+            String refreshToken = jwtUtil.generateRefreshToken(userDetails); // 230814 추가
+
+
+            Date refreshTokenExpiration = jwtUtil.getExpirationDate(refreshToken);
+            long remainingTimeInMillis = refreshTokenExpiration.getTime() - System.currentTimeMillis();// 만료까지 남은시간
+
+            redisTemplate.opsForValue().set("RT:" + username, refreshToken, remainingTimeInMillis, TimeUnit.MILLISECONDS);
+            System.out.println("key==========RT:" + username);
+            System.out.println("refreshToken===========" + refreshToken);
+
+
+            // 4. 생성된 토큰을 응답
+            LoginSuccessResponseDto loginSuccessResponseDto = new LoginSuccessResponseDto(accessToken);
+            return ResponseEntity.ok(loginSuccessResponseDto);
+
+        }
 
 
 
@@ -219,15 +292,19 @@
         @PostMapping("/logout")
         @ApiOperation(value = "로그아웃")
         public ResponseEntity<UserResponseDto> logout(@RequestBody TokenRequestDto tokenRequestDto) {
-            System.out.println("dto=================" + tokenRequestDto.getAccessToken() + "=========" + tokenRequestDto.getRefreshToken());
+
             //로그아웃 하고싶은 토큰이 유효한 지 먼저 검증하기
-            if (jwtUtil.isTokenExpired(tokenRequestDto.getAccessToken())) {
+            String accessToken = tokenRequestDto.getAccessToken();
+            if (jwtUtil.isTokenExpired(accessToken)) {
                 throw new UserException("로그아웃 : 유효하지 않은 토큰입니다.", HttpStatus.BAD_REQUEST, null);
             }
 
+
             // access토큰에서 username을 가져온다
-            String usernameFromToken = jwtUtil.getUsernameFromToken(tokenRequestDto.getAccessToken());
+            String usernameFromToken = jwtUtil.getUsernameFromToken(accessToken);
             System.out.println("토큰에서가져온이름==================" + usernameFromToken);
+
+            String refreshToken = (String) redisTemplate.opsForValue().get("RT:" + usernameFromToken);
 
             // redis에서 해당 username으로 저장된 refresh토큰이 있는지 여부 확인 후에 있을 경우 삭제하기
             if (redisTemplate.opsForValue().get("RT:" + usernameFromToken) != null){

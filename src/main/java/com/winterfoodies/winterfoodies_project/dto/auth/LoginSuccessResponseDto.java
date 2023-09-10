@@ -31,6 +31,10 @@ public class LoginSuccessResponseDto {
         this.refreshToken = refreshToken;
     }
 
+    public LoginSuccessResponseDto(String accessToken) {
+        this.accessToken = accessToken;
+    }
+
 
 
 }
