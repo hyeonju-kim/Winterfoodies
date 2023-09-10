@@ -63,14 +63,19 @@ public class MainPageServiceImpl implements MainPageService{
 
 
     // 인증된 사용자의 id 가져오기
+//    public Long getUserId() {
+//        User foundUser = userRepository.findByUsername(getUsernameFromAuthentication());
+//        if (foundUser != null) {
+//            return foundUser.getId();
+//        } else {
+//            // 사용자를 찾지 못하거나 인증되지 않은 경우에 대한 처리
+//            throw new RequestException(new ErrorBox("사용자를 찾을 수 없거나 인증되지 않았습니다."));
+//        }
+//    }
+
     public Long getUserId() {
         User foundUser = userRepository.findByUsername(getUsernameFromAuthentication());
-        if (foundUser != null) {
-            return foundUser.getId();
-        } else {
-            // 사용자를 찾지 못하거나 인증되지 않은 경우에 대한 처리
-            throw new RequestException(new ErrorBox("사용자를 찾을 수 없거나 인증되지 않았습니다."));
-        }
+        return foundUser.getId();
     }
 
 
@@ -272,21 +277,28 @@ public class MainPageServiceImpl implements MainPageService{
 
         // 토큰이 있으면 가게 좋아요표시(채워진하트) 나타나지 않고, 토큰이 있으면(로그인하면) 좋아요표시 나타나도록! - 230909추가
 
-        System.out.println("getUserId()====================?" + getUserId());
-        System.out.println("getUsernameFromAuthentication()====================?" + getUsernameFromAuthentication());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println("authentication == " + authentication);
+        System.out.println(authentication.getPrincipal());
+        System.out.println(authentication.getCredentials());
+        System.out.println(authentication.getDetails());
 
-//        if (SecurityContextHolder.getContext().getAuthentication() != null) {
-//            // 사용자가 로그인한 경우
-//            List<FavoriteStore> favoriteStoreList = favoriteStoreRepository.findByUserId(getUserId());
-//            for (FavoriteStore favoriteStore : favoriteStoreList) {
-//                if (Objects.equals(favoriteStore.getStoreId(), storeId)) {
-//                    storeMainDto.setLike("Y");
-//                }
-//            }
-//        } else {
-//            // 사용자가 로그인하지 않은 경우
-//            storeMainDto.setLike("N");
-//        }
+        // 사용자가 로그인한 경우에는 찜여부를 보여주고, 로그인하지 않은 경우에는 항상 찜하지 않은 상태 - 안되네 진짜 미치겠네 ㅡㅡ;;;;;;;;;
+        if (authentication.getPrincipal() instanceof User) {
+            // 사용자가 로그인한 경우
+            String username = authentication.getName();
+            System.out.println("username == ? " + username);
+            User byUsername = userRepository.findByUsername(username);
+            List<FavoriteStore> favoriteStoreList = favoriteStoreRepository.findByUserId(getUserId());
+            for (FavoriteStore favoriteStore : favoriteStoreList) {
+                if (Objects.equals(favoriteStore.getStoreId(), storeId)) {
+                    storeMainDto.setLike("Y");
+                }
+            }
+        } else {
+            // 사용자가 로그인하지 않은 경우
+            storeMainDto.setLike("N");
+        }
 
         // 3) 가게정보 만들기 추가 -230831
         Optional<Store> optionalStore = storeRepository.findById(storeId);
