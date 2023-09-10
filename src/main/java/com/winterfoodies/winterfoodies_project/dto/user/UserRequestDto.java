@@ -56,6 +56,5 @@ public class UserRequestDto {
     @ApiModelProperty(example = "이메일 중복확인 여부" , hidden = true )
     private boolean isCheckUserName;
 
-    @ApiModelProperty(example = "닉네임 중복확인 여부" , hidden = true )
-    private boolean isCheckNickName;
+
 }

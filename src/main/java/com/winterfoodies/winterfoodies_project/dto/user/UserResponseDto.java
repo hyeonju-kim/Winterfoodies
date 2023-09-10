@@ -14,7 +14,7 @@ import org.springframework.http.HttpStatus;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class UserResponseDto{
 
-    @ApiModelProperty(example = "메시지" )
+    @ApiModelProperty(example = "사용가능한 이메일 주소입니다.")
     private String message;
 
     @ApiModelProperty(hidden = true )
@@ -28,17 +28,17 @@ public class UserResponseDto{
 //    @ApiModelProperty(example = "유저 이메일", hidden = true )
 //    private String email;
 
-    @ApiModelProperty(example = "asdf12345@naver.com")
+    @ApiModelProperty(example = "asdf12345@naver.com", hidden = true)
     private String username;
 
-    @ApiModelProperty(example = "붕어빵러버")
+    @ApiModelProperty(example = "붕어빵러버", hidden = true)
     private String nickname;
 
-    @ApiModelProperty(example = "010-8711-7702")
+    @ApiModelProperty(example = "010-8711-7702", hidden = true)
     private String phoneNumber;
 
 //    @JsonIgnore
-    @ApiModelProperty(value = "유저 상태", hidden = true )
+    @ApiModelProperty(example = "success")
     private String status;
 
     public UserResponseDto(String message) {

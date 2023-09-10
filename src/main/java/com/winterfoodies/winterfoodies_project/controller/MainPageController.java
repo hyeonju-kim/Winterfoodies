@@ -27,7 +27,7 @@ public class MainPageController {
 
     // 상품명 목록만 제공하는 API
     @GetMapping("/productList")
-    @ApiOperation(value = "상품명 모두 보여주기  -  토큰 XXXXXXXXXXXXXXX")
+    @ApiOperation(value = "상품명 모두 보여주기 ")
     public List<ProductResponseDto> storeList() {
         return mainPageService.getProductList();
     }
@@ -107,7 +107,7 @@ public class MainPageController {
 
     // 8. 가게 상세 조회(리뷰)
     @GetMapping("/{storeId}/review")
-    @ApiOperation(value = "가게 상세 조회(리뷰)  -  토큰 XXXXXXXXXXXXXXX")
+    @ApiOperation(value = "가게 상세 조회(리뷰)")
     @ApiImplicitParam(name = "storeId", value = "가게 아이디")
     public StoreMainDto storeDetailReview(@PathVariable Long storeId) {
         return mainPageService.getStoreReviews(storeId);

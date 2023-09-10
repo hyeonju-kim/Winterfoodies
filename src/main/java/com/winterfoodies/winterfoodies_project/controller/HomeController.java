@@ -74,7 +74,7 @@
 
         // 로그인 - 기존방식
         @PostMapping("/loginTest")
-        @ApiOperation(value = "로그인")
+        @ApiOperation(value = "로그인 - 기존 방식")
         public ResponseEntity<LoginSuccessResponseDto> loginTest(@Valid @RequestBody LoginRequestDto loginRequestDto, BindingResult bindingResult) {
             // [230726] 추가
             if (bindingResult.hasErrors()) {
@@ -152,6 +152,7 @@
 
         // 클라에서 인코딩 후 백에서 디코딩하는 방식의 로그인 (보안 강화) - 230910 추가
         @PostMapping("/login")
+        @ApiOperation(value = "로그인 - Basic")
         public ResponseEntity<LoginSuccessResponseDto> loginBasic(HttpServletRequest request) {
             // "Authorization" 헤더 값을 가져옵니다.
             String authorizationHeader = request.getHeader("Authorization");
@@ -267,6 +268,7 @@
 
         // 비밀번호 찾기 - 230907 추가
         @PostMapping("/forgot-password")
+        @ApiOperation(value = "비밀번호 찾기")
         public ResponseEntity<UserResponseDto> sendForgotPasswordEmail(@RequestBody UserRequestDto userRequestDto){
             // 임시 유저 정보 생성하고 메일 발송
             boolean authInfo = authService.saveTempAuthInfo(userRequestDto.getUsername());
