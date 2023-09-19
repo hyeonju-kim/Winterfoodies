@@ -73,7 +73,7 @@
 
 
         // 로그인 - 기존방식
-        @PostMapping("/loginTest")
+        @PostMapping("/login")
         @ApiOperation(value = "로그인 - 기존 방식")
         public ResponseEntity<LoginSuccessResponseDto> loginTest(@Valid @RequestBody LoginRequestDto loginRequestDto, BindingResult bindingResult) {
             // [230726] 추가
@@ -138,20 +138,20 @@
             Date refreshTokenExpiration = jwtUtil.getExpirationDate(refreshToken);
             long remainingTimeInMillis = refreshTokenExpiration.getTime() - System.currentTimeMillis();// 만료까지 남은시간
 
-            redisTemplate.opsForValue().set("RT:" + username, refreshToken, remainingTimeInMillis, TimeUnit.MILLISECONDS);
+//            redisTemplate.opsForValue().set("RT:" + username, refreshToken, remainingTimeInMillis, TimeUnit.MILLISECONDS);
             System.out.println("key==========RT:" + username);
             System.out.println("refreshToken===========" + refreshToken);
 
 
             // 4. 생성된 토큰을 응답
-            LoginSuccessResponseDto loginSuccessResponseDto = new LoginSuccessResponseDto(accessToken);
+            LoginSuccessResponseDto loginSuccessResponseDto = new LoginSuccessResponseDto(accessToken, refreshToken);
 //            UserResponseDto userResponseDto = new UserResponseDto(username, nickname, phoneNumber);
 //            loginSuccessResponseDto.setUserResponseDto(userResponseDto);
             return ResponseEntity.ok(loginSuccessResponseDto);
         }
 
         // 클라에서 인코딩 후 백에서 디코딩하는 방식의 로그인 (보안 강화) - 230910 추가
-        @PostMapping("/login")
+        @PostMapping("/loginTest")
         @ApiOperation(value = "로그인 - Basic")
         public ResponseEntity<LoginSuccessResponseDto> loginBasic(HttpServletRequest request) {
             // "Authorization" 헤더 값을 가져옵니다.
@@ -176,11 +176,11 @@
                 username = credentials[0];
                 password = credentials[1];
 
-                System.out.println("Username: " + username);
-                System.out.println("Password: " + password);
+                System.out.println(" 홈 컨트롤러 / 로그인 : " + username);
+                System.out.println(" 홈 컨트롤러 / 로그인 : " + password);
+
                 User retrievedUser = userRepository.findByUsername(username);
 
-                log.info("retrievedUser = {}", retrievedUser);
 
                 if (retrievedUser == null) {
                     throw new UserException("가입되지 않은 이메일입니다.", HttpStatus.BAD_REQUEST, null);
@@ -209,13 +209,13 @@
             Date refreshTokenExpiration = jwtUtil.getExpirationDate(refreshToken);
             long remainingTimeInMillis = refreshTokenExpiration.getTime() - System.currentTimeMillis();// 만료까지 남은시간
 
-            redisTemplate.opsForValue().set("RT:" + username, refreshToken, remainingTimeInMillis, TimeUnit.MILLISECONDS);
+//            redisTemplate.opsForValue().set("RT:" + username, refreshToken, remainingTimeInMillis, TimeUnit.MILLISECONDS);
             System.out.println("key==========RT:" + username);
             System.out.println("refreshToken===========" + refreshToken);
 
 
             // 4. 생성된 토큰을 응답
-            LoginSuccessResponseDto loginSuccessResponseDto = new LoginSuccessResponseDto(accessToken);
+            LoginSuccessResponseDto loginSuccessResponseDto = new LoginSuccessResponseDto(accessToken, refreshToken);
             return ResponseEntity.ok(loginSuccessResponseDto);
 
         }
