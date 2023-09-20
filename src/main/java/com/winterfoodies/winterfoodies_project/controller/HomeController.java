@@ -225,12 +225,12 @@
         @GetMapping("/token")
         @ApiOperation(value = "refreshToken 보내주면 accessToken 발급")
         public TokenRequestDto generateRefreshToken(@RequestBody TokenRequestDto tokenRequestDto)  {
-            String accessToken = tokenRequestDto.getAccessToken();
-            String username = jwtUtil.getUsernameFromToken(accessToken);
+            String refreshToken = tokenRequestDto.getRefreshToken();
+            String username = jwtUtil.getUsernameFromToken(refreshToken);
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-            String refreshToken = jwtUtil.generateRefreshToken(userDetails);
+            String accessToken = jwtUtil.generateAccessToken(userDetails);
             TokenRequestDto newTokenDto = new TokenRequestDto();
-            newTokenDto.setRefreshToken(refreshToken);
+            newTokenDto.setAccessToken(accessToken);
             return newTokenDto;
         }
 
