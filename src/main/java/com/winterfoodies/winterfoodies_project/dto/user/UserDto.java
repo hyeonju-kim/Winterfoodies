@@ -36,6 +36,9 @@ public class UserDto {
     @ApiModelProperty(example = "126.800944" ,hidden = true)
     private double longitude;
 
+    private String accessToken;
+    private String refreshToken;
+
 
     //잘못된경우에만
     @ApiModelProperty(example = "메시지" ,hidden = true)

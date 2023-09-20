@@ -221,6 +221,18 @@
         }
 
 
+        // refreshToken 보내주면 accessToken 발급해주는 api 추가 - 230920
+        @GetMapping("/token")
+        @ApiOperation(value = "refreshToken 보내주면 accessToken 발급")
+        public TokenRequestDto generateRefreshToken(@RequestBody TokenRequestDto tokenRequestDto)  {
+            String accessToken = tokenRequestDto.getAccessToken();
+            String username = jwtUtil.getUsernameFromToken(accessToken);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            String refreshToken = jwtUtil.generateRefreshToken(userDetails);
+            TokenRequestDto newTokenDto = new TokenRequestDto();
+            newTokenDto.setRefreshToken(refreshToken);
+            return newTokenDto;
+        }
 
         // 로그인 후, 유저네임/닉네임/휴대폰번호 조회
         @GetMapping("/me")
