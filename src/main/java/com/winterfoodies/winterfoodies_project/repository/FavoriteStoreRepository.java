@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface FavoriteStoreRepository extends JpaRepository<FavoriteStore, Long> {
-    List<FavoriteStore> findByUserId(double userId);
+    List<FavoriteStore> findByUserId(Long userId);
 
-    Optional<FavoriteStore> findByUserIdAndStoreId(double userId, double storeId);
+    Optional<FavoriteStore> findByUserIdAndStoreId(Long userId, Long storeId);
 }

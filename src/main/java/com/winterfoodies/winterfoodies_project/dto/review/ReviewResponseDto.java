@@ -13,11 +13,11 @@ import java.util.List;
 @Setter
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class ReviewResponseDto extends Timestamped {
-    private double userId;
+    private Long userId;
 
     private String storeName;
 
-    private double rating;
+    private Long rating;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private List<UrlDto> images;

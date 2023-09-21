@@ -43,7 +43,7 @@ public class StoreRequestDto {
 
     private double longitude;
 
-    private double averageRating; // 평균 별점
+    private Long averageRating; // 평균 별점
     
     private String estimatedCookingTime;
 }

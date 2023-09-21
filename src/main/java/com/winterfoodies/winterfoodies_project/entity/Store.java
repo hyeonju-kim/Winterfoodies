@@ -20,10 +20,10 @@ import java.util.List;
 @SequenceGenerator(name = "storeSeq", sequenceName = "STORE_SEQ", initialValue = 1, allocationSize = 1)
 public class Store implements Serializable {
 
-    static final double serialVersionUID = -3085157956097560248L;
+    static final long serialVersionUID = -3085157956097560248L;
     @Column(name = "STORE_ID")
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "storeSeq")
-    private double id;
+    private Long id;
 
 
     @Column(name = "STORE_STATUS")

@@ -24,7 +24,7 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "orderSeq")
     @Column(name = "ORDER_ID")
-    private double id;
+    private Long id;
 
     @JsonIgnore
     @ManyToOne
@@ -51,7 +51,7 @@ public class Order {
     private LocalDateTime createAt;
 
     @Column(name = "TOTAL_AMOUNT")
-    private double totalAmount;
+    private Long totalAmount;
 
     @Column(name = "MESSAGE")
     private String message;

@@ -18,7 +18,7 @@ public class OrderProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "orderProductSeq")
     @Column(name = "ORDER_PRODUCT_ID")
-    private double id;
+    private Long id;
 
     @JsonIgnore
     @ManyToOne
@@ -31,7 +31,7 @@ public class OrderProduct {
     private Product product;
 
     @Column(name = "QUANTITY")
-    private double quantity;
+    private Long quantity;
 
     @Column(name = "CLIENT_MESSAGE")
     private String clientMessage;
@@ -40,7 +40,7 @@ public class OrderProduct {
     private LocalDateTime visitTime;
 
     @Column(name = "SUB_TOTAL_AMOUNT")
-    private double subTotalAmount;
+    private Long subTotalAmount;
 
     public OrderProduct() {
 

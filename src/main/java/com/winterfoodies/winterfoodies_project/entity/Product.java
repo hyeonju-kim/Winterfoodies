@@ -16,18 +16,18 @@ import java.util.List;
 public class Product {
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "productSeq")
     @Column(name = "PRODUCT_ID")
-    private double id;
+    private Long id;
 
-    private double storeId;
+    private Long storeId;
 
     @Column(name = "PRODUCT_NAME")
     private String name;
 
     @Column(name = "PRICE")
-    private double price;
+    private Long price;
 //
 //    @Column(name = "QUANTITY")
-//    private double quantity;
+//    private Long quantity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "STORE_DETAIL_ID")

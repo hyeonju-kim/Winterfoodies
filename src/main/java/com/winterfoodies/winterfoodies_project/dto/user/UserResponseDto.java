@@ -23,7 +23,7 @@ public class UserResponseDto{
 //    private String result;
 
     @ApiModelProperty(example = "1", hidden = true )
-    private double id;
+    private Long id;
 
 //    @ApiModelProperty(example = "유저 이메일", hidden = true )
 //    private String email;

@@ -19,7 +19,7 @@ public interface MypageService {
     public List<StoreResponseDto> getFavoriteStoresByUserId();
 
     // 주문한 가게 목록 조회
-//    List<OrderProduct> getOrderProductByUserId(double userId);
+//    List<OrderProduct> getOrderProductByUserId(Long userId);
 
     // 리뷰 쓴 가게 목록 조회
     List<ReviewDto> getReview();
@@ -28,7 +28,7 @@ public interface MypageService {
     List<List<OrderResponseDto>> getOrderByUserId();
 
     // 리뷰 삭제
-    public UserDto delReviewByUserId(double reviewId);
+    public UserDto delReviewByUserId(Long reviewId);
 
     // 리뷰 작성
     List<ReviewDto> postReview(ReviewDto reviewDto);

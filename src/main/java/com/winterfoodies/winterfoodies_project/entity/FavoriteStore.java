@@ -13,12 +13,12 @@ import javax.persistence.GenerationType;
 public class FavoriteStore {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private double id;
+    private Long id;
 
     @Column(name = "USER_ID")
-    private double userId;
+    private Long userId;
 
     @Column(name = "STORE_ID")
-    private double storeId;
+    private Long storeId;
 
 }

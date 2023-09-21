@@ -11,7 +11,7 @@ import java.util.List;
 @Setter
 public class DashBoard {
     //누적 주문 수
-    private double accumulatedOrderCount;
+    private Long accumulatedOrderCount;
 
     //상단 카드배너 (4개)
     private List<TopInfoCard> topInfoCards = new ArrayList<>();

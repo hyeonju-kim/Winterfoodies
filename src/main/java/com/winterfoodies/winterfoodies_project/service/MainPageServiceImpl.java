@@ -63,7 +63,7 @@ public class MainPageServiceImpl implements MainPageService{
 
 
     // 인증된 사용자의 id 가져오기
-//    public double getUserId() {
+//    public Long getUserId() {
 //        User foundUser = userRepository.findByUsername(getUsernameFromAuthentication());
 //        if (foundUser != null) {
 //            return foundUser.getId();
@@ -73,7 +73,7 @@ public class MainPageServiceImpl implements MainPageService{
 //        }
 //    }
 
-    public double getUserId() {
+    public Long getUserId() {
         User foundUser = userRepository.findByUsername(getUsernameFromAuthentication());
         return foundUser.getId();
     }
@@ -130,7 +130,7 @@ public class MainPageServiceImpl implements MainPageService{
 
     // 2. 메뉴별, 가까운순별 가게목록 - 가게명, 위치, 평점
     @Override
-    public StoreMainDto getNearbyStores2(double productId, double latitude, double longitude) {
+    public StoreMainDto getNearbyStores2(Long productId, double latitude, double longitude) {
 
         StoreMainDto storeMainDto = new StoreMainDto();
         Optional<Product> optionalProduct = productRepository.findById(productId);
@@ -165,7 +165,7 @@ public class MainPageServiceImpl implements MainPageService{
 
     // 3. 메뉴별, 인기순(판매순)별 가게목록
     @Override
-    public List<StoreResponseDto> getStoresSortedByMenuSales(double productId, double latitude, double longitude) {
+    public List<StoreResponseDto> getStoresSortedByMenuSales(Long productId, double latitude, double longitude) {
         double radius = 5.0; // 검색 반경 설정
 
         List<Store> storesSortedByMenuSales = storeRepository.getStoresSortedByMenuSalesByProductId(productId, latitude, longitude, radius);
@@ -176,7 +176,7 @@ public class MainPageServiceImpl implements MainPageService{
             storeResponseDto.setName(store.getStoreDetail().getName());
             storeResponseDto.setBasicAddress(store.getStoreDetail().getBasicAddress());
             storeResponseDto.setAverageRating(store.getStoreDetail().getAverageRating());
-            double countOrders = orderRepository.countByStoreId(store.getId());
+            Long countOrders = orderRepository.countByStoreId(store.getId());
             storeResponseDto.setOrders(countOrders);
             storeResponseDto.setLatitude(store.getStoreDetail().getLatitude());
             storeResponseDto.setLongitude(store.getStoreDetail().getLongitude());
@@ -188,7 +188,7 @@ public class MainPageServiceImpl implements MainPageService{
 
     // 4. 메뉴별, 리뷰순 가게목록
     @Override
-    public List<StoreResponseDto> getStoresSortedByReiviews(double productId, double latitude, double longitude) {
+    public List<StoreResponseDto> getStoresSortedByReiviews(Long productId, double latitude, double longitude) {
         double radius = 5.0; // 검색 반경 설정
         List<Store> storeByReviews = storeRepository.getStoreByReviewsByProductId(productId, latitude, longitude, radius);
         List<StoreResponseDto> storeByReiviewsStoreList = new ArrayList<>();
@@ -199,7 +199,7 @@ public class MainPageServiceImpl implements MainPageService{
             storeResponseDto.setName(store.getStoreDetail().getName());
             storeResponseDto.setBasicAddress(store.getStoreDetail().getBasicAddress());
             storeResponseDto.setAverageRating(store.getStoreDetail().getAverageRating());
-            double countReviews = reviewRepository.countByStoreId(store.getId());
+            Long countReviews = reviewRepository.countByStoreId(store.getId());
             storeResponseDto.setCountReviews(countReviews);
             storeResponseDto.setLatitude(store.getStoreDetail().getLatitude());
             storeResponseDto.setLongitude(store.getStoreDetail().getLongitude());
@@ -211,7 +211,7 @@ public class MainPageServiceImpl implements MainPageService{
 
     // 5. 메뉴별, 별점순 가게목록 - 230830추가
     @Override
-    public List<StoreResponseDto> getStoreByAverageRating(double productId, double latitude, double longitude) {
+    public List<StoreResponseDto> getStoreByAverageRating(Long productId, double latitude, double longitude) {
         double radius = 5.0; // 검색 반경 설정
         List<Store> storeByAverageRating = storeRepository.getStoreByAverageRatingByProductId(productId, latitude, longitude, radius);
         List<StoreResponseDto> storeByAverageRatingList = new ArrayList<>();
@@ -234,7 +234,7 @@ public class MainPageServiceImpl implements MainPageService{
 
     //  6. 가게 상세 조회 (메뉴 및 인기간식)
     @Override
-    public StoreMainDto getStoreProducts(double storeId) {
+    public StoreMainDto getStoreProducts(Long storeId) {
         StoreMainDto storeMainDto = new StoreMainDto();
 
         Store foundStore = storeRepository.getStoreById(storeId);
@@ -325,7 +325,7 @@ public class MainPageServiceImpl implements MainPageService{
 
 //    // 7. 가게 상세 조회 (가게정보)
 //    @Override
-//    public StoreResponseDto getStoreDetails(double storeId) {
+//    public StoreResponseDto getStoreDetails(Long storeId) {
 //        Optional<Store> optionalStore = storeRepository.findById(storeId);
 //        Store store = optionalStore.get();
 //        StoreResponseDto storeResponseDto = new StoreResponseDto();
@@ -343,7 +343,7 @@ public class MainPageServiceImpl implements MainPageService{
 
     // 8. 가게 상세 조회(리뷰)
     @Override
-    public StoreMainDto getStoreReviews(double storeId) {
+    public StoreMainDto getStoreReviews(Long storeId) {
         StoreMainDto storeMainDto = new StoreMainDto();
 
         List<Review> reviewList = reviewRepository.findByStoreId(storeId);
@@ -352,7 +352,7 @@ public class MainPageServiceImpl implements MainPageService{
         storeMainDto.setStoreName(store.getStoreDetail().getName());
         storeMainDto.setThumbNailImgUrl(store.getStoreDetail().getThumbnailImgUrl());
 
-        double reviewCnt = reviewRepository.countByStoreId(storeId);
+        Long reviewCnt = reviewRepository.countByStoreId(storeId);
         storeMainDto.setReviewCnt(reviewCnt);
 
         List<ReviewDto> reviewDtoList = new ArrayList<>();
@@ -360,7 +360,7 @@ public class MainPageServiceImpl implements MainPageService{
         for (Review review : reviewList) {
             ReviewDto reviewDto = new ReviewDto();
             reviewDto.setId(review.getId());
-            double userId = review.getUserId();
+            Long userId = review.getUserId();
             reviewDto.setUserId(userId);
             Optional<User> userOptional = userRepository.findById(userId);
             User user = userOptional.get();
@@ -370,7 +370,7 @@ public class MainPageServiceImpl implements MainPageService{
             ArrayList<String> orderedProducts = new ArrayList<>();
 
             for (OrderProduct orderProduct : orderProducts) {
-                double productId = orderProduct.getProduct().getId();
+                Long productId = orderProduct.getProduct().getId();
                 Optional<Product> optionalProduct = productRepository.findById(productId);
                 Product product = optionalProduct.get();
                 orderedProducts.add(product.getName());
@@ -392,7 +392,7 @@ public class MainPageServiceImpl implements MainPageService{
 
     // 9. 가게 찜하기
     @Override
-    public UserResponseDto addFavoriteStore(double storeId) {
+    public UserResponseDto addFavoriteStore(Long storeId) {
         FavoriteStore favoriteStore = new FavoriteStore();
         favoriteStore.setUserId(getUserId());
         favoriteStore.setStoreId(storeId);
@@ -405,7 +405,7 @@ public class MainPageServiceImpl implements MainPageService{
 
     // 10. 가게 찜하기 취소
     @Override
-    public UserResponseDto revokeFavoriteStore(double storeId) {
+    public UserResponseDto revokeFavoriteStore(Long storeId) {
 
         // 사용자가 찜한 가게인지 확인
         Optional<FavoriteStore> favoriteStoreOptional = favoriteStoreRepository.findByUserIdAndStoreId(getUserId(), storeId);

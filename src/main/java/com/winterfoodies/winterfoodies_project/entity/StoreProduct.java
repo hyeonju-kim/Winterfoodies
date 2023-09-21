@@ -14,7 +14,7 @@ import javax.persistence.*;
 public class StoreProduct {
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "storeProductSeq")
     @Column(name = "STORE_PRODUCT_ID")
-    private double id;
+    private Long id;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)

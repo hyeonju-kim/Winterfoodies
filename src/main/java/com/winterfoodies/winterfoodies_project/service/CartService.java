@@ -23,13 +23,13 @@ public interface CartService {
     CartDto getCartProductByDB();
 
     // 장바구니 상품 수량 증가
-    CartDto increaseQuantity(@PathVariable double productId);
+    CartDto increaseQuantity(@PathVariable Long productId);
 
     // 장바구니 상품 수량 감소
-    CartDto decreaseQuantity(@PathVariable double productId);
+    CartDto decreaseQuantity(@PathVariable Long productId);
 
     // 장바구니 특정 상품 삭제
-    CartProductDto removeProductFromCart(@RequestParam double productId, HttpServletRequest request, HttpServletResponse response);
+    CartProductDto removeProductFromCart(@RequestParam Long productId, HttpServletRequest request, HttpServletResponse response);
 
 //    // 장바구니 초기화
 //    CartProductDto clearCart(HttpServletResponse response);

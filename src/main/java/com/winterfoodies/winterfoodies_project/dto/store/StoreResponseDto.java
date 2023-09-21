@@ -24,7 +24,7 @@ public class StoreResponseDto {
     private String result;
 
     @ApiModelProperty(example = "1",value = "가게아이디" )
-    private double storeId;
+    private Long storeId;
 
     @ApiModelProperty(example = "신천붕어빵" , value = "가게명")
     private String name; // 가게명
@@ -45,13 +45,13 @@ public class StoreResponseDto {
     private String roadCodeNo;
 
     @ApiModelProperty(example = "4", value = "평균별점")
-    private double averageRating; // 평균 별점
+    private Long averageRating; // 평균 별점
 
     @ApiModelProperty(value = "판매량", hidden = true)
-    private double orders; // 판매량
+    private Long orders; // 판매량
 
     @ApiModelProperty(value = "리뷰개수", hidden = true)
-    private double countReviews; // 리뷰개수
+    private Long countReviews; // 리뷰개수
 
     @ApiModelProperty(example = "37.381798", value = "위도")
     private double latitude;

@@ -12,9 +12,9 @@ import java.util.List;
 @Setter
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class ReviewRequestDto {
-    private double userId;
+    private Long userId;
     private String storeName;
-    private double rating;
+    private Long rating;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private String images;

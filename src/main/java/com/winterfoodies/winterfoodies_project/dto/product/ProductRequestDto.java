@@ -17,16 +17,16 @@ public class ProductRequestDto {
     @NotNull
     @Min(0)
     @ApiModelProperty(example = "2", value = "상품 아이디")
-    private double productId;
+    private Long productId;
 
     @NotNull
     @Min(0)
     @ApiModelProperty(example = "5", value = "상품 수량")
-    private double quantity;
+    private Long quantity;
 
     @ApiModelProperty(example = "유저 메시지" , hidden = true)
     private String clientMessage;
 
     @ApiModelProperty(example = "1", value = "가게 id")
-    private double storeId;
+    private Long storeId;
 }

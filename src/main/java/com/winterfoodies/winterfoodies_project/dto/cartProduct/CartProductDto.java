@@ -28,18 +28,18 @@ import java.util.Optional;
 @Setter
 @JsonInclude(JsonInclude.Include.NON_EMPTY) //비어있지 않은 필드만 나타내는 어노테이션
 public class CartProductDto {
-    private double id;
-    private double productId;
+    private Long id;
+    private Long productId;
     private String productName;
-    private double quantity;
-    private double pricePerProduct;
-    private double subTotalPrice; // 장바구니의 각 상품별 합계
-    private double totalPrice;
+    private Long quantity;
+    private Long pricePerProduct;
+    private Long subTotalPrice; // 장바구니의 각 상품별 합계
+    private Long totalPrice;
     private String message;
-    private double storeId;
+    private Long storeId;
     private String storeName;
     private String estimatedCookingTime;
-    private double userId;
+    private Long userId;
 
 
 
@@ -49,7 +49,7 @@ public class CartProductDto {
     }
 
     // 1. requestDto -> Dto
-    public CartProductDto(CartProductRequestDto requestDto, double userId) {
+    public CartProductDto(CartProductRequestDto requestDto, Long userId) {
         this.productId = requestDto.getProductId();
         this.quantity = requestDto.getQuantity();
         this.subTotalPrice = requestDto.getSubTotalPrice();
@@ -64,7 +64,7 @@ public class CartProductDto {
     }
 
     // 2. entity -> Dto
-    public CartProductDto(CartProduct cartProduct, double userId) {
+    public CartProductDto(CartProduct cartProduct, Long userId) {
         this.id = cartProduct.getId();
         this.productId = cartProduct.getProduct().getId();
         this.productName = cartProduct.getProduct().getName();

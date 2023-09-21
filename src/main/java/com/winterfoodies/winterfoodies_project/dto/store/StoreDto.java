@@ -15,14 +15,14 @@ public class StoreDto {
     private String message;
     private String redirect;
     private String result;
-    private double id;
+    private Long id;
     private String name; // 가게명
     private String addressNo;
     private String basicAddress; // 기본주소
     private String detailAddress;
     private String info;
     private String roadCodeNo;
-    private double averageRating; // 평균 별점
+    private Long averageRating; // 평균 별점
     private double latitude;
     private double longitude;
     private String estimatedCookingTime;

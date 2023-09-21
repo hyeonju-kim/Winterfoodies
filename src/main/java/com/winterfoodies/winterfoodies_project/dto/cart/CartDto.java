@@ -12,17 +12,17 @@ import java.util.ArrayList;
 @Setter
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class CartDto {
-    private double id;
+    private Long id;
 
     private String name;
 
     private String storeName;
 
-    private double price;
+    private Long price;
 
-    private double quantity;
+    private Long quantity;
 
-    private double totalPrice;
+    private Long totalPrice;
 
     private String EstimatedCookingTime;
 

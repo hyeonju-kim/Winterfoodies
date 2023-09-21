@@ -6,11 +6,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
-    List<Review> findByUserId(double userId);
+    List<Review> findByUserId(Long userId);
 
-    List<Review> findByStoreId(double storeId);
-    void deleteById(double reviewId);
+    List<Review> findByStoreId(Long storeId);
+    void deleteById(Long reviewId);
 
-    double countByStoreId(double storeId);
+    Long countByStoreId(Long storeId);
 
 }

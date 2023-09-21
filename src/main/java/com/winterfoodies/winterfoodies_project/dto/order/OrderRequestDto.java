@@ -14,13 +14,13 @@ import java.util.List;
 public class OrderRequestDto {
 
     @ApiModelProperty(example = "1", value = "주문 id", hidden = true)
-    private double orderId;
+    private Long orderId;
 
     @ApiModelProperty(value = "productRequestDtoList", hidden = true)
     private List<ProductRequestDto> productRequestDtoList;
 
     @ApiModelProperty(example = "1", value = "가게 id", hidden = true)
-    private double storeId;
+    private Long storeId;
 
     @ApiModelProperty(example = "빨리 만들어 주세용~~!", value = "유저 메시지")
     private String message;

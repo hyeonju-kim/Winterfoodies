@@ -21,7 +21,7 @@ import java.util.Map;
 public class CartProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private double id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "cart_id")
@@ -35,15 +35,15 @@ public class CartProduct {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    private double quantity;
+    private Long quantity;
 
-    private double pricePerProduct;
+    private Long pricePerProduct;
 
-    private double totalPrice;
+    private Long totalPrice;
 
-    private double subTotalPrice; // 장바구니의 각 상품별 합계
+    private Long subTotalPrice; // 장바구니의 각 상품별 합계
 
-    private double userId;
+    private Long userId;
 
     public CartProduct(Cart cart, Product product) {
         this.cart = cart;

@@ -46,7 +46,7 @@ public class CartServiceImpl implements CartService {
     }
 
     // 인증된 사용자의 id 가져오기
-    public double getUserId() {
+    public Long getUserId() {
         User foundUser = userRepository.findByUsername(getUsernameFromAuthentication());
         return foundUser.getId();
     }
@@ -54,9 +54,9 @@ public class CartServiceImpl implements CartService {
     // ❤ 1. 장바구니에 상품 추가 (쿠키와 DB에 장바구니 담기)
     @Override
     public CartProductDto addProductToCart(CartProductDto inCartProductDto, HttpServletRequest request, HttpServletResponse response) {
-        double productId = inCartProductDto.getProductId();
-        double quantity = inCartProductDto.getQuantity();
-        double storeId = inCartProductDto.getStoreId();
+        Long productId = inCartProductDto.getProductId();
+        Long quantity = inCartProductDto.getQuantity();
+        Long storeId = inCartProductDto.getStoreId();
 
 //        // 쿠키에 담기
 //        Cookie[] cookies = request.getCookies();
@@ -147,8 +147,8 @@ public class CartServiceImpl implements CartService {
 //                    for (String product : products) {
 //                        String[] productAndQuantity = product.split(":");
 //
-//                        double productId = Long.valueOf(productAndQuantity[0]);
-//                        double quantity = Long.valueOf(productAndQuantity[1]);
+//                        Long productId = Long.valueOf(productAndQuantity[0]);
+//                        Long quantity = Long.valueOf(productAndQuantity[1]);
 //
 //                        Optional<Product> optionalProduct = productRepository.findById(productId);
 //
@@ -172,8 +172,8 @@ public class CartServiceImpl implements CartService {
     @Override
     public CartDto getCartProductByDB() {
         CartDto cartDto = new CartDto();
-        double userId = getUserId();
-        double totalAmt = 0L;
+        Long userId = getUserId();
+        Long totalAmt = 0L;
         List<CartProduct> cartProductList = cartProductRepository.findByUserId(userId);
 
         if (cartProductList.isEmpty()) {
@@ -198,10 +198,10 @@ public class CartServiceImpl implements CartService {
 
     // 장바구니 상품 수량 증가
     @Override
-    public CartDto increaseQuantity(double productId) {
+    public CartDto increaseQuantity(Long productId) {
         CartDto cartDto = new CartDto();
-        double userId = getUserId();
-        double totalAmt = 0L;
+        Long userId = getUserId();
+        Long totalAmt = 0L;
 
         ArrayList<CartProductDto> cartProductDtoList = new ArrayList<>();
 
@@ -230,10 +230,10 @@ public class CartServiceImpl implements CartService {
 
     // 장바구니 상품 수량 감소
     @Override
-    public CartDto decreaseQuantity(double productId) {
+    public CartDto decreaseQuantity(Long productId) {
         CartDto cartDto = new CartDto();
-        double userId = getUserId();
-        double totalAmt = 0L;
+        Long userId = getUserId();
+        Long totalAmt = 0L;
 
         ArrayList<CartProductDto> cartProductDtoList = new ArrayList<>();
 
@@ -263,7 +263,7 @@ public class CartServiceImpl implements CartService {
 
     // ❤ 3. 장바구니 특정 상품 삭제 (쿠키와 DB에서 삭제)
     @Override
-    public CartProductDto removeProductFromCart(double productId, HttpServletRequest request, HttpServletResponse response) {
+    public CartProductDto removeProductFromCart(Long productId, HttpServletRequest request, HttpServletResponse response) {
         Cookie[] cookies = request.getCookies();
 
         // 쿠키에서 삭제
@@ -278,7 +278,7 @@ public class CartServiceImpl implements CartService {
                     // 입력한 상품 id가 현재의 상품과 같지 않으면 새로운 Cart에 추가하기 (입력한 상품 id만 빼고 추가하는 것. 결론적으로는 입력한 상품 id가 삭제되는 꼴 !)
                     for (String prd : product) {
                         String[] prdAndQnt = prd.split(":");
-                        double cartProductId = Long.valueOf(prdAndQnt[0]);
+                        Long cartProductId = Long.valueOf(prdAndQnt[0]);
 
                         if (!cartProductId.equals(productId)) {
                             updatedCartValue.append("|").append(prd);
@@ -332,7 +332,7 @@ public class CartServiceImpl implements CartService {
 //
 //        order.setStore(foundCartProductList.get(0).getStore());
 //
-//        double totalPrice = 0L;
+//        Long totalPrice = 0L;
 //        for (CartProduct cartProduct : foundCartProductList) {
 //            totalPrice += cartProduct.getTotalPrice();
 //        }
@@ -395,12 +395,12 @@ public class CartServiceImpl implements CartService {
         Order order = new Order();
         orderRepository.save(order);
 
-        double totalAmt = 0L;
+        Long totalAmt = 0L;
 
         for (CartProduct cartProduct : cartProductList) {
             String prdName = cartProduct.getProduct().getName();
-            double prdQnt = cartProduct.getQuantity();
-            double subTotalPrice = cartProduct.getSubTotalPrice();
+            Long prdQnt = cartProduct.getQuantity();
+            Long subTotalPrice = cartProduct.getSubTotalPrice();
 
             ProductDto productDto = new ProductDto();
             productDto.setProductName(prdName);

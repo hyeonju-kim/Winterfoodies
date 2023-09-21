@@ -17,29 +17,29 @@ public interface MainPageService {
     public StoreMainDto getNearbyStores(double latitude, double longitude);
 
     // 메뉴별, 가까운순별 가게목록 - 가게명, 위치, 평점
-    public StoreMainDto getNearbyStores2(double productId, double latitude, double longitude);
+    public StoreMainDto getNearbyStores2(Long productId, double latitude, double longitude);
 
     // 메뉴별, 인기순(판매순)별 가게목록
-    public List<StoreResponseDto> getStoresSortedByMenuSales(double productId, double latitude, double longitude);
+    public List<StoreResponseDto> getStoresSortedByMenuSales(Long productId, double latitude, double longitude);
 
     // 메뉴별, 리뷰순 가게목록
-    public List<StoreResponseDto> getStoresSortedByReiviews(double productId, double latitude, double longitude);
+    public List<StoreResponseDto> getStoresSortedByReiviews(Long productId, double latitude, double longitude);
 
     // 별점 순 가게목록 - 230830 추가
-    public List<StoreResponseDto> getStoreByAverageRating(double productId, double latitude, double longitude);
+    public List<StoreResponseDto> getStoreByAverageRating(Long productId, double latitude, double longitude);
 
     //  가게 상세 조회 (메뉴 및 인기간식 및 가게정보)
-    StoreMainDto getStoreProducts(double storeId);
+    StoreMainDto getStoreProducts(Long storeId);
 
 //    // 가게 상세 조회 (가게정보)
-//    StoreResponseDto getStoreDetails(double storeId);
+//    StoreResponseDto getStoreDetails(Long storeId);
 
     // 가게 상세 조회(리뷰)
-    StoreMainDto getStoreReviews(double storeId);
+    StoreMainDto getStoreReviews(Long storeId);
 
     // 가게 찜하기
-    UserResponseDto addFavoriteStore(double storeId);
+    UserResponseDto addFavoriteStore(Long storeId);
 
     // 가게 찜하기 취소
-    UserResponseDto revokeFavoriteStore(double storeId);
+    UserResponseDto revokeFavoriteStore(Long storeId);
 }

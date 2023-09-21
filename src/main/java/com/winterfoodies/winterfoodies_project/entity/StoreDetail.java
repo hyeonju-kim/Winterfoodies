@@ -23,7 +23,7 @@ public class StoreDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "storeDetailSeq")
     @Column(name = "STORE_DETAIL_ID")
-    private double id;
+    private Long id;
 
     @Column(name = "STORE_NAME")
     private String name;
@@ -50,7 +50,7 @@ public class StoreDetail {
     private LocalTime closeTime;
 
     @Column(name = "AVERAGE_RATING")
-    private double averageRating;
+    private Long averageRating;
 
     @Column(name = "LATITUDE")
     private double latitude;

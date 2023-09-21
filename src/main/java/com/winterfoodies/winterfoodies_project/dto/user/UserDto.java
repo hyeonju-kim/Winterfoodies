@@ -16,7 +16,7 @@ import javax.validation.constraints.Pattern;
 @JsonInclude(JsonInclude.Include.NON_EMPTY) //비어있지 않은 필드만 나타내는 어노테이션
 public class UserDto {
     @ApiModelProperty(example = "1" ,hidden = true)
-    private double id;
+    private Long id;
 //    private String email;
 
     @NotBlank(message = "비밀번호는 필수 입력 값입니다.")

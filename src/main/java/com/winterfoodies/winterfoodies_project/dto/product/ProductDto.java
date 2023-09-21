@@ -14,25 +14,25 @@ import lombok.ToString;
 public class ProductDto {
 
     @ApiModelProperty(example = "상품 id" )
-    private double productId;
+    private Long productId;
 
     @ApiModelProperty(example = "상품명" )
     private String productName;
 
     @ApiModelProperty(example = "상품 수량" )
-    private double quantity;
+    private Long quantity;
 
     @ApiModelProperty(example = "메시지" )
     private String message;
 
     @ApiModelProperty(example = "가게명" )
-    private double storeId;
+    private Long storeId;
 
     @ApiModelProperty(example = "500", value = "각 상품당 가격")
-    private double pricePerProduct;
+    private Long pricePerProduct;
 
     @ApiModelProperty(example = "3000", value = "각 메뉴별 총 주문금액")
-    private double subTotalAmount;
+    private Long subTotalAmount;
 
     public ProductDto() {
     }
