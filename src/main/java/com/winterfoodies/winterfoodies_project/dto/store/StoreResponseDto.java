@@ -24,7 +24,7 @@ public class StoreResponseDto {
     private String result;
 
     @ApiModelProperty(example = "1",value = "가게아이디" )
-    private Long storeId;
+    private int storeId;
 
     @ApiModelProperty(example = "신천붕어빵" , value = "가게명")
     private String name; // 가게명
