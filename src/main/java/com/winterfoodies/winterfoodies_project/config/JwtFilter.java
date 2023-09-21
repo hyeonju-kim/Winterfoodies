@@ -1,6 +1,7 @@
 package com.winterfoodies.winterfoodies_project.config;
 
 //import com.winterfoodies.winterfoodies_project.AppRunner;
+import com.winterfoodies.winterfoodies_project.exception.UserException;
 import com.winterfoodies.winterfoodies_project.service.UserDetailsServiceImpl;
 
 import lombok.AllArgsConstructor;
@@ -9,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -73,30 +75,37 @@ public class JwtFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
                 }
             }
-            // 230814 추가
-            // 액세스 토큰이 만료되었을 경우 리프레시 토큰을 사용하여 새로운 액세스 토큰 발급
+//            // 230814 추가
+//            // 액세스 토큰이 만료되었을 경우 리프레시 토큰을 사용하여 새로운 액세스 토큰 발급
+//            if (jwtUtil.isTokenExpired(token)) {
+//                // Redis에서 해당 리프레시 토큰 가져오기
+//                String refreshToken = (String) redisTemplate.opsForValue().get("RT:" + username);
+//
+//                if (refreshToken != null && jwtUtil.isValidToken(refreshToken, userDetails)) {
+//                    // 리프레시 토큰이 유효하면 새로운 액세스 토큰 생성
+//                    String newAccessToken = jwtUtil.generateAccessToken(userDetails);
+//
+//                    // 새로운 액세스 토큰을 Response 헤더에 설정
+//                    response.setHeader("Authorization", "Bearer " + newAccessToken);
+//
+//                    // SecurityContextHolder에 새로운 Authentication 설정
+//                    UsernamePasswordAuthenticationToken newAuthenticationToken =
+//                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+//                    newAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+//                    SecurityContextHolder.getContext().setAuthentication(newAuthenticationToken);
+//                    System.out.println("jwt필터에서 인증객체에 잘 저장되는지 확인 === "+SecurityContextHolder.getContext().getAuthentication());
+//
+//                    // 이전 액세스 토큰을 Redis에 저장하여 로그아웃 처리 (Blacklist 역할)
+//                    redisTemplate.opsForValue().set(token, "logout", jwtUtil.getExpirationDate(token).getTime() - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
+//                }
+//            }
+
+            // 엑세스 토큰 만료 시 401 에러 던지기
             if (jwtUtil.isTokenExpired(token)) {
-                // Redis에서 해당 리프레시 토큰 가져오기
-                String refreshToken = (String) redisTemplate.opsForValue().get("RT:" + username);
-
-                if (refreshToken != null && jwtUtil.isValidToken(refreshToken, userDetails)) {
-                    // 리프레시 토큰이 유효하면 새로운 액세스 토큰 생성
-                    String newAccessToken = jwtUtil.generateAccessToken(userDetails);
-
-                    // 새로운 액세스 토큰을 Response 헤더에 설정
-                    response.setHeader("Authorization", "Bearer " + newAccessToken);
-
-                    // SecurityContextHolder에 새로운 Authentication 설정
-                    UsernamePasswordAuthenticationToken newAuthenticationToken =
-                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                    newAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    SecurityContextHolder.getContext().setAuthentication(newAuthenticationToken);
-                    System.out.println("jwt필터에서 인증객체에 잘 저장되는지 확인 === "+SecurityContextHolder.getContext().getAuthentication());
-
-                    // 이전 액세스 토큰을 Redis에 저장하여 로그아웃 처리 (Blacklist 역할)
-                    redisTemplate.opsForValue().set(token, "logout", jwtUtil.getExpirationDate(token).getTime() - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
-                }
+                throw new UserException("토큰이 만료되었습니다.", HttpStatus.UNAUTHORIZED, null);
             }
+
+
 
         }
         filterChain.doFilter(request, response);
