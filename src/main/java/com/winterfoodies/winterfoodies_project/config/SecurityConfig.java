@@ -43,7 +43,8 @@ public class  SecurityConfig extends WebSecurityConfigurerAdapter {
             "/store-img/**",
             "/api/mypage", // 주석을 해야하나 말아야하나..
             "/h2-console/**",
-            "/api/login"
+            "/api/login",
+            "/api/token"
     };
 
     @Override

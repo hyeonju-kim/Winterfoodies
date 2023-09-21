@@ -40,8 +40,12 @@
     import org.springframework.web.bind.annotation.*;
 
     import javax.naming.Binding;
+    import javax.servlet.FilterChain;
+    import javax.servlet.ServletException;
     import javax.servlet.http.HttpServletRequest;
+    import javax.servlet.http.HttpServletResponse;
     import javax.validation.Valid;
+    import java.io.IOException;
     import java.nio.charset.StandardCharsets;
     import java.time.LocalDateTime;
     import java.time.format.DateTimeFormatter;
@@ -95,7 +99,8 @@
             String username = loginRequestDto.getUsername();
             User retrievedUser = userRepository.findByUsername(username);
 
-            log.info("retrievedUser = {}", retrievedUser);
+            System.out.println(" 홈 컨트롤러 / 기존 로그인 / username = " + username);
+            System.out.println(" 홈 컨트롤러 / 기존 로그인 / retrievedUser = " + retrievedUser);
 
             if (retrievedUser == null) {
                 throw new UserException("가입되지 않은 이메일입니다.", HttpStatus.BAD_REQUEST, null);
@@ -224,15 +229,24 @@
         // refreshToken 보내주면 accessToken 발급해주는 api 추가 - 230920
         @GetMapping("/token")
         @ApiOperation(value = "refreshToken 보내주면 accessToken 발급")
-        public TokenRequestDto generateRefreshToken(@RequestBody TokenRequestDto tokenRequestDto)  {
-            String refreshToken = tokenRequestDto.getRefreshToken();
-            String username = jwtUtil.getUsernameFromToken(refreshToken);
+        public TokenRequestDto generateRefreshToken(HttpServletRequest request) throws ServletException, IOException {
+            // 1. 헤더 파싱
+            String authorization = request.getHeader("Authorization");
+            String username = "";
+            String token = "";
+
+            // 2. 토큰 파싱 해서 name 얻어오기
+            if (authorization != null && authorization.startsWith("Bearer ")) {
+                token = authorization.substring(7);
+                username = jwtUtil.getUsernameFromToken(token);
+            }
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
             String accessToken = jwtUtil.generateAccessToken(userDetails);
             TokenRequestDto newTokenDto = new TokenRequestDto();
             newTokenDto.setAccessToken(accessToken);
             return newTokenDto;
         }
+
 
         // 로그인 후, 유저네임/닉네임/휴대폰번호 조회
         @GetMapping("/me")
