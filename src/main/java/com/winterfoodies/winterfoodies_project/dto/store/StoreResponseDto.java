@@ -98,9 +98,9 @@ public class StoreResponseDto {
         this.thumbNailImgUrl = storeDetail.getThumbnailImgUrl();
     }
 
-    public static StoreResponseDto empty(){
-        StoreResponseDto store = new StoreResponseDto();
-//        store.setHasStoreYn("N");
-        return store;
-    }
+//    public static StoreResponseDto empty(){
+//        StoreResponseDto store = new StoreResponseDto();
+////        store.setHasStoreYn("N");
+//        return store;
+//    }
 }
