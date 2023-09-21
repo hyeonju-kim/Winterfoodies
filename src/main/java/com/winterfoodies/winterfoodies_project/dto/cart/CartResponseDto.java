@@ -8,15 +8,15 @@ import lombok.Setter;
 @Setter
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class CartResponseDto {
-    private Long id;
+    private double id;
 
     private String name;
 
-    private Long price;
+    private double price;
 
-    private Long quantity;
+    private double quantity;
 
-    private Long totalPrice;
+    private double totalPrice;
 
     private String EstimatedCookingTime;
 

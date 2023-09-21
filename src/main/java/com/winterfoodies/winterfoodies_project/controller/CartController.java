@@ -94,14 +94,14 @@ public class CartController {
 
     // 장바구니에서 상품 수량 증가
     @PostMapping("/incQnt/{productId}")
-    public CartDto increaseQuantity(@PathVariable Long productId) {
+    public CartDto increaseQuantity(@PathVariable double productId) {
         return cartService.increaseQuantity(productId);
 
     }
 
     // 장바구니에서 상품 수량 감소
     @PostMapping("/decQnt/{productId}")
-    public CartDto decreaseQuantity(@PathVariable Long productId) {
+    public CartDto decreaseQuantity(@PathVariable double productId) {
         return cartService.decreaseQuantity(productId);
 
     }
@@ -109,7 +109,7 @@ public class CartController {
     // 장바구니 특정 상품 삭제
     @DeleteMapping  ("/{productId}") // 230731 Get -> Delete로 변경, @requestParam -> @PathVariable로 변경
     @ApiOperation(value = "장바구니 특정 상품 삭제")
-    public CartProductResponseDto removeProduct(@PathVariable Long productId, HttpServletRequest request, HttpServletResponse response){
+    public CartProductResponseDto removeProduct(@PathVariable double productId, HttpServletRequest request, HttpServletResponse response){
         CartProductDto cartProductDto = cartService.removeProductFromCart(productId, request, response);
         return cartProductDto.convertToCartProductResponseDto();
     }

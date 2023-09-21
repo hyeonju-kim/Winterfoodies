@@ -82,7 +82,7 @@ public class SearchServiceImpl implements SearchService{
             storeResponseDto.setName(store.getStoreDetail().getName());
             storeResponseDto.setMapIcon(store.getStoreDetail().getMapIcon());
             storeResponseDto.setAverageRating(store.getStoreDetail().getAverageRating());
-            Long reviewCnt = reviewRepository.countByStoreId(store.getId());
+            double reviewCnt = reviewRepository.countByStoreId(store.getId());
             storeResponseDto.setCountReviews(reviewCnt);
             nearbyStoreDtoList.add(storeResponseDto);
             storeResponseDto.setLatitude(store.getStoreDetail().getLatitude());

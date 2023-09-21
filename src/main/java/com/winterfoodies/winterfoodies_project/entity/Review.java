@@ -19,16 +19,16 @@ import java.util.*;
 public class Review extends Timestamped{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private double id;
 
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "STORE_ID")
     private Store store;
-//    private Long storeId;
+//    private double storeId;
     private String storeName;
-    private Long rating;
-    private Long userId;
+    private double rating;
+    private double userId;
     private String images;// 이미지 URL들을 쉼표(,) 또는 다른 구분자로 구분하여 저장
     private String content;
 

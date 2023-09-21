@@ -18,16 +18,16 @@ import java.util.Map;
 public class OrderResponseDto {
 
     @ApiModelProperty(example = "1", value = "주문 id", hidden = true)
-    private Long storeId;
+    private double storeId;
 
     @ApiModelProperty(example = "1", value = "주문 id")
     private String storeName;
 
     @ApiModelProperty(example = "1", value = "주문 id")
-    private Long orderId;
+    private double orderId;
 
     @ApiModelProperty(example = "1", value = "주문 id", hidden = true)
-    private Long customerId;
+    private double customerId;
 
     @ApiModelProperty(example = "1", value = "주문 id", hidden = true)
     private String productId;
@@ -51,13 +51,13 @@ public class OrderResponseDto {
     private List<ProductDto> productAndQuantityList;
 
     @ApiModelProperty(example = "10000", value = "총 주문금액")
-    private Long totalAmount;
+    private double totalAmount;
 
     @ApiModelProperty(example = "3000", value = "각 메뉴별 총 주문금액")
-    private Long subTotalAmount;
+    private double subTotalAmount;
 
     @ApiModelProperty(example = "20분~30분" , value = "조리예상시간")
     private String estimatedCookingTime;
 
-    private Long averageRating;
+    private double averageRating;
 }

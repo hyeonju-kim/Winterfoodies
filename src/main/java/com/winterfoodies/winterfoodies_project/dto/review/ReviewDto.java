@@ -15,24 +15,24 @@ import java.util.*;
 @JsonInclude(JsonInclude.Include.NON_EMPTY) //비어있지 않은 필드만 나타내는 어노테이션
 public class ReviewDto extends Timestamped {
     @ApiModelProperty(example = "1",value = "리뷰 id" )
-    private  Long id;
+    private  double id;
 
     @ApiModelProperty(value = "사용자 id" , hidden = true)
-    private Long userId;
+    private double userId;
 
     @ApiModelProperty(value = "사용자 닉네임" , example = "붕어조아")
     private String nickname;
 
-    private Long orderId;
+    private double orderId;
 
     @ApiModelProperty(example = "신천붕어빵", value = "가게명" )
     private String storeName;
 
     @ApiModelProperty(example = "1", value = "가게 id" )
-    private Long storeId;
+    private double storeId;
 
     @ApiModelProperty(example = "5", value = "별점" )
-    private Long rating;
+    private double rating;
 
     @ApiModelProperty(value = "음식 사진" )
     @JsonFormat(shape = JsonFormat.Shape.STRING)

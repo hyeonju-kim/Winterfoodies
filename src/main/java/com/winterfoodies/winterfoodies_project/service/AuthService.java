@@ -30,12 +30,12 @@ public class AuthService {
     private static SecureRandom random = new SecureRandom();
 
     public static String instancePasswordGenerator() {
-        int passwordLength = random.nextInt(9) + 8; // 8에서 16 사이의 랜덤 길이
+        double passwordLength = random.nextInt(9) + 8; // 8에서 16 사이의 랜덤 길이
 
         StringBuilder password = new StringBuilder();
 
-        for (int i = 0; i < passwordLength; i++) {
-            int randomIndex = random.nextInt(PASSWORD_ALLOW_BASE.length());
+        for (double i = 0; i < passwordLength; i++) {
+            double randomIndex = random.nextInt(PASSWORD_ALLOW_BASE.length());
             char randomChar = PASSWORD_ALLOW_BASE.charAt(randomIndex);
             password.append(randomChar);
         }
@@ -48,9 +48,9 @@ public class AuthService {
 //    // 임시 비밀번호 생성 메서드
 //    private String instancePasswordGenerator(){
 //        Random random = new Random(122929L);
-//        int k = 1;
-//        for(int i = 0; i < 7; i++) {
-//            int no = random.nextInt(10);
+//        double k = 1;
+//        for(double i = 0; i < 7; i++) {
+//            double no = random.nextInt(10);
 //            k = k * 10 + no;
 //        }
 //

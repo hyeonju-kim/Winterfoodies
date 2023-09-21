@@ -49,7 +49,7 @@ public class MainPageController {
     @GetMapping("/{productId}/near")
     @ApiOperation(value = "메뉴별, 가까운순별 가게목록")
     @ApiImplicitParam(name = "productId", value = "상품 아이디")
-    public StoreMainDto nearbyStoreList(@PathVariable("productId") Long productId,
+    public StoreMainDto nearbyStoreList(@PathVariable("productId") double productId,
                                                   @RequestParam(required = false) Double latitude,
                                                   @RequestParam(required = false) Double longitude) {
         return mainPageService.getNearbyStores2(productId, latitude, longitude);
@@ -59,7 +59,7 @@ public class MainPageController {
     @GetMapping("/{productId}/popular")
     @ApiOperation(value = "메뉴별, 인기순(판매량순)별 가게목록")
     @ApiImplicitParam(name = "productId", value = "상품 아이디")
-    public List<StoreResponseDto> popularList(@PathVariable("productId") Long productId,
+    public List<StoreResponseDto> popularList(@PathVariable("productId") double productId,
                                               @RequestParam(required = false) Double latitude,
                                               @RequestParam(required = false) Double longitude) {
         return mainPageService.getStoresSortedByMenuSales(productId, latitude, longitude);
@@ -69,7 +69,7 @@ public class MainPageController {
     @GetMapping("/{productId}/reviewstore")
     @ApiOperation(value = "메뉴별, 리뷰순별 가게목록")
     @ApiImplicitParam(name = "productId", value = "상품 아이디")
-    public List<StoreResponseDto> reviewList(@PathVariable("productId") Long productId,
+    public List<StoreResponseDto> reviewList(@PathVariable("productId") double productId,
                                              @RequestParam(required = false) Double latitude,
                                              @RequestParam(required = false) Double longitude) {
         return mainPageService.getStoresSortedByReiviews(productId, latitude, longitude);
@@ -79,7 +79,7 @@ public class MainPageController {
     @GetMapping("/{productId}/averageRating")
     @ApiOperation(value = "메뉴별, 평점별 가게목록")
     @ApiImplicitParam(name = "productId", value = "상품 아이디")
-    public List<StoreResponseDto> ratingList(@PathVariable("productId") Long productId,
+    public List<StoreResponseDto> ratingList(@PathVariable("productId") double productId,
                                              @RequestParam(required = false) Double latitude,
                                              @RequestParam(required = false) Double longitude) {
         return mainPageService.getStoreByAverageRating(productId, latitude, longitude);
@@ -93,7 +93,7 @@ public class MainPageController {
     @GetMapping("/{storeId}")
     @ApiOperation(value = "가게 상세 조회(메뉴, 인기메뉴, 가게정보)")
     @ApiImplicitParam(name = "storeId", value = "가게 아이디")
-    public StoreMainDto storeDetail(@PathVariable Long storeId) {
+    public StoreMainDto storeDetail(@PathVariable double storeId) {
         return mainPageService.getStoreProducts(storeId);
     }
 
@@ -101,7 +101,7 @@ public class MainPageController {
 //    @GetMapping("/{storeId}/info")
 //    @ApiOperation(value = "가게 상세 조회(가게정보)")
 //    @ApiImplicitParam(name = "storeId", value = "가게 아이디")
-//    public StoreResponseDto storeDetailInfo(@PathVariable Long storeId) {
+//    public StoreResponseDto storeDetailInfo(@PathVariable double storeId) {
 //        return mainPageService.getStoreDetails(storeId);
 //    }
 
@@ -109,7 +109,7 @@ public class MainPageController {
     @GetMapping("/{storeId}/review")
     @ApiOperation(value = "가게 상세 조회(리뷰)")
     @ApiImplicitParam(name = "storeId", value = "가게 아이디")
-    public StoreMainDto storeDetailReview(@PathVariable Long storeId) {
+    public StoreMainDto storeDetailReview(@PathVariable double storeId) {
         return mainPageService.getStoreReviews(storeId);
     }
 
@@ -117,7 +117,7 @@ public class MainPageController {
     @PostMapping("/{storeId}/like")
     @ApiOperation(value = "가게 찜하기")
     @ApiImplicitParam(name = "storeId", value = "가게 아이디")
-    public UserResponseDto addFavoriteStore(@PathVariable("storeId") Long storeId) {
+    public UserResponseDto addFavoriteStore(@PathVariable("storeId") double storeId) {
         return mainPageService.addFavoriteStore(storeId);
     }
 
@@ -125,7 +125,7 @@ public class MainPageController {
     @PutMapping("/{storeId}/like")
     @ApiOperation(value = "가게 찜하기 취소")
     @ApiImplicitParam(name = "storeId", value = "가게 아이디")
-    public UserResponseDto revokeFavoriteStore(@PathVariable("storeId") Long storeId) {
+    public UserResponseDto revokeFavoriteStore(@PathVariable("storeId") double storeId) {
         return mainPageService.revokeFavoriteStore(storeId);
     }
 

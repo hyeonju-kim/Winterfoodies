@@ -141,7 +141,7 @@
             // RT:나나(key) / 23jijiofj2io3hi32hiongiodsninioda(value) 형태로
 
             Date refreshTokenExpiration = jwtUtil.getExpirationDate(refreshToken);
-            long remainingTimeInMillis = refreshTokenExpiration.getTime() - System.currentTimeMillis();// 만료까지 남은시간
+            double remainingTimeInMillis = refreshTokenExpiration.getTime() - System.currentTimeMillis();// 만료까지 남은시간
 
 //            redisTemplate.opsForValue().set("RT:" + username, refreshToken, remainingTimeInMillis, TimeUnit.MILLISECONDS);
             System.out.println("key==========RT:" + username);
@@ -212,7 +212,7 @@
 
 
             Date refreshTokenExpiration = jwtUtil.getExpirationDate(refreshToken);
-            long remainingTimeInMillis = refreshTokenExpiration.getTime() - System.currentTimeMillis();// 만료까지 남은시간
+            double remainingTimeInMillis = refreshTokenExpiration.getTime() - System.currentTimeMillis();// 만료까지 남은시간
 
 //            redisTemplate.opsForValue().set("RT:" + username, refreshToken, remainingTimeInMillis, TimeUnit.MILLISECONDS);
             System.out.println("key==========RT:" + username);
@@ -342,7 +342,7 @@
 
             // 해당 access token 유효시간을 가지고 와서 블랙리스트에 저장하기
             Date accessTokenExpiration = jwtUtil.getExpirationDate(tokenRequestDto.getAccessToken());
-            long remainingTimeInMillis = accessTokenExpiration.getTime() - System.currentTimeMillis();// 만료까지 남은시간
+            double remainingTimeInMillis = accessTokenExpiration.getTime() - System.currentTimeMillis();// 만료까지 남은시간
             System.out.println("accessTokenExpiration====" + accessTokenExpiration);
             System.out.println("remainingTimeInMillis====" + remainingTimeInMillis);
 

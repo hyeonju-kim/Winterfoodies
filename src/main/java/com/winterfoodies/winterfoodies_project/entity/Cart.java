@@ -16,17 +16,17 @@ import java.util.List;
 public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private double id;
 
-    private Long userId;
+    private double userId;
 
-    private Long storeId;
+    private double storeId;
 
     @JsonIgnore // 순환참조 발생하지 않도록
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartProduct> cartProducts = new ArrayList<>();
 
-    public Cart(Long userId) {
+    public Cart(double userId) {
         this.userId = userId;
     }
 

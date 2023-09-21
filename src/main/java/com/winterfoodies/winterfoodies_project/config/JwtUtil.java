@@ -14,8 +14,8 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class JwtUtil {
     private final String SECRET = "secret";
-    private static final long ACCESS_TOKEN_EXPIRATION = 60 * 30 * 1000;     // 30분 (밀리초 단위로 표현)
-    private static final long REFRESH_TOKEN_EXPIRATION = 60L * 60 * 24 * 90 * 1000; // 3개월 (밀리초 단위로 표현)
+    private static final double ACCESS_TOKEN_EXPIRATION = 60 * 30 * 1000;     // 30분 (밀리초 단위로 표현)
+    private static final double REFRESH_TOKEN_EXPIRATION = 60L * 60 * 24 * 90 * 1000; // 3개월 (밀리초 단위로 표현)
 
 
 
@@ -34,7 +34,7 @@ public class JwtUtil {
         return createToken(claims, userDetails.getUsername(), REFRESH_TOKEN_EXPIRATION);
     }
 
-    private String createToken(Claims claims, String subject, long expirationMillis) {
+    private String createToken(Claims claims, String subject, double expirationMillis) {
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(new Date(System.currentTimeMillis()))

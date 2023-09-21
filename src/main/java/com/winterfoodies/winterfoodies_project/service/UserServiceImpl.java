@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
     }
 
     // 인증된 사용자의 id 가져오기
-    public Long getUserId() {
+    public double getUserId() {
         User foundUser = userRepository.findByUsername(getUsernameFromAuthentication());
         return foundUser.getId();
     }

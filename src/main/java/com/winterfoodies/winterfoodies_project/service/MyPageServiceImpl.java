@@ -43,7 +43,7 @@ public class MyPageServiceImpl implements MypageService{
     }
 
     // 인증된 사용자의 id 가져오기
-    public Long getUserId() {
+    public double getUserId() {
         User foundUser = userRepository.findByUsername(getUsernameFromAuthentication());
         return foundUser.getId();
     }
@@ -90,8 +90,8 @@ public class MyPageServiceImpl implements MypageService{
         List<StoreResponseDto> storeResponseDtoList = new ArrayList<>();
 
         for (FavoriteStore favoriteStore : foundFavoriteStore) {
-            Long foundStoreId = favoriteStore.getStoreId();
-            Long id = favoriteStore.getId();
+            double foundStoreId = favoriteStore.getStoreId();
+            double id = favoriteStore.getId();
             Optional<Store> foundStore = storeRepository.findById(foundStoreId);
 
             StoreResponseDto storeResponseDto = new StoreResponseDto();
@@ -181,7 +181,7 @@ public class MyPageServiceImpl implements MypageService{
 
     // 리뷰 삭제
     @Override
-    public UserDto delReviewByUserId(Long reviewId) {
+    public UserDto delReviewByUserId(double reviewId) {
         Optional<Review> review = reviewRepository.findById(reviewId);
         UserDto userDto = new UserDto();
         userDto.setMessage("삭제완료!!");

@@ -20,16 +20,16 @@ public class StoreMainDto { // 가게 상세 조회
     private String productName;
 
     @ApiModelProperty(example = "평균별점" )
-    private Long averageRating;
+    private double averageRating;
 
     @ApiModelProperty(example = "Y" )
     private String like = "N";
 
     @ApiModelProperty(example = "23" )
-    private Long reviewCnt;
+    private double reviewCnt;
 
     @ApiModelProperty(example = "6" )
-    private Long searchCnt;
+    private double searchCnt;
 
     @ApiModelProperty(value = "가게썸네일사진", hidden = true)
     private String thumbNailImgUrl;

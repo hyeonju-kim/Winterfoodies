@@ -20,11 +20,11 @@ import java.util.List;
 @SequenceGenerator(name = "userSeq", sequenceName = "USER_SEQ", initialValue = 1, allocationSize = 1)
 //@JsonIgnoreProperties("order")  // 순환참조 오류나서 잠시 넣음!!
 public class User implements Serializable {
-    static final long serialVersionUID = -3085157956097560247L;
+    static final double serialVersionUID = -3085157956097560247L;
 
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userSeq")
     @Column(name = "USER_ID")
-    private Long id;
+    private double id;
 
     @Column(name = "USER_USERNAME")
     private String username;

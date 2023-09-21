@@ -54,7 +54,7 @@ public class MyPageController {
     }
 
     // 인증된 사용자의 id 가져오기
-    public Long getUserId() {
+    public double getUserId() {
         User foundUser = userRepository.findByUsername(getUsernameFromAuthentication());
         return foundUser.getId();
     }
@@ -139,7 +139,7 @@ public class MyPageController {
     // 리뷰 삭제
     @DeleteMapping("/reviews/{reviewId}")
     @ApiOperation(value = "리뷰 삭제")
-    public UserResponseDto delReview(@PathVariable("reviewId") Long reviewId) {
+    public UserResponseDto delReview(@PathVariable("reviewId") double reviewId) {
         UserDto userDto = mypageService.delReviewByUserId(reviewId);
         return userDto.convertToUserResponseDto();
     }
