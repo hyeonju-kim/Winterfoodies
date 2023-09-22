@@ -40,7 +40,7 @@ public class MainPageController {
             @ApiImplicitParam(name = "longitude", value = "경도"),
     })
     public StoreMainDto mainPage(@RequestParam(required = false) Double latitude,
-                                                                          @RequestParam(required = false) Double longitude) {
+                                                                          @RequestParam(required = false) Double longitude) throws IllegalAccessException {
 
        return mainPageService.getNearbyStores(latitude, longitude);
     }

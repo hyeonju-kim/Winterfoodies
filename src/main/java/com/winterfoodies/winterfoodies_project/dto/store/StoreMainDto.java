@@ -38,6 +38,12 @@ public class StoreMainDto { // 가게 상세 조회
     private String estimatedCookingTime;
 
     private List<ProductResponseDto> productResponseDtoList;
+
+    //상품 상수 9개 추가
+    private List<String> productEnumArrayList;
+
+    private List<ProductResponseDto> productConstantsList;
+
     private List<ProductResponseDto> popularProductsDtoList;
     private List<StoreResponseDto> storeResponseDtoList;
     private List<ReviewDto> reviewDtoList;

@@ -15,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
 import java.util.*;
 
 @Service
@@ -82,7 +83,7 @@ public class MainPageServiceImpl implements MainPageService{
 
     // 1. 메인페이지 - 나와 가까운 가게 목록 보이기
     @Override
-    public StoreMainDto getNearbyStores(double latitude, double longitude) {
+    public StoreMainDto getNearbyStores(double latitude, double longitude) throws IllegalAccessException {
         StoreMainDto storeMainDto = new StoreMainDto();
 
         // 1) 인기상품 (지금까지 판매된 상품중에 가장 많이 팔린 인기상품 랭킹) - 나중에 일주일 간격, 하루 간격으로 수정 예정
@@ -95,16 +96,34 @@ public class MainPageServiceImpl implements MainPageService{
             productList.add(productResponseDto);
         }
 
-        // 2) 상단의 상품목록 보이기
-        List<Product> foundProduct = productRepository.findAll();
-        List<ProductResponseDto> productResponseDtoList = new ArrayList<>();
 
-        for (Product product : foundProduct) {
-            ProductResponseDto productResponseDto = new ProductResponseDto();
-            productResponseDto.setId(product.getId());
-            productResponseDto.setProductName(product.getName());
-            productResponseDtoList.add(productResponseDto);
+        // 2) 9개 상품 노출
+        ArrayList<ProductResponseDto> productConstantsList = new ArrayList<>();
+
+        String[][] productConstants = {
+                {"1", "붕어빵"},
+                {"2", "어묵"},
+                {"3", "군밤"},
+                {"4", "호떡"},
+                {"5", "계란빵"},
+                {"6", "군고구마"},
+                {"7", "다코야키"},
+                {"8", "호두과자"},
+                {"9", "국화빵"}
+        };
+
+        for (String[] productInfo : productConstants) {
+            Long id = Long.parseLong(productInfo[0]);
+            String name = productInfo[1];
+            productConstantsList.add(new ProductResponseDto(id, name));
         }
+
+        // ArrayList 출력
+        for (ProductResponseDto dto : productConstantsList) {
+            System.out.println("ID: " + dto.getId() + ", Name: " + dto.getProductName());
+        }
+
+
 
         // 3) 나와 가장 가까운 간식 top5
         double radius = 2.0; // 검색 반경 설정 (예: 2.0km)
@@ -123,7 +142,7 @@ public class MainPageServiceImpl implements MainPageService{
         }
 
         storeMainDto.setPopularProductsDtoList(productList);
-        storeMainDto.setProductResponseDtoList(productResponseDtoList);
+        storeMainDto.setProductConstantsList(productConstantsList);
         storeMainDto.setStoreResponseDtoList(nearbyStoreDtoList);
         return storeMainDto;
     }
