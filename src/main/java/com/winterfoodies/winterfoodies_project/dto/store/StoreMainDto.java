@@ -1,7 +1,6 @@
 package com.winterfoodies.winterfoodies_project.dto.store;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.winterfoodies.winterfoodies_project.dto.product.ProductEnum;
 import com.winterfoodies.winterfoodies_project.dto.product.ProductResponseDto;
 import com.winterfoodies.winterfoodies_project.dto.review.ReviewDto;
 import io.swagger.annotations.ApiModelProperty;
@@ -40,10 +39,10 @@ public class StoreMainDto { // 가게 상세 조회
 
     private List<ProductResponseDto> productResponseDtoList;
 
-    //상품 enum 추가
-    private List<ProductEnum> productEnumArrayList;
+    //상품 상수 9개 추가
+    private List<String> productEnumArrayList;
 
-    private List<ProductResponseDto> productEnumListToString;
+    private List<ProductResponseDto> productConstantsList;
 
     private List<ProductResponseDto> popularProductsDtoList;
     private List<StoreResponseDto> storeResponseDtoList;
