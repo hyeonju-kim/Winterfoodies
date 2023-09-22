@@ -33,4 +33,9 @@ public class ProductResponseDto {
     public ProductResponseDto() {
 
     }
+
+    public ProductResponseDto(Long id, String productName) {
+        this.id = id;
+        this.productName = productName;
+    }
 }

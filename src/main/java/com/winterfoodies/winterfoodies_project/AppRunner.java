@@ -94,32 +94,28 @@ public class AppRunner implements ApplicationRunner {
         product5.setPrice(2000L);
         productsList2.add(product5);
 
-        // 3번 가게 상품리스트 생성 (호떡, 계란빵, 다코야키, 호두과자, 국화빵)
+        // 3번 가게 상품리스트 생성 (계란빵, 다코야키, 호두과자, 국화빵)
         List<Product> productsList3 = new ArrayList<>();
         Product product6 = new Product();
-        product6.setName("호떡");
+        product6.setName("계란빵");
         product6.setPrice(1500L);
         productsList3.add(product6);
 
         Product product7 = new Product();
-        product7.setName("계란빵");
+        product7.setName("다코야키");
         product7.setPrice(1500L);
         productsList3.add(product7);
 
         Product product8 = new Product();
-        product8.setName("다코야키");
+        product8.setName("호두과자");
         product8.setPrice(1500L);
         productsList3.add(product8);
 
         Product product9 = new Product();
-        product9.setName("호두과자");
+        product9.setName("국화빵");
         product9.setPrice(1500L);
         productsList3.add(product9);
 
-        Product product10 = new Product();
-        product10.setName("국화빵");
-        product10.setPrice(1500L);
-        productsList3.add(product10);
 
         productRepository.save(product);
         productRepository.save(product2);
@@ -130,8 +126,6 @@ public class AppRunner implements ApplicationRunner {
         productRepository.save(product7);
         productRepository.save(product8);
         productRepository.save(product9);
-        productRepository.save(product9);
-        productRepository.save(product10);
 
 
         //가게 디테일 생성 1 - 신천붕어빵 (붕어빵, 어묵, 군밤)
@@ -238,33 +232,47 @@ public class AppRunner implements ApplicationRunner {
         StoreProduct storeProduct = new StoreProduct();
         storeProduct.setStore(store); // 신천붕어빵
         storeProduct.setProduct(product); // 붕어빵
-        storeProduct.setProduct(product2); // 델리만쥬
         storeProductRepository.save(storeProduct);
 
         StoreProduct storeProduct2 = new StoreProduct();
         storeProduct2.setStore(store); // 신천붕어빵
-        storeProduct2.setProduct(product2); // 델리만쥬
+        storeProduct2.setProduct(product2); // 어묵
         storeProductRepository.save(storeProduct2);
 
         StoreProduct storeProduct3 = new StoreProduct();
         storeProduct3.setStore(store); // 신천붕어빵
-        storeProduct3.setProduct(product3); // 다코야끼
+        storeProduct3.setProduct(product3); // 군밤
         storeProductRepository.save(storeProduct3);
 
         StoreProduct storeProduct4 = new StoreProduct();
         storeProduct4.setStore(store2); // 대야붕어빵
-        storeProduct4.setProduct(product); // 붕어빵
+        storeProduct4.setProduct(product4); // 붕어빵
         storeProductRepository.save(storeProduct4);
 
         StoreProduct storeProduct5 = new StoreProduct();
         storeProduct5.setStore(store2); // 대야붕어빵
-        storeProduct5.setProduct(product3); // 다코야끼
+        storeProduct5.setProduct(product5); // 호떡
         storeProductRepository.save(storeProduct5);
 
         StoreProduct storeProduct6 = new StoreProduct();
         storeProduct6.setStore(store3); // 소새울호떡집
-        storeProduct6.setProduct(product4); // 호떡
+        storeProduct6.setProduct(product6); // 계란빵
         storeProductRepository.save(storeProduct6);
+
+        StoreProduct storeProduct7 = new StoreProduct();
+        storeProduct6.setStore(store3); // 소새울호떡집
+        storeProduct6.setProduct(product7); // 다코야키
+        storeProductRepository.save(storeProduct7);
+
+        StoreProduct storeProduct8 = new StoreProduct();
+        storeProduct6.setStore(store3); // 소새울호떡집
+        storeProduct6.setProduct(product8); // 호두과자
+        storeProductRepository.save(storeProduct8);
+
+        StoreProduct storeProduct9 = new StoreProduct();
+        storeProduct6.setStore(store3); // 소새울호떡집
+        storeProduct6.setProduct(product9); // 국화빵
+        storeProductRepository.save(storeProduct9);
 
         //사용자 - 헨리, 김소라, 방성훈
         User customer = new User();
@@ -409,7 +417,7 @@ public class AppRunner implements ApplicationRunner {
         OrderProduct orderProduct7 = new OrderProduct();
         orderProduct7.setOrder(order4); // 신천붕어빵
         orderProduct7.setProduct(product3); // 군밤
-        orderProduct7.setQuantity(50L);
+        orderProduct7.setQuantity(45L);
         orderProductRepository.save(orderProduct7);
 
         List<OrderProduct> orderProductList4 = new ArrayList<>();
@@ -420,7 +428,7 @@ public class AppRunner implements ApplicationRunner {
         order4.setOrderProducts(orderProductList4);
         orderRepository.save(order4);
 
-        // 주문 5 - 헨리가 소새울호떡집에서 호떡10개, 계란빵5개, 다코야키50개 주문
+        // 주문 5 - 헨리가 소새울호떡집에서 계란빵 10개, 다코야키 5개, 호두과자 50개 주문
         Order order5 = new Order();
         order5.setUser(customer); // 헨리
         order5.setStore(store3);  //소새울호떡집
@@ -431,19 +439,19 @@ public class AppRunner implements ApplicationRunner {
 
         OrderProduct orderProduct8 = new OrderProduct();
         orderProduct8.setOrder(order5);
-        orderProduct8.setProduct(product6); // 호떡
-        orderProduct8.setQuantity(10L);
+        orderProduct8.setProduct(product6); // 계란빵
+        orderProduct8.setQuantity(20L);
         orderProductRepository.save(orderProduct8);
 
         OrderProduct orderProduct9 = new OrderProduct();
         orderProduct9.setOrder(order5);
-        orderProduct9.setProduct(product7); // 계란빵
-        orderProduct9.setQuantity(5L);
+        orderProduct9.setProduct(product7); // 다코야키
+        orderProduct9.setQuantity(15L);
         orderProductRepository.save(orderProduct9);
 
         OrderProduct orderProduct10 = new OrderProduct();
         orderProduct10.setOrder(order5);
-        orderProduct10.setProduct(product8); // 다코야키
+        orderProduct10.setProduct(product8); // 호두과자
         orderProduct10.setQuantity(50L);
         orderProductRepository.save(orderProduct10);
 

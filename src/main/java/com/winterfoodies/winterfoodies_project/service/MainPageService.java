@@ -14,7 +14,7 @@ public interface MainPageService {
     public List<ProductResponseDto> getProductList();
 
     // 메인 페이지 - 위치 정보 가져오기
-    public StoreMainDto getNearbyStores(double latitude, double longitude);
+    public StoreMainDto getNearbyStores(double latitude, double longitude) throws IllegalAccessException;
 
     // 메뉴별, 가까운순별 가게목록 - 가게명, 위치, 평점
     public StoreMainDto getNearbyStores2(Long productId, double latitude, double longitude);
