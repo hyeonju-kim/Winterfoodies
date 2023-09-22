@@ -2,6 +2,7 @@ package com.winterfoodies.winterfoodies_project.service;
 
 import com.winterfoodies.winterfoodies_project.ErrorBox;
 import com.winterfoodies.winterfoodies_project.dto.product.ProductDto;
+import com.winterfoodies.winterfoodies_project.dto.product.ProductEnum;
 import com.winterfoodies.winterfoodies_project.dto.product.ProductResponseDto;
 import com.winterfoodies.winterfoodies_project.dto.review.ReviewDto;
 import com.winterfoodies.winterfoodies_project.dto.store.StoreMainDto;
@@ -96,15 +97,28 @@ public class MainPageServiceImpl implements MainPageService{
         }
 
         // 2) 상단의 상품목록 보이기
-        List<Product> foundProduct = productRepository.findAll();
-        List<ProductResponseDto> productResponseDtoList = new ArrayList<>();
+//        List<Product> foundProduct = productRepository.findAll();
+//        List<ProductResponseDto> productResponseDtoList = new ArrayList<>();
+//
+//        for (Product product : foundProduct) {
+//            ProductResponseDto productResponseDto = new ProductResponseDto();
+//            productResponseDto.setId(product.getId());
+//            productResponseDto.setProductName(product.getName());
+//            productResponseDtoList.add(productResponseDto);
+//        }
 
-        for (Product product : foundProduct) {
-            ProductResponseDto productResponseDto = new ProductResponseDto();
-            productResponseDto.setId(product.getId());
-            productResponseDto.setProductName(product.getName());
-            productResponseDtoList.add(productResponseDto);
+        // 9개 상품 노출
+
+        List<ProductEnum> productEnumList = Arrays.asList(ProductEnum.values());
+        Collections.sort(productEnumList, Comparator.comparingLong(ProductEnum::getValue));
+
+        ArrayList<ProductResponseDto> list = new ArrayList<>();
+
+        for (ProductEnum productEnum : productEnumList) {
+            list.add(new ProductResponseDto(productEnum.getValue(), productEnum.getName()));
         }
+
+
 
         // 3) 나와 가장 가까운 간식 top5
         double radius = 2.0; // 검색 반경 설정 (예: 2.0km)
@@ -123,7 +137,7 @@ public class MainPageServiceImpl implements MainPageService{
         }
 
         storeMainDto.setPopularProductsDtoList(productList);
-        storeMainDto.setProductResponseDtoList(productResponseDtoList);
+        storeMainDto.setProductEnumListToString(list);
         storeMainDto.setStoreResponseDtoList(nearbyStoreDtoList);
         return storeMainDto;
     }

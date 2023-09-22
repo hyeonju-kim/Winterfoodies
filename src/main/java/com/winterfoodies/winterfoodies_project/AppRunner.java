@@ -94,32 +94,27 @@ public class AppRunner implements ApplicationRunner {
         product5.setPrice(2000L);
         productsList2.add(product5);
 
-        // 3번 가게 상품리스트 생성 (호떡, 계란빵, 다코야키, 호두과자, 국화빵)
+        // 3번 가게 상품리스트 생성 (계란빵, 다코야키, 호두과자, 국화빵)
         List<Product> productsList3 = new ArrayList<>();
         Product product6 = new Product();
-        product6.setName("호떡");
+        product6.setName("계란빵");
         product6.setPrice(1500L);
         productsList3.add(product6);
 
         Product product7 = new Product();
-        product7.setName("계란빵");
+        product7.setName("다코야키");
         product7.setPrice(1500L);
         productsList3.add(product7);
 
         Product product8 = new Product();
-        product8.setName("다코야키");
+        product8.setName("호두과자");
         product8.setPrice(1500L);
         productsList3.add(product8);
 
         Product product9 = new Product();
-        product9.setName("호두과자");
+        product9.setName("국화빵");
         product9.setPrice(1500L);
         productsList3.add(product9);
-
-        Product product10 = new Product();
-        product10.setName("국화빵");
-        product10.setPrice(1500L);
-        productsList3.add(product10);
 
         productRepository.save(product);
         productRepository.save(product2);
@@ -130,8 +125,6 @@ public class AppRunner implements ApplicationRunner {
         productRepository.save(product7);
         productRepository.save(product8);
         productRepository.save(product9);
-        productRepository.save(product9);
-        productRepository.save(product10);
 
 
         //가게 디테일 생성 1 - 신천붕어빵 (붕어빵, 어묵, 군밤)
