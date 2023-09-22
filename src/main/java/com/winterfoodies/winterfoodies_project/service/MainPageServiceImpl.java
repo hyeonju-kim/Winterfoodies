@@ -95,7 +95,7 @@ public class MainPageServiceImpl implements MainPageService{
             productList.add(productResponseDto);
         }
 
-        // 2) 상단의 상품목록 보이기
+        // 2) 상단의 상품목록 보이기//
         List<Product> foundProduct = productRepository.findAll();
         List<ProductResponseDto> productResponseDtoList = new ArrayList<>();
 
